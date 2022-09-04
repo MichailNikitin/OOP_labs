@@ -43,12 +43,11 @@ int main() {
 
       if (abs(i_start - i_end) > 1 && !is_pos) {
          double med = sum*1.0/(abs(i_start - i_end));
-         std::cout << med << "    ";
+         
          for (int j = i_start; j < i_end; j++)
-            if (arr[j] < med) {
-               std::cout << arr[j] << std::endl;
+            if (arr[j] < med) 
                arr[j] = 0;
-            }
+            
          sum = 0;
       }
       i_end = i_start = 0;
