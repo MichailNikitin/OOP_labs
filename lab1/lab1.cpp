@@ -1,16 +1,13 @@
 #include <iostream>
 #include <format>
 
-class DSortSeq{
-   int n,
-//текущий размер
-   nmax;
-//максимальный размер
-   double *mas;
-//указатель на массив
+class SortSeq{
+   int n,//текущий размер
+   nmax;//максимальный размер
+   double *mas;//указатель на массив
 public:
-   DSortSeq();//пустая последовательность
-   ~DSortSeq();//деструктор класса
+   SortSeq();//пустая последовательность
+   ~SortSeq();//деструктор класса
    void add(double x);//добавить число
    int size();//текущий размер
    double get(int i);//получить элемент последовательности
@@ -20,40 +17,42 @@ public:
 using namespace std;
 int main() {
    srand(time(0));
-   DSortSeq D;
+   SortSeq D;
 
-   int count_numbers = 7;
-   cout<<format("Заполним последовательность {} случаными числами"
+   int count_numbers = rand() % 5+5;
+   cout<<format("1.Заполним последовательность {} случаными числами"
    "и распечатаем состояние объекта\n", count_numbers);
    for(int i = 0; i < count_numbers; i ++)
-      D.add(rand() % 10 + 1);
+      D.add(rand() % 20 + 1);
    D.print();
    
-   cout<<"Текущий размер последовательности:"<<D.size()<<"\n";
+   cout<<"2.Текущий размер последовательности:"<<D.size()<<"\n";
    
-   cout<<"Получим третий элемент последовательности:"
-       <<D.get(3)<<"\n";
+   int rand_i4get = rand() % D.size();
+   cout<<format("3.Получим {} элемент последовательности:", rand_i4get+1)
+       <<D.get(rand_i4get)<<"\n";
    
-   cout<<"Удалим 1 эл. послед. и распечатаем состояние объекта\n";
-   D.remove(1);
+    int rand_i4remove = rand() % D.size();
+   cout<<format("4.Удалим {} эл. послед. и распечатаем состояние объекта\n", rand_i4remove+1);
+   D.remove(rand_i4remove);
    D.print();
    
-   cout<<"Удалим несуществующий элемент последовательности:";
+   cout<<"5.Удалим несуществующий элемент последовательности:";
        D.remove(D.size()+1);
    return 0;
 }
 
 
-DSortSeq::DSortSeq() {
+SortSeq::SortSeq() {
    nmax=8;
    n=0;
    mas=new double[nmax];
 }
-DSortSeq::~DSortSeq() {
+SortSeq::~SortSeq() {
    delete [] mas;
 }
 
-void DSortSeq::add(double x) {
+void SortSeq::add(double x) {
    if (n == nmax) {
       nmax*= 2;
       double *m = new double[nmax];
@@ -71,10 +70,10 @@ void DSortSeq::add(double x) {
       }
    }
 }
-int DSortSeq::size() {
+int SortSeq::size() {
    return (n);
 }
-double DSortSeq::get(int i) {
+double SortSeq::get(int i) {
    if (i<0 || i>=n) {
       cout<<"Неверный индекс\n";
       exit(1);
@@ -83,7 +82,7 @@ double DSortSeq::get(int i) {
       return (mas[i]);
 }
 
-void DSortSeq::remove(int i) {
+void SortSeq::remove(int i) {
    if (i<0 || i>=n) {
       cout<<"Неверный индекс\n";
       exit(1);
@@ -95,7 +94,7 @@ void DSortSeq::remove(int i) {
    }
 }
 
-void DSortSeq::print() {
+void SortSeq::print() {
    for (int i=0; i < n; i++)
       cout<<mas[i]<<" ";
    cout<<"\n";

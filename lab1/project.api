@@ -1,13 +1,13 @@
 #
 !lab1.cpp cctype cerrno clocale cstdint cstdio cstdlib ctype.h cwchar cwctype errno.h exception format initializer_list ios iosfwd iostream istream limits limits.h locale.h new ostream signal.h stddef.h stdexcept stdint.h stdio.h stdlib.h streambuf string string_view system_error type_traits typeinfo wchar.h wctype.h #<#>
-DSortSeq _type_ #<lab1.cpp>
-DSortSeq() #<lab1.cpp>
+SortSeq _type_ #<lab1.cpp>
+SortSeq() #<lab1.cpp>
 main() -> int #<lab1.cpp>
-	DSortSeq:%n : int #<lab1.cpp>
-	DSortSeq:%nmax : int #<lab1.cpp>
-	DSortSeq:%mas : double* #<lab1.cpp>
-	DSortSeq::add(double x) -> void #<lab1.cpp>
-	DSortSeq::size() -> int #<lab1.cpp>
-	DSortSeq::get(int i) -> double #<lab1.cpp>
-	DSortSeq::remove(int i) -> void #<lab1.cpp>
-	DSortSeq::print() -> void #<lab1.cpp>
+	SortSeq:%n : int #<lab1.cpp>
+	SortSeq:%nmax : int #<lab1.cpp>
+	SortSeq:%mas : double* #<lab1.cpp>
+	SortSeq::add(double x) -> void #<lab1.cpp>
+	SortSeq::size() -> int #<lab1.cpp>
+	SortSeq::get(int i) -> double #<lab1.cpp>
+	SortSeq::remove(int i) -> void #<lab1.cpp>
+	SortSeq::print() -> void #<lab1.cpp>
