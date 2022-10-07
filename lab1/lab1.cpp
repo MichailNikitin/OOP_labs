@@ -1,9 +1,9 @@
 #include <iostream>
 #include <format>
 
-class SortSeq{
+class SortSeq {
    int n,//текущий размер
-   nmax;//максимальный размер
+       nmax;//максимальный размер
    double *mas;//указатель на массив
 public:
    SortSeq();//пустая последовательность
@@ -21,24 +21,24 @@ int main() {
 
    int count_numbers = rand() % 5+5;
    cout<<format("1.Заполним последовательность {} случаными числами"
-   "и распечатаем состояние объекта\n", count_numbers);
-   for(int i = 0; i < count_numbers; i ++)
+                "и распечатаем состояние объекта\n", count_numbers);
+   for (int i = 0; i < count_numbers; i ++)
       D.add(rand() % 20 + 1);
    D.print();
-   
+
    cout<<"2.Текущий размер последовательности:"<<D.size()<<"\n";
-   
+
    int rand_i4get = rand() % D.size();
    cout<<format("3.Получим {} элемент последовательности:", rand_i4get+1)
        <<D.get(rand_i4get)<<"\n";
-   
-    int rand_i4remove = rand() % D.size();
+
+   int rand_i4remove = rand() % D.size();
    cout<<format("4.Удалим {} эл. послед. и распечатаем состояние объекта\n", rand_i4remove+1);
    D.remove(rand_i4remove);
    D.print();
-   
+
    cout<<"5.Удалим несуществующий элемент последовательности:";
-       D.remove(D.size()+1);
+   D.remove(D.size()+1);
    return 0;
 }
 
