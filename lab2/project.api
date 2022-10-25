@@ -1,0 +1,12 @@
+#
+!15Nikitin_ET212.cpp cctype cerrno clocale cmath cstdint cstdio cstdlib ctype.h cwchar cwctype errno.h exception initializer_list ios iosfwd iostream istream limits limits.h locale.h math.h new ostream signal.h stddef.h stdexcept stdint.h stdio.h stdlib.h streambuf string string_view system_error type_traits typeinfo wchar.h wctype.h #<#>
+Polar _type_ #<15Nikitin_ET212.cpp>
+Polar(double=1, double=0) #<15Nikitin_ET212.cpp>
+_USE_MATH_DEFINES #<15Nikitin_ET212.cpp>
+main() -> Polar int #<15Nikitin_ET212.cpp>
+	Polar:%r : double #<15Nikitin_ET212.cpp>
+	Polar:%phi : double #<15Nikitin_ET212.cpp>
+	Polar::operator+=(const Polar&) -> Polar& #<15Nikitin_ET212.cpp>
+	Polar::operator-=(const Polar&) -> Polar& #<15Nikitin_ET212.cpp>
+	Polar::operator*=(const Polar&) -> Polar& #<15Nikitin_ET212.cpp>
+	Polar::operator/=(const Polar&) -> Polar& #<15Nikitin_ET212.cpp>

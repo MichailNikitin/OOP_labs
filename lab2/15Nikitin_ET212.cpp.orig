@@ -1,0 +1,20 @@
+#include <iostream>
+
+class Polar{
+   double r;
+   double phi;
+   public:
+      Polar(r = 1, phi = 0);
+   
+   
+   
+   
+}
+
+
+int main(){
+   
+   
+   
+   
+}
