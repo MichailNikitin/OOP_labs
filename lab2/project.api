@@ -4,9 +4,18 @@ Polar _type_ #<15Nikitin_ET212.cpp>
 Polar(double=1, double=0) #<15Nikitin_ET212.cpp>
 _USE_MATH_DEFINES #<15Nikitin_ET212.cpp>
 main() -> Polar int #<15Nikitin_ET212.cpp>
+operator!=(const Polar& x, const Polar& y) -> bool #<15Nikitin_ET212.cpp>
+operator!=(const Polar&, const Polar&) -> bool #<15Nikitin_ET212.cpp>
+operator<< : ostream& #<15Nikitin_ET212.cpp>
+operator==(const Polar& x, const Polar& y) -> bool #<15Nikitin_ET212.cpp>
+operator==(const Polar&, const Polar&) -> bool #<15Nikitin_ET212.cpp>
+operator>> : istream& #<15Nikitin_ET212.cpp>
 	Polar:%r : double #<15Nikitin_ET212.cpp>
 	Polar:%phi : double #<15Nikitin_ET212.cpp>
 	Polar::operator+=(const Polar&) -> Polar& #<15Nikitin_ET212.cpp>
 	Polar::operator-=(const Polar&) -> Polar& #<15Nikitin_ET212.cpp>
 	Polar::operator*=(const Polar&) -> Polar& #<15Nikitin_ET212.cpp>
 	Polar::operator/=(const Polar&) -> Polar& #<15Nikitin_ET212.cpp>
+	Polar=:operator!() -> bool #<15Nikitin_ET212.cpp>
+	Polar=:getLength() -> double #<15Nikitin_ET212.cpp>
+	Polar=:getAngle() -> double #<15Nikitin_ET212.cpp>
