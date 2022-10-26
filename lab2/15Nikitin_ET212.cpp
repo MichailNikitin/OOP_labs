@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cmath>
 #define _USE_MATH_DEFINES
-
+using namespace std;
 class Polar {
    double r;
    double phi;
@@ -13,24 +13,24 @@ public:
    Polar &operator/=(const Polar &); //уменьшение вектора в d раз
    friend bool operator==(const Polar &, const Polar &); //перегрузка операции ==
    friend bool operator!=(const Polar &, const Polar &); //перегрузка операции !=
-   bool operator!()const {return (a==0);}//перегрузка операции !
+   bool operator!()const {return (r==0);}//перегрузка операции !
    friend istream &operator>>(istream &, Polar &);//перегрузка операции  >>
    friend ostream &operator<<(ostream &, const Polar &);// перегрузка операции  <<
-   double getLength() const {return r}; // радиус
-   double getAngle() const {return phi}; // угол
-}
+   double getLength() const {return r;}; // радиус
+   double getAngle() const {return phi;}; // угол
+};
 
 
 int main() {
-
-
-
-
+Polar v1(1, 90), v2(0.5, 120), v3(5, 520);
+return 0;
 }
 
 Polar::Polar(double r, double phi) {
    this->r = r;
-   this->phi = phi%360;
+   double b;
+   int a = (int)modf(phi, *b);
+   this->phi = a%360+b;
 }
 
 Polar &Polar::operator+=(const Polar &d) {
@@ -53,10 +53,27 @@ Polar &Polar::operator/=(const Polar &d) {
    return *this;
 }
 
+Polar operator+(Polar x, Polar y) {
+   return x+=y;
+}
+
+Polar operator-(Polar x, Polar y) {
+   return x-=y;
+}
+
 bool operator==(const Polar &x, const Polar &y) {
-   return ((x.a==x.b&&y.a==y.b);
+   return ((x.r==y.r&&y.phi==y.phi);
 }
 
 bool operator!=(const Polar &x, const Polar &y) {
    return !(x==y);
+   
+   istream &operator>>(istream &s, Rational &p) {
+   char c;
+   return s>>p.r>>c>>p.phi;
 }
+ostream &operator<<(ostream &s, const Rational &p) {
+   return s<<p.r <<"@"<<p.phi;
+}
+
+
