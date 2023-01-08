@@ -11,6 +11,7 @@ class Polar {
 public:
    Polar(double r, double phi) : r(recur_angle(r)), phi(recur_angle(phi)) {};//конструктор
 
+   Polar operator + (double,    
    Polar &operator+=(double d);//перегрузка операции +=
    Polar &operator-=(double d);//перегрузка операции -=
    Polar &operator*=(double d);//перегрузка операции *=
