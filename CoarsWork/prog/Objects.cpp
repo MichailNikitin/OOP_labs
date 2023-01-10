@@ -9,3 +9,23 @@ void Robot::set_direction(int new_direction){direction = new_direction;}
 
 void Robot::set_color(int new_color){color = new_color;}
 
+void Robot::change_fild(Fild& fild){
+   
+
+}
+
+bool Robot::is_crash(){
+   
+   
+}
+
+Object::Object(int ){
+   
+   
+}
+
+bool Object::is_access(Robot correct_robot){
+   
+   
+}
+
