@@ -7,8 +7,8 @@
 class Robot;
 class Robots;
 class Object;
-struct Cell;
-class Field;
+class Cell;
+class Fild;
 class Сommand;
 class Programm;
 class Task;
@@ -16,121 +16,103 @@ class Task;
 std::vector <Robot *> Robots; // глобальный вектор с роботами
 std::vector <Programm *> Programms; // глобальный вектор с программами
 
-struct position {
-   int x, y;
-};
-
 class Robot {
-   IMAGE *img; // картинка робота
-   position coord; //текущие  координаты робота;
-   position direction; // текущее направление(смещение по координатам) {0, 1}/{1, 0}/{0, -1}/{-1, 0}
+   int i, j; //текущие  координаты робота;
+   int direction[2]; // текущее направление {0, 1}/{1, 0}/{0, -1}/{-1, 0}
    int color; // текущий цвет
    bool allow_change_direction; // разрешено изменять направление?
    bool allow_change_cordinat; // разрешено изменять координаты?
    Robot(bool, bool); //allow_change_direction, allow_change_cordinat
 public:
-   void set_cordinat(position); // установить координаты
-   void set_direction(position); // установить направление
+   void set_cordinat(int, int); // установить координаты
+   void set_direction(int); // установить направление
    void set_color(int); // установить цвет
-   void change_Field(Field &); // перед выходом из клетки удаление или замена объекта
+   void change_fild(Fild&); // перед выходом из клетки удаление или замена объекта
 private:
-   bool is_crash(std::vector <Robot *> &Robots); // столкнулся(набор роботов)?
+   bool is_crash(Robots&); // столкнулся(набор роботов)?
 };
 
 class Object {
-   IMAGE *img; // картинка объекта
-public:
-   Object(IMAGE *);
-   virtual bool is_access(Robot &) = 0; // проверка клетки на доступность для робота
+   public:
+   Object(int);
+   virtual bool is_access(Robot&) = 0; // проверка клетки на доступность для робота
 };
 
-class Fruit : public Object {
-public:
-   Fruit(IMAGE *);
-   bool is_access(Robot &);
+class Fruit : public Object{
+   bool is_access(Robot&);
 };
 
-class Tree : public Object {
-   Tree(IMAGE *);
-   bool is_access(Robot &);
+class Tree : public Object{
+   bool is_access(Robot&);
 };
 
 struct Cell {
-   Object *current_object = nullptr; // объект в клетке
+   Object* current_object = nullptr; // объект в клетке
    int color = COLOR(255, 255, 255);
 };
 
-class Field {
+class Fild {
    int width, height; // размеры поля
-   Cell **field ; //поле из клеток
-public:
-   Field(int, int); // width, height
-   void set_obj(Object *, position); // установить объект
-   void delete_obj(position); // удалить объект
-   void set_color(position, int); // установить цвет
-   Object *get_object(position); // получить объкт на клетке
+
+   Cell **Fild ; //поле из клеток
+   public:
+      Fild(int, int); // width, height
+      void set_obj(Object*, int, int); // установить объект
+      void delete_obj(int, int); // удалить объект
+   void set_color(int, int, int); // установить цвет
+   Object* get_object(int, int); // получить объкт на клетке
 };
 
-class Command {
-
-   position coord;
+class Сommand {
+   int i, j;
    bool is_allow_change_cordinat; //разрешено изменять координаты?
    bool is_allow_delete; //разрешено удалять?
-
+   
    friend class Programm;
-protected:
-   IMAGE *img;
-
 public:
-   Command(bool, bool, position); //is_allow_change_cordinat, is_allow_delete,  x, y
+   Command(bool, bool, int, int); //is_allow_change_cordinat, is_allow_delete, 
    virtual void use(Robot &) = 0;
-   virtual void draw(position) = 0; // x, y
+   virtual void draw(int, int) = 0; // x, y
 };
 
 // "Стрелка", меняющая нарпавление
 class Arrow : public Command {
-   position orientation;
-public:
-   // разрешение на пермещение и удаление, позиция расположения, позимещения изменения направления
-   Arrow(bool, bool, position, position);
-   void use(Robot &);
-   void draw(position) ; // x, y
+   public:
+   Arrow(bool, bool, int, int);
+   void use(Robot&);
+   void draw(int, int) ; // x, y
 };
 
 //"Банка с краской", меняющая цвет робота
 class ChangeColor : public Command {
-public:
-   ChangeColor(bool, bool, position);
-   void use(Robot &);
-   void draw(position); // x, y
+   void use(Robot&);
+   void draw(int, int); // x, y
 };
 
 //"Выход", удаляющий робота
 class Exit : public Command {
-public:
-   Exit(bool, bool, position);
-   void use(Robot &);
-   void draw(position); // x, y
+   void use(Robot&);
+   void draw(int, int); // x, y
 };
 
 class Programm {
    int color = 255;
-   std::vector<Command> commands ;
+   vector<Command> commands ;
 public:
    Programm(int); // color
-   void add(Command *);
-   void draw(position);
-   Command *select(position); // i, j
+   void add(Command*);
+   void draw(int, int);
+   Command* select(int, int); // i, j
 };
 
 class Task {
-   Field current_Field;
+   Fild correct_fild;
    std::string text_task; // текст задания
-   // инициализация всех компанентов согласно заданию
-   void initialize(Field &, std::vector <Robot *> &Robots, std::vector <Programm *> &Programms);
-   void prepare(Field &); // размещение предметов на поле
-   bool is_task_completed(Field &, std::vector <Robot *> &Robots); // проверка на выполненность
-   void draw_an_example() {}; // иллюстрирование решения задания(для художника)
+
+   void initialize(Field&, ); // инициализация всех компанентов согласно заданию
+   void prepare(Field&); // размещение предметов на поле
+   bool is_task_completed(Fild); // проверка на выполненность
+   void draw_an_example() = 0; // иллюстрирование решения задания(для художника)
 };
 
 #endif
