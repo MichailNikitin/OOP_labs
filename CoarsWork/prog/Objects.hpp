@@ -13,9 +13,6 @@ class Сommand;
 class Programm;
 class Task;
 
-std::vector <Robot *> Robots; // глобальный вектор с роботами
-std::vector <Programm *> Programms; // глобальный вектор с программами
-
 struct position {
    int x, y;
 };
@@ -27,8 +24,8 @@ class Robot {
    int color; // текущий цвет
    bool allow_change_direction; // разрешено изменять направление?
    bool allow_change_cordinat; // разрешено изменять координаты?
-   Robot(bool, bool); //allow_change_direction, allow_change_cordinat
 public:
+   Robot(bool, bool); //allow_change_direction, allow_change_cordinat
    void set_cordinat(position); // установить координаты
    void set_direction(position); // установить направление
    void set_color(int); // установить цвет
@@ -41,6 +38,7 @@ class Object {
    IMAGE *img; // картинка объекта
 public:
    Object(IMAGE *);
+   ~Object();
    virtual bool is_access(Robot &) = 0; // проверка клетки на доступность для робота
 };
 
@@ -62,7 +60,7 @@ struct Cell {
 
 class Field {
    int width, height; // размеры поля
-   Cell **field ; //поле из клеток
+   std::vector<std::vector<Cell>> field; //поле из клеток
 public:
    Field(int, int); // width, height
    void set_obj(Object *, position); // установить объект
@@ -72,15 +70,14 @@ public:
 };
 
 class Command {
-
    position coord;
    bool is_allow_change_cordinat; //разрешено изменять координаты?
    bool is_allow_delete; //разрешено удалять?
 
    friend class Programm;
+
 protected:
    IMAGE *img;
-
 public:
    Command(bool, bool, position); //is_allow_change_cordinat, is_allow_delete,  x, y
    virtual void use(Robot &) = 0;
@@ -99,6 +96,7 @@ public:
 
 //"Банка с краской", меняющая цвет робота
 class ChangeColor : public Command {
+   int color;
 public:
    ChangeColor(bool, bool, position);
    void use(Robot &);
@@ -118,6 +116,7 @@ class Programm {
    std::vector<Command> commands ;
 public:
    Programm(int); // color
+   int get_col();
    void add(Command *);
    void draw(position);
    Command *select(position); // i, j
@@ -127,7 +126,10 @@ class Task {
    Field current_Field;
    std::string text_task; // текст задания
    // инициализация всех компанентов согласно заданию
-   void initialize(Field &, std::vector <Robot *> &Robots, std::vector <Programm *> &Programms);
+   
+   public:
+   
+   void initialize(Field &, std::vector <Robot *> &Robots, std::vector <Programm *>   &Programms);
    void prepare(Field &); // размещение предметов на поле
    bool is_task_completed(Field &, std::vector <Robot *> &Robots); // проверка на выполненность
    void draw_an_example() {}; // иллюстрирование решения задания(для художника)
