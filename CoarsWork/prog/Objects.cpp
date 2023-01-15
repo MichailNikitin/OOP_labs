@@ -1,5 +1,8 @@
-#include "Objects.hpp"
+#include <fstream>
+#include <iostream>
 #include "graphics.h"
+#include "interface.h"
+#include "Objects.hpp"
 
 using namespace std;
 
@@ -28,8 +31,11 @@ bool Robot::is_crash(std::vector <Robot *>& Robots){
 }
 
 Object::Object(IMAGE* image): img(image){}
+//~Object::Object(){delete img;}
 Fruit::Fruit(IMAGE* image): Object(image){}
+//~Fruit::Fruit(){delete img;}
 Tree::Tree(IMAGE* image): Object(image){}
+//~Fruit::Fruit(){delete img;}
 
 bool Fruit::is_access(Robot& current_robot){
    return 1;
@@ -40,7 +46,14 @@ bool Tree::is_access(Robot& current_robot){
 }
 
 Field::Field(int w, int h):width(w), height(h){
-   vector<vector<Cell>> field(width, vector<Cell>(height));
+   //vector<vector<Cell>> field(width, vector<Cell>(height));
+}
+
+position Field::coord2pos(int x, int y){
+   position current_pos;
+   current_pos.x = x/100;
+   current_pos.y = y/100;
+   return current_pos;
 }
 
 void Field::set_obj(Object* obj, position pos){ // i, j
@@ -75,22 +88,57 @@ void Arrow::use(Robot& robot){
    robot.set_direction(this->orientation);
 }
 void Arrow::draw(position coord){
-   this->img = loadBMP("arrow-up.png");
-   putimage(coord.x, coord.x, img, COPY_PUT);
+   setcolor(BLACK);
+   drawpoly(14, arr_arrowUp);
 }
 
 void ChangeColor::use(Robot& robot){
    robot.set_color(this->color);
 }
 void ChangeColor::draw(position coord){
-   //this->img = loadBMP("arrow-up.png");
-   //putimage(coord.x, coord.x, img, COPY_PUT);
+   circle(coord.x+50, coord.y+50, 40);
 }
 
 void Exit::use(Robot& robot){
-
+   int a;
 }
 void Exit::draw(position coord){
    this->img = loadBMP("wooden-crate.png");
    putimage(coord.x, coord.x, img, COPY_PUT);
 }
+
+Programm::Programm(int c): color(c){}
+
+int Programm::get_col(){return color;}
+
+void Programm::add(Command * command){ // , bool change_coord, bool is_delete, position pos
+   commands.emplace_back(command); 
+}
+
+Task::Task(const string file_name, Field &current_Field, vector <Robot *>&Robots,vector <Programm *>&Programms){
+   ifstream file;
+   setlocale (LC_ALL,"Russian");
+   file.open(file_name);
+   file >> text_task;
+   file >> count_robots >> count_programms;
+   
+   cout << text_task << endl;
+   cout << count_robots<< " " << count_programms;
+   
+/*   
+   for (int i = 0; i < count_robots; i++){
+      int r_x, r_y;
+      string direct;
+      bool change_direct, change_coord;
+      file >> r_x >> r_y;
+      file >> direct;
+      file >> change_direct >> change_coord;
+      Robots.emplace_back(new Robot(false, true));
+}
+*/
+   
+   file.close();
+}
+
+
+

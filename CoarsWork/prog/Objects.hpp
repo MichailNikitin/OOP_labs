@@ -4,6 +4,9 @@
 #include <string>
 #include "graphics.h"
 
+#define WIDTH_I 5
+#define HEIGHT_J 5
+
 class Robot;
 class Robots;
 class Object;
@@ -26,6 +29,7 @@ class Robot {
    bool allow_change_cordinat; // разрешено изменять координаты?
 public:
    Robot(bool, bool); //allow_change_direction, allow_change_cordinat
+   ~Robot() = default;
    void set_cordinat(position); // установить координаты
    void set_direction(position); // установить направление
    void set_color(int); // установить цвет
@@ -38,18 +42,21 @@ class Object {
    IMAGE *img; // картинка объекта
 public:
    Object(IMAGE *);
-   ~Object();
+   //~Object();
    virtual bool is_access(Robot &) = 0; // проверка клетки на доступность для робота
 };
 
 class Fruit : public Object {
 public:
    Fruit(IMAGE *);
+   //~Fruit();
    bool is_access(Robot &);
 };
 
 class Tree : public Object {
+public:
    Tree(IMAGE *);
+   //~Tree();
    bool is_access(Robot &);
 };
 
@@ -63,6 +70,7 @@ class Field {
    std::vector<std::vector<Cell>> field; //поле из клеток
 public:
    Field(int, int); // width, height
+   position coord2pos(int, int); // x, y
    void set_obj(Object *, position); // установить объект
    void delete_obj(position); // удалить объект
    void set_color(position, int); // установить цвет
@@ -119,18 +127,17 @@ public:
    int get_col();
    void add(Command *);
    void draw(position);
-   Command *select(position); // i, j
+   Command* select(position); // i, j
 };
 
 class Task {
-   Field current_Field;
    std::string text_task; // текст задания
+   int count_robots;
+   int count_programms;
+   
    // инициализация всех компанентов согласно заданию
-   
-   public:
-   
-   void initialize(Field &, std::vector <Robot *> &Robots, std::vector <Programm *>   &Programms);
-   void prepare(Field &); // размещение предметов на поле
+public:
+   Task(const std::string, Field &, std::vector <Robot *> &, std::vector <Programm *>&);// название файла с заданием
    bool is_task_completed(Field &, std::vector <Robot *> &Robots); // проверка на выполненность
    void draw_an_example() {}; // иллюстрирование решения задания(для художника)
 };

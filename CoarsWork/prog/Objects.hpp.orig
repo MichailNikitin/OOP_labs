@@ -13,9 +13,6 @@ class Сommand;
 class Programm;
 class Task;
 
-std::vector <Robot *> Robots; // глобальный вектор с роботами
-std::vector <Programm *> Programms; // глобальный вектор с программами
-
 struct position {
    int x, y;
 };
@@ -28,7 +25,7 @@ class Robot {
    bool allow_change_direction; // разрешено изменять направление?
    bool allow_change_cordinat; // разрешено изменять координаты?
 public:
-      Robot(bool, bool); //allow_change_direction, allow_change_cordinat
+   Robot(bool, bool); //allow_change_direction, allow_change_cordinat
    void set_cordinat(position); // установить координаты
    void set_direction(position); // установить направление
    void set_color(int); // установить цвет
@@ -41,17 +38,20 @@ class Object {
    IMAGE *img; // картинка объекта
 public:
    Object(IMAGE *);
+   ~Object();
    virtual bool is_access(Robot &) = 0; // проверка клетки на доступность для робота
 };
 
 class Fruit : public Object {
 public:
    Fruit(IMAGE *);
+~Fruit();
    bool is_access(Robot &);
 };
 
 class Tree : public Object {
    Tree(IMAGE *);
+   ~Tree();
    bool is_access(Robot &);
 };
 
@@ -77,7 +77,7 @@ class Command {
    bool is_allow_delete; //разрешено удалять?
 
    friend class Programm;
-   
+
 protected:
    IMAGE *img;
 public:
@@ -128,7 +128,9 @@ class Task {
    Field current_Field;
    std::string text_task; // текст задания
    // инициализация всех компанентов согласно заданию
-   void initialize(Field &, std::vector <Robot *> &Robots, std::vector <Programm *> &Programms);
+public:
+   Task(const std::string);// название файла с jgb
+   void initialize(Field &, std::vector <Robot *> &Robots, std::vector <Programm *>   &Programms);
    void prepare(Field &); // размещение предметов на поле
    bool is_task_completed(Field &, std::vector <Robot *> &Robots); // проверка на выполненность
    void draw_an_example() {}; // иллюстрирование решения задания(для художника)

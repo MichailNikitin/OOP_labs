@@ -1,6 +1,9 @@
 
 
 
+
+
+
 using namespace std;
 
 Robot::Robot(bool direction, bool cordinat):allow_change_direction(direction), allow_change_cordinat(cordinat){}
@@ -28,8 +31,11 @@ bool Robot::is_crash(std::vector <Robot *>& Robots){
 }
 
 Object::Object(IMAGE* image): img(image){}
+//~Object::Object(){delete img;}
 Fruit::Fruit(IMAGE* image): Object(image){}
+//~Fruit::Fruit(){delete img;}
 Tree::Tree(IMAGE* image): Object(image){}
+//~Fruit::Fruit(){delete img;}
 
 bool Fruit::is_access(Robot& current_robot){
    return 1;
@@ -40,7 +46,14 @@ bool Tree::is_access(Robot& current_robot){
 }
 
 Field::Field(int w, int h):width(w), height(h){
-   vector<vector<Cell>> field(width, vector<Cell>(height));
+   //vector<vector<Cell>> field(width, vector<Cell>(height));
+}
+
+position Field::coord2pos(int x, int y){
+   position current_pos;
+   current_pos.x = x/100;
+   current_pos.y = y/100;
+   return current_pos;
 }
 
 void Field::set_obj(Object* obj, position pos){ // i, j
@@ -52,4 +65,51 @@ void Field::delete_obj(position pos){ // i, j
 }
 
 void Field::set_color(position pos, int color){ // i, j
-   _abracadabra_cast(field[pos.x][pos.y]);
+   field[pos.x][pos.y].color = color;
+}
+
+Object* Field::get_object(position pos){
+   return field[pos.x][pos.y].current_object;
+}
+
+Command::Command(bool is_change_cordinat, bool is_delete, position new_coord):
+is_allow_change_cordinat(is_change_cordinat), is_allow_delete(is_delete), coord(new_coord){}
+
+Arrow::Arrow(bool is_change_cordinat, bool is_delete, position new_coord, position direction):
+Command(is_change_cordinat, is_delete, new_coord){}
+
+ChangeColor::ChangeColor(bool is_change_cordinat, bool is_delete, position new_coord):
+Command(is_change_cordinat, is_delete, new_coord){}
+
+Exit::Exit(bool is_change_cordinat, bool is_delete, position new_coord):
+Command(is_change_cordinat, is_delete, new_coord){}
+
+void Arrow::use(Robot& robot){
+   robot.set_direction(this->orientation);
+}
+void Arrow::draw(position coord){
+   setcolor(BLACK);
+   drawpoly(14, arr_arrowUp);
+}
+
+void ChangeColor::use(Robot& robot){
+   robot.set_color(this->color);
+}
+void ChangeColor::draw(position coord){
+   circle(coord.x+50, coord.y+50, 40);
+}
+
+void Exit::use(Robot& robot){
+   int a = 1;
+}
+void Exit::draw(position coord){
+   this->img = loadBMP("wooden-crate.png");
+   putimage(coord.x, coord.x, img, COPY_PUT);
+}
+
+Programm::Programm(int c): color(c){}
+
+int Programm::get_col(){return color;}
+
+void Programm::add(Command * command){ // , bool change_coord, bool is_delete, position pos
+   _abracadabra_cast(commands);
