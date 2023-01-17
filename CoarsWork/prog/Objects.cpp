@@ -12,6 +12,18 @@ constexpr int color_prog[4] = {RED, GREEN, BLUE, YELLOW};
 
 using namespace std;
 
+int direct2grad(position direct) {
+   if (direct.y == 1)
+      return 90;
+   if (direct.x == -1)
+      return 180;
+   if (direct.y == -1)
+      return 270;
+   else
+      return 0;
+}
+
+
 Robot::Robot(IMAGE *image, bool direction, bool cordinat):img(image), allow_change_direction(direction), allow_change_cordinat(cordinat) {}
 Robot::~Robot() {freeimage(img);}
 
@@ -33,9 +45,8 @@ void Robot::change_Field(Field &Field) {
 }
 
 void Robot::draw() {
-   int x = pos.x*100;
-   int y = pos.y*100;
-   putimage(x, y, img, COPY_PUT);
+   IMAGE *rotImg = imageturn(img,  direct2grad(pos), WHITE);
+   putimage(pos.x*100+5,pos.y*100+5, rotImg, COPY_PUT);
 }
 bool Robot::is_crash(std::vector <Robot *> &Robots) {
 
@@ -161,18 +172,19 @@ void Task::initialize(Field &current_Field, vector <Robot *> &Robots,vector <Pro
       change_coord = (f_change_coord == "да"? true : false);
 
       switch (f_direct) {
-      case 1:
-         direct = position(-1, 0);
-         break; //"влево"
-      case 2:
-         direct = position(0, -1);
-         break; //"вниз"
-      case 3:
+      case 0:
          direct = position(1, 0);
          break; // "вправ"
-      case 4:
+      case 1:
          direct = position(0, 1);
          break; //"вверх"
+      case 2:
+         direct = position(-1, 0);
+         break; //"влево"
+      case 3:
+         direct = position(0, -1);
+         break; //"вниз"
+
       }
       char name_image[7];
       snprintf(name_image, sizeof(name_image), "r%d.bmp",f_color);
@@ -182,6 +194,8 @@ void Task::initialize(Field &current_Field, vector <Robot *> &Robots,vector <Pro
       new_robot.set_direction(direct);
       new_robot.draw();
    }
+
+
 
    file.close();
 }

@@ -35,6 +35,7 @@ Tree(IMAGE*) #<Objects.hpp>
 WIDTH_I #<Objects.hpp>
 arr_arrowUp : int[] #<Objects.cpp>
 color_prog : constexpr int[] #<Objects.cpp>
+direct2grad(position direct) -> int #<Objects.cpp>
 main() -> int #<main.cpp>
 position _type_ #<Objects.hpp>
 position() #<Objects.hpp>

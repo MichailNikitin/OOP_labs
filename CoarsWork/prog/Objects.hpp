@@ -36,7 +36,7 @@ class Robot {
    bool allow_change_direction; // разрешено изменять направление?
    bool allow_change_cordinat; // разрешено изменять координаты?
 public:
-   Robot(IMAGE* img_robot,bool is_allow_change_direction, bool is_allow_change_cordinat); //allow_change_direction, allow_change_cordinat
+   Robot(IMAGE *img_robot,bool is_allow_change_direction, bool is_allow_change_cordinat); //allow_change_direction, allow_change_cordinat
    ~Robot();
    void set_cordinat(position); // установить координаты
    void set_direction(position); // установить направление
