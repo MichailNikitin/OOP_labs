@@ -29,40 +29,42 @@ class Robot {
    bool allow_change_cordinat; // разрешено изменять координаты?
 public:
    Robot(bool, bool); //allow_change_direction, allow_change_cordinat
-   ~Robot() = default;
+   ~Robot();
    void set_cordinat(position); // установить координаты
    void set_direction(position); // установить направление
    void set_color(int); // установить цвет
    void change_Field(Field &); // перед выходом из клетки удаление или замена объекта
+   void draw();
 private:
    bool is_crash(std::vector <Robot *> &Robots); // столкнулся(набор роботов)?
 };
 
 class Object {
+protected:
    IMAGE *img; // картинка объекта
 public:
    Object(IMAGE *);
-   //~Object();
+   ~Object();
    virtual bool is_access(Robot &) = 0; // проверка клетки на доступность для робота
 };
 
 class Fruit : public Object {
 public:
    Fruit(IMAGE *);
-   //~Fruit();
+   ~Fruit();
    bool is_access(Robot &);
 };
 
 class Tree : public Object {
 public:
    Tree(IMAGE *);
-   //~Tree();
+   ~Tree();
    bool is_access(Robot &);
 };
 
 struct Cell {
    Object *current_object = nullptr; // объект в клетке
-   int color = COLOR(255, 255, 255);
+   int color = WHITE;
 };
 
 class Field {
@@ -88,6 +90,7 @@ protected:
    IMAGE *img;
 public:
    Command(bool, bool, position); //is_allow_change_cordinat, is_allow_delete,  x, y
+   Command(const Command & com);
    virtual void use(Robot &) = 0;
    virtual void draw(position) = 0; // x, y
 };
@@ -97,7 +100,7 @@ class Arrow : public Command {
    position orientation;
 public:
    // разрешение на пермещение и удаление, позиция расположения, позимещения изменения направления
-   Arrow(bool, bool, position, position);
+   Arrow(bool is_allow_change_cordinat, bool is_allow_delete, position coord, position orient);
    void use(Robot &);
    void draw(position) ; // x, y
 };
@@ -120,8 +123,8 @@ public:
 };
 
 class Programm {
-   int color = 255;
-   std::vector<Command> commands ;
+   int color = WHITE;
+   std::vector<Command*> commands ;
 public:
    Programm(int); // color
    int get_col();
@@ -134,7 +137,6 @@ class Task {
    std::string text_task; // текст задания
    int count_robots;
    int count_programms;
-   
    // инициализация всех компанентов согласно заданию
 public:
    Task(const std::string, Field &, std::vector <Robot *> &, std::vector <Programm *>&);// название файла с заданием
@@ -142,4 +144,6 @@ public:
    void draw_an_example() {}; // иллюстрирование решения задания(для художника)
 };
 
+extern std::vector <Robot *> Robots; // глобальный вектор с роботами
+extern std::vector <Programm *> Programms; // глобальный вектор с программами
 #endif

@@ -1,16 +1,16 @@
-# Objects.hpp interface.h
-!Objects.cpp Objects.hpp cctype cerrno clocale cstdint cstdio cstdlib ctype.h cwchar cwctype errno.h exception fstream graphics.h initializer_list interface.h ios iosfwd iostream istream keys_n_colors.h limits limits.h locale.h new ostream signal.h stddef.h stdexcept stdint.h stdio.h stdlib.h streambuf string string_view system_error type_traits typeinfo utility vector wchar.h wctype.h #<#>
+# Objects.hpp
+!Objects.cpp Objects.hpp algorithm cctype cerrno clocale cstdint cstdio cstdlib ctype.h cwchar cwctype errno.h exception fstream graphics.h initializer_list ios iosfwd iostream istream keys_n_colors.h limits limits.h locale.h new ostream signal.h stddef.h stdexcept stdint.h stdio.h stdlib.h streambuf string string_view system_error type_traits typeinfo utility vector wchar.h wctype.h #<#>
 !Objects.hpp cctype cerrno clocale cstdint cstdio cstdlib ctype.h cwchar errno.h exception graphics.h initializer_list iosfwd keys_n_colors.h limits limits.h locale.h new signal.h stddef.h stdint.h stdio.h stdlib.h string string_view type_traits typeinfo utility vector wchar.h #<#>
-!interface.h Objects.hpp cctype cerrno clocale cstdint cstdio cstdlib ctype.h cwchar errno.h exception graphics.h initializer_list iosfwd keys_n_colors.h limits limits.h locale.h new signal.h stddef.h stdint.h stdio.h stdlib.h string string_view type_traits typeinfo utility vector wchar.h #<#>
-!main.cpp Objects.hpp cctype cerrno clocale cstdint cstdio cstdlib ctype.h cwchar cwctype errno.h exception graphics.h initializer_list interface.h ios iosfwd iostream istream keys_n_colors.h limits limits.h locale.h new ostream signal.h stddef.h stdexcept stdint.h stdio.h stdlib.h streambuf string string_view system_error type_traits typeinfo utility vector wchar.h wctype.h #<#>
+!main.cpp Objects.hpp cctype cerrno clocale cstdint cstdio cstdlib ctype.h cwchar cwctype errno.h exception graphics.h initializer_list ios iosfwd iostream istream keys_n_colors.h limits limits.h locale.h new ostream signal.h stddef.h stdexcept stdint.h stdio.h stdlib.h streambuf string string_view system_error type_traits typeinfo utility vector wchar.h wctype.h #<#>
 Arrow _type_ #<Objects.hpp>
-Arrow(bool, bool, position, position) #<Objects.hpp>
+Arrow(bool is_allow_change_cordinat, bool is_allow_delete, position coord, position orient) #<Objects.hpp>
 Cell : struct #<Objects.hpp>
 Cell _type_ #<Objects.hpp>
 ChangeColor _type_ #<Objects.hpp>
 ChangeColor(bool, bool, position) #<Objects.hpp>
 Command _type_ #<Objects.hpp>
 Command(bool, bool, position) #<Objects.hpp>
+Command(const Command& com) #<Objects.hpp>
 Exit _type_ #<Objects.hpp>
 Exit(bool, bool, position) #<Objects.hpp>
 Field _type_ #<Objects.hpp>
@@ -20,11 +20,14 @@ Fruit(IMAGE*) #<Objects.hpp>
 HEIGHT_J #<Objects.hpp>
 Object _type_ #<Objects.hpp>
 Object(IMAGE*) #<Objects.hpp>
+POS2CORD(x) #<main.cpp>
 Programm _type_ #<Objects.hpp>
 Programm(int) #<Objects.hpp>
+Programms : std::vector #<Objects.hpp>
 Programms : vector #<main.cpp>
 Robot _type_ #<Objects.hpp>
 Robot(bool, bool) #<Objects.hpp>
+Robots : std::vector #<Objects.hpp>
 Robots : vector #<main.cpp>
 Robots _type_ #<Objects.hpp>
 Task _type_ #<Objects.hpp>
@@ -32,7 +35,7 @@ Task(const std::string, Field&, std::vector&, std::vector&) #<Objects.hpp>
 Tree _type_ #<Objects.hpp>
 Tree(IMAGE*) #<Objects.hpp>
 WIDTH_I #<Objects.hpp>
-arr_arrowUp : int[] #<interface.h>
+arr_arrowUp : int[] #<Objects.cpp>
 main() -> int #<main.cpp>
 position _type_ #<Objects.hpp>
 	Arrow:%orientation : position #<Objects.hpp>
@@ -68,6 +71,7 @@ position _type_ #<Objects.hpp>
 	Field::delete_obj(position) -> void #<Objects.hpp>
 	Field::set_color(position, int) -> void #<Objects.hpp>
 	Field::get_object(position) -> Object* #<Objects.hpp>
+	Fruit:%img : IMAGE* #<Objects.hpp>
 	Fruit::is_access(Robot&) -> bool #<Objects.hpp>
 	Fruit::is_access(Robot&) -> virtual bool #<Objects.hpp>
 	Object:%img : IMAGE* #<Objects.hpp>
@@ -89,11 +93,13 @@ position _type_ #<Objects.hpp>
 	Robot::set_direction(position) -> void #<Objects.hpp>
 	Robot::set_color(int) -> void #<Objects.hpp>
 	Robot::change_Field(Field&) -> void #<Objects.hpp>
+	Robot::draw() -> void #<Objects.hpp>
 	Task:%text_task : std::string #<Objects.hpp>
 	Task:%count_robots : int #<Objects.hpp>
 	Task:%count_programms : int #<Objects.hpp>
 	Task::is_task_completed(Field&, std::vector& Robots) -> bool #<Objects.hpp>
 	Task::draw_an_example() -> void #<Objects.hpp>
+	Tree:%img : IMAGE* #<Objects.hpp>
 	Tree::is_access(Robot&) -> bool #<Objects.hpp>
 	Tree::is_access(Robot&) -> virtual bool #<Objects.hpp>
 	position::x : int #<Objects.hpp>

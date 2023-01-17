@@ -1,13 +1,15 @@
 #include <fstream>
 #include <iostream>
 #include "graphics.h"
-#include "interface.h"
+#include <algorithm>
 #include "Objects.hpp"
+
+static int arr_arrowUp[14] = {45, 0, 90, 45, 67, 45, 67, 90, 23, 90, 23, 45, 0, 45}; 
 
 using namespace std;
 
 Robot::Robot(bool direction, bool cordinat):allow_change_direction(direction), allow_change_cordinat(cordinat){}
-
+Robot::~Robot(){freeimage(img);}
 void Robot::set_cordinat(position new_coord){
    coord.x = new_coord.x;
    coord.y = new_coord.y;
@@ -31,11 +33,11 @@ bool Robot::is_crash(std::vector <Robot *>& Robots){
 }
 
 Object::Object(IMAGE* image): img(image){}
-//~Object::Object(){delete img;}
+Object::~Object(){freeimage(img);}
 Fruit::Fruit(IMAGE* image): Object(image){}
-//~Fruit::Fruit(){delete img;}
+Fruit::~Fruit(){freeimage(img);}
 Tree::Tree(IMAGE* image): Object(image){}
-//~Fruit::Fruit(){delete img;}
+Tree::~Tree(){freeimage(img);}
 
 bool Fruit::is_access(Robot& current_robot){
    return 1;
@@ -75,6 +77,12 @@ Object* Field::get_object(position pos){
 Command::Command(bool is_change_cordinat, bool is_delete, position new_coord):
 is_allow_change_cordinat(is_change_cordinat), is_allow_delete(is_delete), coord(new_coord){}
 
+Command::Command(const Command & com){
+      is_allow_change_cordinat = com.is_allow_change_cordinat;
+      is_allow_delete = com.is_allow_delete;
+      coord = com.coord;
+}
+
 Arrow::Arrow(bool is_change_cordinat, bool is_delete, position new_coord, position direction):
 Command(is_change_cordinat, is_delete, new_coord){}
 
@@ -100,7 +108,7 @@ void ChangeColor::draw(position coord){
 }
 
 void Exit::use(Robot& robot){
-   int a;
+   Robots.erase(ranges::find(Robots, &robot));
 }
 void Exit::draw(position coord){
    this->img = loadBMP("wooden-crate.png");
@@ -112,12 +120,12 @@ Programm::Programm(int c): color(c){}
 int Programm::get_col(){return color;}
 
 void Programm::add(Command * command){ // , bool change_coord, bool is_delete, position pos
-   commands.emplace_back(command); 
+   commands.push_back(command); 
 }
 
 Task::Task(const string file_name, Field &current_Field, vector <Robot *>&Robots,vector <Programm *>&Programms){
    ifstream file;
-   setlocale (LC_ALL,"Russian");
+   setlocale (LC_ALL, "Russian");
    file.open(file_name);
    file >> text_task;
    file >> count_robots >> count_programms;
