@@ -4,19 +4,34 @@
 
 
 
+
+
+
+static int arr_arrowUp[14] = {45, 0, 90, 45, 67, 45, 67, 90, 23, 90, 23, 45, 0, 45};
+constexpr int color_prog[4] = {RED, GREEN, BLUE, YELLOW};
+
 using namespace std;
 
-vector <Robot *> Robots; // глобальный вектор с роботами
-vector <Programm *> Programms; // глобальный вектор с программами
+Robot::Robot(IMAGE *image, bool direction, bool cordinat):img(image), allow_change_direction(direction), allow_change_cordinat(cordinat) {}
+Robot::~Robot() {freeimage(img);}
 
-int main() {
-   initwindow(800, 550, "Программа для обучения программированию");
-   putimage(0, 0, loadBMP("inteface.bmp"), COPY_PUT);
+void Robot::set_cordinat(position new_pos) {
+   pos.x = new_pos.x;
+   pos.y = new_pos.y;
+}
 
-   position current_cell(0, 0);
+void Robot::set_direction(position new_direction) {
+   direction.x = new_direction.x;
+   direction.y = new_direction.y;
+}
 
-   Field field(WIDTH_I, HEIGHT_J);
+void Robot::set_color(int new_color) {color = new_color;}
 
-   //Task task("tast_list.txt", field, Robots, Programms);
+void Robot::change_Field(Field &Field) {
 
-   _abracadabra_cast(Robots);
+
+}
+
+void Robot::draw() {
+   int x = pos.x*100;
+   int y = _abracadabra_cast(pos);

@@ -18,35 +18,31 @@ int main() {
 
    Field field(WIDTH_I, HEIGHT_J);
 
-   Task task("tast_list.txt", field, Robots, Programms);
+   Task task("tast_list.txt");
+   task.initialize(field, Robots, Programms);
 
-   Robots.push_back(new Robot(false, true));
-   Robots.emplace_back(new Robot(true, false));
-
-   Programms.emplace_back(new Programm(RED));
-   Programms.emplace_back(new Programm(GREEN));
    
    while (1) {
       switch (getch(kbhit())) {
       case KEY_UP:
          current_cell.y += (current_cell.y == 0) ? 0 : -1;
          setcolor(YELLOW);
-         rectangle(POS2CORD(current_cell.x), POS2CORD(current_cell.y), current_cell.x+100, current_cell.y+100);
+         rectangle(POS2CORD(current_cell.x), POS2CORD(current_cell.y), POS2CORD(current_cell.x+100), POS2CORD(current_cell.y+100));
          break;
       case KEY_DOWN:
-         current_cell.y += (current_cell.y == HEIGHT_J) ? 0 : 1;
+         current_cell.y += (current_cell.y == HEIGHT_J-1) ? 0 : 1;
          setcolor(YELLOW);
          rectangle(POS2CORD(current_cell.x), POS2CORD(current_cell.y), POS2CORD(current_cell.x+100), POS2CORD(current_cell.y+100));
          break;
       case KEY_LEFT:
          current_cell.x += (current_cell.x == 0) ? 0 : -1;
          setcolor(YELLOW);
-         rectangle(current_cell.x, current_cell.y, current_cell.x+100, current_cell.y+100);
+         rectangle(POS2CORD(current_cell.x), POS2CORD(current_cell.y), POS2CORD(current_cell.x+100), POS2CORD(current_cell.y+100));
          break;
       case KEY_RIGHT:
-         current_cell.x += (current_cell.x == WIDTH_I) ? 0 : 1;
+         current_cell.x += (current_cell.x == WIDTH_I-1) ? 0 : 1;
          setcolor(YELLOW);
-         rectangle(current_cell.x, current_cell.y, current_cell.x+100, current_cell.y+100);
+         rectangle(POS2CORD(current_cell.x), POS2CORD(current_cell.y), POS2CORD(current_cell.x+100), POS2CORD(current_cell.y+100));
          break;
       case KEY_ENTER:
 

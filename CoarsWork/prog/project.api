@@ -1,5 +1,5 @@
 # Objects.hpp
-!Objects.cpp Objects.hpp algorithm cctype cerrno clocale cstdint cstdio cstdlib ctype.h cwchar cwctype errno.h exception fstream graphics.h initializer_list ios iosfwd iostream istream keys_n_colors.h limits limits.h locale.h new ostream signal.h stddef.h stdexcept stdint.h stdio.h stdlib.h streambuf string string_view system_error type_traits typeinfo utility vector wchar.h wctype.h #<#>
+!Objects.cpp Objects.hpp algorithm cctype cerrno clocale cstdint cstdio cstdlib ctype.h cwchar cwctype errno.h exception format fstream graphics.h initializer_list ios iosfwd iostream istream keys_n_colors.h limits limits.h locale.h new ostream signal.h stddef.h stdexcept stdint.h stdio.h stdlib.h streambuf string string_view system_error type_traits typeinfo utility vector wchar.h wctype.h #<#>
 !Objects.hpp cctype cerrno clocale cstdint cstdio cstdlib ctype.h cwchar errno.h exception graphics.h initializer_list iosfwd keys_n_colors.h limits limits.h locale.h new signal.h stddef.h stdint.h stdio.h stdlib.h string string_view type_traits typeinfo utility vector wchar.h #<#>
 !main.cpp Objects.hpp cctype cerrno clocale cstdint cstdio cstdlib ctype.h cwchar cwctype errno.h exception graphics.h initializer_list ios iosfwd iostream istream keys_n_colors.h limits limits.h locale.h new ostream signal.h stddef.h stdexcept stdint.h stdio.h stdlib.h streambuf string string_view system_error type_traits typeinfo utility vector wchar.h wctype.h #<#>
 Arrow _type_ #<Objects.hpp>
@@ -23,21 +23,23 @@ Object(IMAGE*) #<Objects.hpp>
 POS2CORD(x) #<main.cpp>
 Programm _type_ #<Objects.hpp>
 Programm(int) #<Objects.hpp>
-Programms : std::vector #<Objects.hpp>
-Programms : vector #<main.cpp>
+Programms : vector #<Objects.hpp>
 Robot _type_ #<Objects.hpp>
-Robot(bool, bool) #<Objects.hpp>
-Robots : std::vector #<Objects.hpp>
-Robots : vector #<main.cpp>
+Robot(IMAGE* img_robot, bool is_allow_change_direction, bool is_allow_change_cordinat) #<Objects.hpp>
+Robots : vector #<Objects.hpp>
 Robots _type_ #<Objects.hpp>
 Task _type_ #<Objects.hpp>
-Task(const std::string, Field&, std::vector&, std::vector&) #<Objects.hpp>
+Task(const string) #<Objects.hpp>
 Tree _type_ #<Objects.hpp>
 Tree(IMAGE*) #<Objects.hpp>
 WIDTH_I #<Objects.hpp>
 arr_arrowUp : int[] #<Objects.cpp>
+color_prog : constexpr int[] #<Objects.cpp>
 main() -> int #<main.cpp>
 position _type_ #<Objects.hpp>
+position() #<Objects.hpp>
+position(const position& pos) #<Objects.hpp>
+position(int new_x, int new_y) #<Objects.hpp>
 	Arrow:%orientation : position #<Objects.hpp>
 	Arrow:%img : IMAGE* #<Objects.hpp>
 	Arrow::use(Robot&) -> void #<Objects.hpp>
@@ -65,7 +67,7 @@ position _type_ #<Objects.hpp>
 	Exit::draw(position) -> virtual void #<Objects.hpp>
 	Field:%width : int #<Objects.hpp>
 	Field:%height : int #<Objects.hpp>
-	Field:%field : std::vector #<Objects.hpp>
+	Field:%field : vector #<Objects.hpp>
 	Field::coord2pos(int, int) -> position #<Objects.hpp>
 	Field::set_obj(Object*, position) -> void #<Objects.hpp>
 	Field::delete_obj(position) -> void #<Objects.hpp>
@@ -77,13 +79,13 @@ position _type_ #<Objects.hpp>
 	Object:%img : IMAGE* #<Objects.hpp>
 	Object::is_access(Robot&) -> virtual bool #<Objects.hpp>
 	Programm:%color : int #<Objects.hpp>
-	Programm:%commands : std::vector #<Objects.hpp>
+	Programm:%commands : vector #<Objects.hpp>
 	Programm::get_col() -> int #<Objects.hpp>
 	Programm::add(Command*) -> void #<Objects.hpp>
 	Programm::draw(position) -> void #<Objects.hpp>
 	Programm::select(position) -> Command* #<Objects.hpp>
 	Robot:%img : IMAGE* #<Objects.hpp>
-	Robot:%coord : position #<Objects.hpp>
+	Robot:%pos : position #<Objects.hpp>
 	Robot:%direction : position #<Objects.hpp>
 	Robot:%color : int #<Objects.hpp>
 	Robot:%allow_change_direction : bool #<Objects.hpp>
@@ -94,10 +96,12 @@ position _type_ #<Objects.hpp>
 	Robot::set_color(int) -> void #<Objects.hpp>
 	Robot::change_Field(Field&) -> void #<Objects.hpp>
 	Robot::draw() -> void #<Objects.hpp>
-	Task:%text_task : std::string #<Objects.hpp>
+	Task:%text_task : string #<Objects.hpp>
+	Task:%name_taskFile : string #<Objects.hpp>
 	Task:%count_robots : int #<Objects.hpp>
 	Task:%count_programms : int #<Objects.hpp>
-	Task::is_task_completed(Field&, std::vector& Robots) -> bool #<Objects.hpp>
+	Task::initialize(Field&, std::vector& Robots, std::vector& Programms) -> void #<Objects.hpp>
+	Task::is_task_completed(Field&, vector& Robots) -> bool #<Objects.hpp>
 	Task::draw_an_example() -> void #<Objects.hpp>
 	Tree:%img : IMAGE* #<Objects.hpp>
 	Tree::is_access(Robot&) -> bool #<Objects.hpp>
