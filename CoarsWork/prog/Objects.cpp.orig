@@ -12,7 +12,7 @@ constexpr int color_prog[4] = {RED, GREEN, BLUE, YELLOW};
 
 using namespace std;
 
-int direct2grad(position direct){
+int direct2grad(position direct) {
    if (direct.y == 1)
       return 90;
    if (direct.x == -1)
@@ -45,7 +45,7 @@ void Robot::change_Field(Field &Field) {
 }
 
 void Robot::draw() {
-   IMAGE* rotImg = imageturn(img,  direct2grad(pos), WHITE);
+   IMAGE *rotImg = imageturn(img,  direct2grad(pos), WHITE);
    putimage(pos.x*100+5,pos.y*100+5, rotImg, COPY_PUT);
 }
 bool Robot::is_crash(std::vector <Robot *> &Robots) {
@@ -152,10 +152,10 @@ void Task::initialize(Field &current_Field, vector <Robot *> &Robots,vector <Pro
    file.open(name_taskFile);
 
    getline(file, text_task);
-   file >> count_robots >> count_programms;
+   file >> count_robots >> count_commands;
 
    cout << text_task << endl;
-   cout << count_robots<< " " << count_programms<< endl;
+   cout << count_robots<< " " << count_commands<< endl;
 
    for (int i = 0; i < count_robots; i++) {
       int r_x, r_y, r_color;
@@ -172,10 +172,10 @@ void Task::initialize(Field &current_Field, vector <Robot *> &Robots,vector <Pro
       change_coord = (f_change_coord == "да"? true : false);
 
       switch (f_direct) {
-               case 0:
+      case 0:
          direct = position(1, 0);
          break; // "вправ"
-               case 1:
+      case 1:
          direct = position(0, 1);
          break; //"вверх"
       case 2:
@@ -194,9 +194,37 @@ void Task::initialize(Field &current_Field, vector <Robot *> &Robots,vector <Pro
       new_robot.set_direction(direct);
       new_robot.draw();
    }
-   
-   
+   // цикл чтения информации о программах
+   for (int i = 0; i < count_commands; i++) {
+      string name_com;
+      int com_x, com_y;
+      int f_color, f_allow_delete;
+      file >> name_com;
+      if (name_com == "стрелка") {
+         int orient;
+         file >> orient;
+               switch (f_direct) {
+      case 0:
+         direct = position(1, 0);
+         break; // "вправ"
+      case 1:
+         direct = position(0, 1);
+         break; //"вверх"
+      case 2:
+         direct = position(-1, 0);
+         break; //"влево"
+      case 3:
+         direct = position(0, -1);
+         break; //"вниз"
 
+      }
+      }
+      file >>f_color >> com_x >> com_y;
+      file >> f_change_coord >> f_allow_delete;
+      
+      
+      
+   }
    file.close();
 }
 

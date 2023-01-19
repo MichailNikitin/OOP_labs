@@ -22,10 +22,7 @@ struct position {
    int x, y;
    position() {x = y = 0;}
    position(int new_x, int new_y):x(new_x), y(new_y) {}
-   position(const position &pos) {
-      x = pos.x;
-      y = pos.y;
-   }
+   position(const position &pos) {x = pos.x;y = pos.y;}
 };
 
 class Robot {
@@ -117,7 +114,7 @@ public:
 class ChangeColor : public Command {
    int color;
 public:
-   ChangeColor(bool, bool, position);
+   ChangeColor(bool is_allow_change_cordinat, bool is_allow_delete, position, int color);
    void use(Robot &);
    void draw(position); // x, y
 };
@@ -125,7 +122,7 @@ public:
 //"Выход", удаляющий робота
 class Exit : public Command {
 public:
-   Exit(bool, bool, position);
+   Exit(bool is_allow_change_cordinat, bool is_allow_delete, position);
    void use(Robot &);
    void draw(position); // x, y
 };
@@ -134,7 +131,7 @@ class Programm {
    int color = WHITE;
    vector<Command *> commands ;
 public:
-   Programm(int); // color
+   Programm(int color); // color
    int get_col();
    void add(Command *);
    void draw(position);

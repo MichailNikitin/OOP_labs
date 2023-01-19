@@ -7,12 +7,12 @@ Arrow(bool is_allow_change_cordinat, bool is_allow_delete, position coord, posit
 Cell : struct #<Objects.hpp>
 Cell _type_ #<Objects.hpp>
 ChangeColor _type_ #<Objects.hpp>
-ChangeColor(bool, bool, position) #<Objects.hpp>
+ChangeColor(bool is_allow_change_cordinat, bool is_allow_delete, position, int color) #<Objects.hpp>
 Command _type_ #<Objects.hpp>
 Command(bool, bool, position) #<Objects.hpp>
 Command(const Command& com) #<Objects.hpp>
 Exit _type_ #<Objects.hpp>
-Exit(bool, bool, position) #<Objects.hpp>
+Exit(bool is_allow_change_cordinat, bool is_allow_delete, position) #<Objects.hpp>
 Field _type_ #<Objects.hpp>
 Field(int, int) #<Objects.hpp>
 Fruit _type_ #<Objects.hpp>
@@ -22,7 +22,7 @@ Object _type_ #<Objects.hpp>
 Object(IMAGE*) #<Objects.hpp>
 POS2CORD(x) #<main.cpp>
 Programm _type_ #<Objects.hpp>
-Programm(int) #<Objects.hpp>
+Programm(int color) #<Objects.hpp>
 Programms : vector #<Objects.hpp>
 Robot _type_ #<Objects.hpp>
 Robot(IMAGE* img_robot, bool is_allow_change_direction, bool is_allow_change_cordinat) #<Objects.hpp>
@@ -36,6 +36,7 @@ WIDTH_I #<Objects.hpp>
 arr_arrowUp : int[] #<Objects.cpp>
 color_prog : constexpr int[] #<Objects.cpp>
 direct2grad(position direct) -> int #<Objects.cpp>
+find_command_in_prog(Programm* prog, int color) -> bool #<Objects.cpp>
 main() -> int #<main.cpp>
 position _type_ #<Objects.hpp>
 position() #<Objects.hpp>

@@ -23,6 +23,12 @@ int direct2grad(position direct) {
       return 0;
 }
 
+bool find_command_in_prog(Programm* prog, int color){
+   if (prog->get_col() == color)
+      return true;
+   return false;
+}
+
 
 Robot::Robot(IMAGE *image, bool direction, bool cordinat):img(image), allow_change_direction(direction), allow_change_cordinat(cordinat) {}
 Robot::~Robot() {freeimage(img);}
@@ -105,10 +111,10 @@ Command::Command(const Command &com) {
 }
 
 Arrow::Arrow(bool is_change_cordinat, bool is_delete, position new_coord, position direction):
-   Command(is_change_cordinat, is_delete, new_coord) {}
+   Command(is_change_cordinat, is_delete, new_coord), orientation(direction) {}
 
-ChangeColor::ChangeColor(bool is_change_cordinat, bool is_delete, position new_coord):
-   Command(is_change_cordinat, is_delete, new_coord) {}
+ChangeColor::ChangeColor(bool is_change_cordinat, bool is_delete, position new_coord, int color):
+   Command(is_change_cordinat, is_delete, new_coord), color(color) {}
 
 Exit::Exit(bool is_change_cordinat, bool is_delete, position new_coord):
    Command(is_change_cordinat, is_delete, new_coord) {}
@@ -152,10 +158,10 @@ void Task::initialize(Field &current_Field, vector <Robot *> &Robots,vector <Pro
    file.open(name_taskFile);
 
    getline(file, text_task);
-   file >> count_robots >> count_programms;
+   file >> count_robots >> count_commands;
 
    cout << text_task << endl;
-   cout << count_robots<< " " << count_programms<< endl;
+   cout << count_robots<< " " << count_commands<< endl;
 
    for (int i = 0; i < count_robots; i++) {
       int r_x, r_y, r_color;
@@ -194,9 +200,51 @@ void Task::initialize(Field &current_Field, vector <Robot *> &Robots,vector <Pro
       new_robot.set_direction(direct);
       new_robot.draw();
    }
+   // цикл чтения информации о программах
+   for (int i = 0; i < count_commands; i++) {
+      string name_com;
+      int com_x, com_y;
+      int f_color, f_allow_delete;
+      file >> name_com;
+      if (name_com == "стрелка") {
+         int f_orient;
+         position orient;
+         file >> f_orient;
+         switch (f_orient) {
+         case 0:
+            orient = position(1, 0);
+            break; // "вправ"
+         case 1:
+            orient = position(0, 1);
+            break; //"вверх"
+         case 2:
+            orient = position(-1, 0);
+            break; //"влево"
+         case 3:
+            orient = position(0, -1);
+            break; //"вниз"
+         }
+      }
+      file >>f_color >> com_x >> com_y;
+      file >> f_change_coord >> f_allow_delete;
+      
+      bool allow_delete = (f_allow_delete == "да"? true : false);
+      bool change_coord = (f_change_coord == "да"? true : false);
+      
+      if(name_com == "стрелка"){
+         Arrow arrow(change_coord, allow_delete, position(com_x, com_y), orient);
+         find_if(Programms.begin(), Programms.end(), [](const Programm* prog) -> bool {return prog.color = f_color};
+         }
+        /*  
+      if(name_com == "банка_с_краской")
+         ChangeColor canOfPaint(change_coord, allow_delete, position(com_x, com_y), color_prog(f_color));
+      else
+         Exit box(change_coord, allow_delete, position(com_x, com_y);
+      */
+      
 
 
-
+   }
    file.close();
 }
 
