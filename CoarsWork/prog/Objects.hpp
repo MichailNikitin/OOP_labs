@@ -127,7 +127,7 @@ public:
    void draw(position); // x, y
 };
 
-class Programm {
+class Programm  {
    int color = WHITE;
    vector<Command *> commands ;
 public:
@@ -145,7 +145,7 @@ class Task {
    string text_task; // текст задани€
    string name_taskFile;
    int count_robots;
-   int count_programms;
+   int count_commands;
    // инициализаци€ всех компанентов согласно заданию
 public:
    Task(const string);// название файла с заданием

@@ -23,7 +23,7 @@ int direct2grad(position direct) {
       return 0;
 }
 
-bool find_command_in_prog(Programm* prog, int color){
+bool find_command_in_prog(Programm *prog, int color) {
    if (prog->get_col() == color)
       return true;
    return false;
@@ -203,8 +203,10 @@ void Task::initialize(Field &current_Field, vector <Robot *> &Robots,vector <Pro
    // цикл чтения информации о программах
    for (int i = 0; i < count_commands; i++) {
       string name_com;
+     // Arrow commandArrow;
       int com_x, com_y;
-      int f_color, f_allow_delete;
+      int f_color;
+      position orient;
       file >> name_com;
       if (name_com == "стрелка") {
          int f_orient;
@@ -213,7 +215,7 @@ void Task::initialize(Field &current_Field, vector <Robot *> &Robots,vector <Pro
          switch (f_orient) {
          case 0:
             orient = position(1, 0);
-            break; // "вправ"
+            break; // "вправo"
          case 1:
             orient = position(0, 1);
             break; //"вверх"
@@ -225,28 +227,34 @@ void Task::initialize(Field &current_Field, vector <Robot *> &Robots,vector <Pro
             break; //"вниз"
          }
       }
+      string f_allow_delete, f_change_coord;
       file >>f_color >> com_x >> com_y;
       file >> f_change_coord >> f_allow_delete;
-      
+
       bool allow_delete = (f_allow_delete == "да"? true : false);
       bool change_coord = (f_change_coord == "да"? true : false);
-      
-      if(name_com == "стрелка"){
-         Arrow arrow(change_coord, allow_delete, position(com_x, com_y), orient);
-         find_if(Programms.begin(), Programms.end(), [](const Programm* prog) -> bool {return prog.color = f_color};
-         }
-        /*  
-      if(name_com == "банка_с_краской")
-         ChangeColor canOfPaint(change_coord, allow_delete, position(com_x, com_y), color_prog(f_color));
-      else
-         Exit box(change_coord, allow_delete, position(com_x, com_y);
-      */
-      
 
+      if (name_com == "стрелка") {
+         Arrow arrow(change_coord, allow_delete, position(com_x, com_y), orient);
+         auto it =  find_if(Programms.begin(), Programms.end(), [f_color](Programm *prog) {return prog->get_col() == f_color;});
+         if (it != Programms.end()) {
+            cout << "Нашёл" << endl;
+         }
+         else
+         {cout << "Не нашёл"  << endl;}
+
+      }
+      /*
+      if(name_com == "банка_с_краской")
+       ChangeColor canOfPaint(change_coord, allow_delete, position(com_x, com_y), color_prog(f_color));
+      else
+       Exit box(change_coord, allow_delete, position(com_x, com_y);
+      */
 
    }
    file.close();
 }
+
 
 
 

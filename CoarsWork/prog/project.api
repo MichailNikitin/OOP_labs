@@ -101,7 +101,7 @@ position(int new_x, int new_y) #<Objects.hpp>
 	Task:%text_task : string #<Objects.hpp>
 	Task:%name_taskFile : string #<Objects.hpp>
 	Task:%count_robots : int #<Objects.hpp>
-	Task:%count_programms : int #<Objects.hpp>
+	Task:%count_commands : int #<Objects.hpp>
 	Task::initialize(Field&, std::vector& Robots, std::vector& Programms) -> void #<Objects.hpp>
 	Task::is_task_completed(Field&, vector& Robots) -> bool #<Objects.hpp>
 	Task::draw_an_example() -> void #<Objects.hpp>
