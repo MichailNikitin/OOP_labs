@@ -129,15 +129,8 @@ void Arrow::use(Robot &robot) {
    robot.set_direction(this->orientation);
 }
 void Arrow::draw() {
-   setcolor(BLACK);
-   /*
-      for(int i = 0; i < 15; i++){
-         arr_arrowUp[i] += (coord.x * 100);
-         arr_arrowUp[i+1] += (coord.y * 100);
-      }
-      drawpoly(8, arr_arrowUp);
-      */
-   rectangle(coord.x*100, coord.y*100, coord.x*100+50, coord.y*100+50);
+   IMAGE *rotImg = imageturn(loadBMP("arrow_white.bmp"),  direct2grad(orientation), WHITE);
+   putimage(coord.x*100+5,coord.y*100+5, rotImg, COPY_PUT);
 }
 
 void ChangeColor::use(Robot &robot) {
@@ -152,8 +145,8 @@ void Exit::use(Robot &robot) {
    Robots.erase(ranges::find(Robots, &robot));
 }
 void Exit::draw() {
-   this->img = loadBMP("wooden-crate.png");
-   putimage(coord.x, coord.x, img, COPY_PUT);
+   this->img = loadBMP("wooden-crate.bmp");
+   putimage(coord.x*100, coord.x*100, img, COPY_PUT);
 }
 
 Programm::Programm(int c): color(c) {}
@@ -213,12 +206,12 @@ void Task::initialize(Field &current_Field, vector <Robot *> &Robots,vector <Pro
       }
       char name_image[7];
       snprintf(name_image, sizeof(name_image), "r%d.bmp",f_color);
-      Robot new_robot(loadBMP(name_image),change_direct, change_coord);
-      new_robot.set_color(color_prog[f_color]);
-      new_robot.set_cordinat(position(r_x, r_y));
-      new_robot.set_direction(direct);
-      new_robot.draw();
-      Robots.push_back(&new_robot);
+      Robot * new_robot = new Robot(loadBMP(name_image),change_direct, change_coord);
+      new_robot->set_color(color_prog[f_color]);
+      new_robot->set_cordinat(position(r_x, r_y));
+      new_robot->set_direction(direct);
+      new_robot->draw();
+      Robots.push_back(new_robot);
    }
    /*
    Arrow arrow1(true, false, position(1, 2), position(0, 1));
@@ -275,7 +268,7 @@ void Task::initialize(Field &current_Field, vector <Robot *> &Robots,vector <Pro
          Arrow arrow(change_coord, allow_delete, position(com_x, com_y), orient);
          command = &arrow;
       }
-
+      else
       if (name_com == "банка_с_краской") {
          int f_change_col;
          file >> f_change_col;
@@ -284,7 +277,7 @@ void Task::initialize(Field &current_Field, vector <Robot *> &Robots,vector <Pro
          ChangeColor canOfPaint(change_coord, allow_delete, position(com_x, com_y), color_prog[f_change_col]);
          command = &canOfPaint;
       }
-
+      else
       if (name_com == "выход") {
          cout << endl;
          Exit box(change_coord, allow_delete, position(com_x, com_y));
@@ -311,16 +304,6 @@ void Task::initialize(Field &current_Field, vector <Robot *> &Robots,vector <Pro
          cout << "Не нашёл"  << endl;
          Programm *new_programm = new Programm(color_prog[f_color]);
          new_programm->add(command);
-         /*   if (name_com == "стрелка") {
-               new_programm.add(&arrow);
-            }
-            else if(name_com == "банка_с_краской"){
-            new_programm.add(&canOfPaint);
-            }
-            else if(name_com == "выход"){
-              new_programm.add(&box);
-            }
-         */
          Programms.push_back(new_programm);
          for (unsigned int i = 0; i < Programms.size(); i++)
          {
@@ -330,8 +313,8 @@ void Task::initialize(Field &current_Field, vector <Robot *> &Robots,vector <Pro
       }
    }
 
-   //for (int i = 0; i < Programms.size(); i++)
-   //Programms[i].draw();
+   for (int i = 0; i < Programms.size(); i++)
+      Programms[i]->draw();
 
 
 
