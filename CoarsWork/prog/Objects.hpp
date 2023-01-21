@@ -85,7 +85,6 @@ public:
 };
 
 class Command {
-   position coord;
    bool is_allow_change_cordinat; //разрешено измен€ть координаты?
    bool is_allow_delete; //разрешено удал€ть?
 
@@ -93,11 +92,13 @@ class Command {
 
 protected:
    IMAGE *img;
+   position coord;
 public:
    Command(bool, bool, position); //is_allow_change_cordinat, is_allow_delete,  x, y
-   Command(const Command &com);
+   Command(const Command &com); //  онструктор копий
+   void set_pos(position);
    virtual void use(Robot &) = 0;
-   virtual void draw(position) = 0; // x, y
+   virtual void draw() = 0; // i, j
 };
 
 // "—трелка", мен€юща€ нарпавление
@@ -107,7 +108,7 @@ public:
    // разрешение на пермещение и удаление, позици€ расположени€, позимещени€ изменени€ направлени€
    Arrow(bool is_allow_change_cordinat, bool is_allow_delete, position coord, position orient);
    void use(Robot &);
-   void draw(position) ; // x, y
+   void draw() ; // x, y
 };
 
 //"Ѕанка с краской", мен€юща€ цвет робота
@@ -116,7 +117,7 @@ class ChangeColor : public Command {
 public:
    ChangeColor(bool is_allow_change_cordinat, bool is_allow_delete, position, int color);
    void use(Robot &);
-   void draw(position); // x, y
+   void draw(); // x, y
 };
 
 //"¬ыход", удал€ющий робота
@@ -124,7 +125,7 @@ class Exit : public Command {
 public:
    Exit(bool is_allow_change_cordinat, bool is_allow_delete, position);
    void use(Robot &);
-   void draw(position); // x, y
+   void draw(); // x, y
 };
 
 class Programm  {
@@ -134,12 +135,12 @@ public:
    Programm(int color); // color
    int get_col();
    void add(Command *);
-   void draw(position);
+   void draw();
    Command *select(position); // i, j
 };
 
-extern vector <Robot *> Robots; // глобальный вектор с роботами
-extern vector <Programm *> Programms; // глобальный вектор с программами
+extern vector <Robot*> Robots; // глобальный вектор с роботами
+extern vector <Programm*> Programms; // глобальный вектор с программами
 
 class Task {
    string text_task; // текст задани€

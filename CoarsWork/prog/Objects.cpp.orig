@@ -170,7 +170,7 @@ void Task::initialize(Field &current_Field, vector <Robot *> &Robots,vector <Pro
       file >> r_x >> r_y;
       file >>f_color >> f_direct;
       file >> f_change_direct >> f_change_coord;
-      cout << r_x << " " << r_y << " " << f_color << " "<< f_direct <<" "<< f_change_direct <<" "<< f_change_coord;
+      cout << r_x << " " << r_y << " " << f_color << " "<< f_direct <<" "<< f_change_direct <<" "<< f_change_coord << endl;
 
       bool change_direct, change_coord;
       position direct;
@@ -203,18 +203,32 @@ void Task::initialize(Field &current_Field, vector <Robot *> &Robots,vector <Pro
    // цикл чтения информации о программах
    for (int i = 0; i < count_commands; i++) {
       string name_com;
+      //Arrow commandArrow;
       int com_x, com_y;
       int f_color;
-      position orient;
+      //position orient;
       file >> name_com;
+      string f_allow_delete, f_change_coord;
+      file >>f_color >> com_x >> com_y;
+      file >> f_change_coord >> f_allow_delete;
+
+      bool allow_delete = (f_allow_delete == "да"? true : false);
+      bool change_coord = (f_change_coord == "да"? true : false);
+
+   cout << name_com <<" " << com_x << " " << com_y << " " 
+      << f_color <<" "<< f_change_coord <<" "<< f_allow_delete;
+
+      
       if (name_com == "стрелка") {
          int f_orient;
          position orient;
          file >> f_orient;
+         
+          cout << f_orient << endl;
          switch (f_orient) {
          case 0:
             orient = position(1, 0);
-            break; // "вправ"
+            break; // "вправo"
          case 1:
             orient = position(0, 1);
             break; //"вверх"
@@ -225,35 +239,31 @@ void Task::initialize(Field &current_Field, vector <Robot *> &Robots,vector <Pro
             orient = position(0, -1);
             break; //"вниз"
          }
-      }
-      string f_allow_delete, f_change_coord;
-      file >>f_color >> com_x >> com_y;
-      file >> f_change_coord >> f_allow_delete;
-
-      bool allow_delete = (f_allow_delete == "да"? true : false);
-      bool change_coord = (f_change_coord == "да"? true : false);
-
-      if (name_com == "стрелка") {
          Arrow arrow(change_coord, allow_delete, position(com_x, com_y), orient);
-         auto it =  find_if(Programms.begin(), Programms.end(), [&f_color]( Programm *prog ) {return prog->get_col() == f_color;});
-         if (it != Programms.end()) {
-            cout << "Не нашёл"<< endl;
-         }
-
-         else
-         {cout << "Нашёл" << endl;}
-
       }
-      /*
-      if(name_com == "банка_с_краской")
-       ChangeColor canOfPaint(change_coord, allow_delete, position(com_x, com_y), color_prog(f_color));
+      if (name_com == "банка_с_краской") {
+         int f_change_col;
+         file >> f_change_col;
+         
+         cout << f_orient << endl;
+         ChangeColor canOfPaint(change_coord, allow_delete, position(com_x, com_y), color_prog(color_prog[f_change_col]));
+      }
+   
+      if (name_com == "выход"){
+         cout << endl;
+         Exit box(change_coord, allow_delete, position(com_x, com_y));  
+      }
       else
-       Exit box(change_coord, allow_delete, position(com_x, com_y);
-      */
-
+         cout << "Сюда вставить проверку на ошибки";
+      auto it =  find_if(Programms.begin(), Programms.end(), [f_color](Programm *prog) {return prog->get_col() == color_prog[f_color];});
+      if (it != Programms.end())
+      {cout << "Нашёл" << endl;}
+      else
+      {cout << "Не нашёл"  << endl;}
    }
-      file.close();
-   }
+   cout << "Чтение файла завешенно. Закрываем файл" << endl;
+   file.close();
+}
 
 
 

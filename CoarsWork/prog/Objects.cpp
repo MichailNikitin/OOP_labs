@@ -7,7 +7,7 @@
 #include "Objects.hpp"
 
 
-static int arr_arrowUp[14] = {45, 0, 90, 45, 67, 45, 67, 90, 23, 90, 23, 45, 0, 45};
+static int arr_arrowUp[16] = {45, 0, 90, 45, 67, 45, 67, 90, 23, 90, 23, 45, 0, 45, 45, 0};
 constexpr int color_prog[4] = {RED, GREEN, BLUE, YELLOW};
 
 using namespace std;
@@ -109,6 +109,10 @@ Command::Command(const Command &com) {
    is_allow_delete = com.is_allow_delete;
    coord = com.coord;
 }
+void Command::set_pos(position pos){
+   coord.x = pos.x;
+   coord.y = pos.y;
+}
 
 Arrow::Arrow(bool is_change_cordinat, bool is_delete, position new_coord, position direction):
    Command(is_change_cordinat, is_delete, new_coord), orientation(direction) {}
@@ -122,22 +126,30 @@ Exit::Exit(bool is_change_cordinat, bool is_delete, position new_coord):
 void Arrow::use(Robot &robot) {
    robot.set_direction(this->orientation);
 }
-void Arrow::draw(position coord) {
+void Arrow::draw() {
    setcolor(BLACK);
-   drawpoly(14, arr_arrowUp);
+/*
+   for(int i = 0; i < 15; i++){
+      arr_arrowUp[i] += (coord.x * 100);
+      arr_arrowUp[i+1] += (coord.y * 100);
+   }
+   drawpoly(8, arr_arrowUp);
+   */
+   rectangle(coord.x*100, coord.y*100, coord.x*100+50, coord.y*100+50);
 }
 
 void ChangeColor::use(Robot &robot) {
    robot.set_color(this->color);
 }
-void ChangeColor::draw(position coord) {
+void ChangeColor::draw() {
+   setcolor(RED);
    circle(coord.x+50, coord.y+50, 40);
 }
 
 void Exit::use(Robot &robot) {
    Robots.erase(ranges::find(Robots, &robot));
 }
-void Exit::draw(position coord) {
+void Exit::draw() {
    this->img = loadBMP("wooden-crate.png");
    putimage(coord.x, coord.x, img, COPY_PUT);
 }
@@ -148,6 +160,11 @@ int Programm::get_col() {return color;}
 
 void Programm::add(Command *command) {  // , bool change_coord, bool is_delete, position pos
    commands.push_back(command);
+}
+
+void Programm::draw(){
+   for(int i = 0; i < commands.size(); i ++)
+      commands[i]->draw();
 }
 
 Task::Task(const string file_name): name_taskFile(file_name) {}
@@ -170,7 +187,7 @@ void Task::initialize(Field &current_Field, vector <Robot *> &Robots,vector <Pro
       file >> r_x >> r_y;
       file >>f_color >> f_direct;
       file >> f_change_direct >> f_change_coord;
-      cout << r_x << " " << r_y << " " << f_color << " "<< f_direct <<" "<< f_change_direct <<" "<< f_change_coord;
+      cout << r_x << " " << r_y << " " << f_color << " "<< f_direct <<" "<< f_change_direct <<" "<< f_change_coord << endl;
 
       bool change_direct, change_coord;
       position direct;
@@ -199,19 +216,44 @@ void Task::initialize(Field &current_Field, vector <Robot *> &Robots,vector <Pro
       new_robot.set_cordinat(position(r_x, r_y));
       new_robot.set_direction(direct);
       new_robot.draw();
+      Robots.push_back(&new_robot);
    }
+   
+   Arrow arrow1(true, false, position(1, 2), position(0, 1));
+   Arrow arrow2(true, false, position(1, 2), position(0, 1));
+   ChangeColor canOfPaint(true, false, position(1, 2), RED);
+   Exit box(true, false, position(1, 2));
+   Programm program(RED);
+   program.add(&arrow1);
+   program.add(&arrow2);
+   Programms.push_back(&program);
+   Programms[0]->draw();
+   /*
    // цикл чтения информации о программах
    for (int i = 0; i < count_commands; i++) {
       string name_com;
-     // Arrow commandArrow;
+      //Arrow commandArrow;
       int com_x, com_y;
       int f_color;
-      position orient;
+      //position orient;
       file >> name_com;
+      string f_allow_delete, f_change_coord;
+      file >>f_color >> com_x >> com_y;
+      file >> f_change_coord >> f_allow_delete;
+
+      bool allow_delete = (f_allow_delete == "да"? true : false);
+      bool change_coord = (f_change_coord == "да"? true : false);
+
+      cout << name_com <<" " << com_x << " " << com_y << " "
+           << f_color <<" "<< f_change_coord <<" "<< f_allow_delete << " ";
+
+
       if (name_com == "стрелка") {
          int f_orient;
          position orient;
          file >> f_orient;
+
+         cout << f_orient << endl;
          switch (f_orient) {
          case 0:
             orient = position(1, 0);
@@ -226,32 +268,47 @@ void Task::initialize(Field &current_Field, vector <Robot *> &Robots,vector <Pro
             orient = position(0, -1);
             break; //"вниз"
          }
-      }
-      string f_allow_delete, f_change_coord;
-      file >>f_color >> com_x >> com_y;
-      file >> f_change_coord >> f_allow_delete;
-
-      bool allow_delete = (f_allow_delete == "да"? true : false);
-      bool change_coord = (f_change_coord == "да"? true : false);
-
-      if (name_com == "стрелка") {
          Arrow arrow(change_coord, allow_delete, position(com_x, com_y), orient);
-         auto it =  find_if(Programms.begin(), Programms.end(), [f_color](Programm *prog) {return prog->get_col() == f_color;});
-         if (it != Programms.end()) {
-            cout << "Нашёл" << endl;
-         }
-         else
-         {cout << "Не нашёл"  << endl;}
-
       }
-      /*
-      if(name_com == "банка_с_краской")
-       ChangeColor canOfPaint(change_coord, allow_delete, position(com_x, com_y), color_prog(f_color));
-      else
-       Exit box(change_coord, allow_delete, position(com_x, com_y);
-      */
+      if (name_com == "банка_с_краской") {
+         int f_change_col;
+         file >> f_change_col;
 
+         cout << f_change_col << endl;
+         ChangeColor canOfPaint(change_coord, allow_delete, position(com_x, com_y), color_prog[f_change_col]);
+      }
+
+      if (name_com == "выход") {
+         cout << endl;
+         Exit box(change_coord, allow_delete, position(com_x, com_y));
+      }
+      else
+         cout << "Сюда вставить проверку на ошибки\n";
+      
+       auto it =  find_if(Programms.begin(), Programms.end(), [f_color](Programm *prog) {cout <<"цвет ---"<< prog->get_col() << endl;
+          return prog->get_col() == color_prog[f_color];});
+      if (it != Programms.end())
+      {cout << "Нашёл" << endl;}
+      else{
+         cout << "Не нашёл"  << endl;
+            Programm new_programm(f_color);
+            if (name_com == "стрелка") {
+               new_programm.add(&arrow);
+            }
+            else if(name_com == "банка_с_краской"){
+            new_programm.add(&canOfPaint);
+            }
+            else if(name_com == "выход"){
+              new_programm.add(&box);
+            }
+         }
    }
+   for (int i = 0; i < Programms.size(); i++)
+      Programms[i].draw();
+
+   */
+   
+   cout << "Чтение файла завешенно. Закрываем файл\n" << endl;
    file.close();
 }
 
