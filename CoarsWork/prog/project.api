@@ -9,6 +9,7 @@ Cell _type_ #<Objects.hpp>
 ChangeColor _type_ #<Objects.hpp>
 ChangeColor(bool is_allow_change_cordinat, bool is_allow_delete, position, int color) #<Objects.hpp>
 Command _type_ #<Objects.hpp>
+Command() #<Objects.hpp>
 Command(bool, bool, position) #<Objects.hpp>
 Command(const Command& com) #<Objects.hpp>
 Exit _type_ #<Objects.hpp>

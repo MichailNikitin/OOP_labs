@@ -5,6 +5,8 @@
 #include <algorithm>
 #include <string>
 #include "Objects.hpp"
+#include <typeinfo>
+
 
 
 static int arr_arrowUp[16] = {45, 0, 90, 45, 67, 45, 67, 90, 23, 90, 23, 45, 0, 45, 45, 0};
@@ -109,7 +111,7 @@ Command::Command(const Command &com) {
    is_allow_delete = com.is_allow_delete;
    coord = com.coord;
 }
-void Command::set_pos(position pos){
+void Command::set_pos(position pos) {
    coord.x = pos.x;
    coord.y = pos.y;
 }
@@ -128,13 +130,13 @@ void Arrow::use(Robot &robot) {
 }
 void Arrow::draw() {
    setcolor(BLACK);
-/*
-   for(int i = 0; i < 15; i++){
-      arr_arrowUp[i] += (coord.x * 100);
-      arr_arrowUp[i+1] += (coord.y * 100);
-   }
-   drawpoly(8, arr_arrowUp);
-   */
+   /*
+      for(int i = 0; i < 15; i++){
+         arr_arrowUp[i] += (coord.x * 100);
+         arr_arrowUp[i+1] += (coord.y * 100);
+      }
+      drawpoly(8, arr_arrowUp);
+      */
    rectangle(coord.x*100, coord.y*100, coord.x*100+50, coord.y*100+50);
 }
 
@@ -162,8 +164,8 @@ void Programm::add(Command *command) {  // , bool change_coord, bool is_delete, 
    commands.push_back(command);
 }
 
-void Programm::draw(){
-   for(int i = 0; i < commands.size(); i ++)
+void Programm::draw() {
+   for (int i = 0; i < commands.size(); i ++)
       commands[i]->draw();
 }
 
@@ -218,7 +220,7 @@ void Task::initialize(Field &current_Field, vector <Robot *> &Robots,vector <Pro
       new_robot.draw();
       Robots.push_back(&new_robot);
    }
-   
+   /*
    Arrow arrow1(true, false, position(1, 2), position(0, 1));
    Arrow arrow2(true, false, position(1, 2), position(0, 1));
    ChangeColor canOfPaint(true, false, position(1, 2), RED);
@@ -228,7 +230,8 @@ void Task::initialize(Field &current_Field, vector <Robot *> &Robots,vector <Pro
    program.add(&arrow2);
    Programms.push_back(&program);
    Programms[0]->draw();
-   /*
+   */
+
    // цикл чтения информации о программах
    for (int i = 0; i < count_commands; i++) {
       string name_com;
@@ -244,9 +247,10 @@ void Task::initialize(Field &current_Field, vector <Robot *> &Robots,vector <Pro
       bool allow_delete = (f_allow_delete == "да"? true : false);
       bool change_coord = (f_change_coord == "да"? true : false);
 
-      cout << name_com <<" " << com_x << " " << com_y << " "
-           << f_color <<" "<< f_change_coord <<" "<< f_allow_delete << " ";
+      cout << name_com  <<   " " << f_color <<" "<< com_x << " " << com_y << " "
+           <<  f_change_coord <<" "<< f_allow_delete << " ";
 
+      Command *command;
 
       if (name_com == "стрелка") {
          int f_orient;
@@ -269,30 +273,45 @@ void Task::initialize(Field &current_Field, vector <Robot *> &Robots,vector <Pro
             break; //"вниз"
          }
          Arrow arrow(change_coord, allow_delete, position(com_x, com_y), orient);
+         command = &arrow;
       }
+
       if (name_com == "банка_с_краской") {
          int f_change_col;
          file >> f_change_col;
 
          cout << f_change_col << endl;
          ChangeColor canOfPaint(change_coord, allow_delete, position(com_x, com_y), color_prog[f_change_col]);
+         command = &canOfPaint;
       }
 
       if (name_com == "выход") {
          cout << endl;
          Exit box(change_coord, allow_delete, position(com_x, com_y));
+         command = &box;
       }
       else
          cout << "Сюда вставить проверку на ошибки\n";
-      
-       auto it =  find_if(Programms.begin(), Programms.end(), [f_color](Programm *prog) {cout <<"цвет ---"<< prog->get_col() << endl;
-          return prog->get_col() == color_prog[f_color];});
+
+      auto it =  find_if(Programms.begin(), Programms.end(), [f_color](Programm *prog) -> bool {
+         cout <<"цвет ---"<< prog->get_col()<<"--- цвет2 ---"<< color_prog[f_color] << endl;
+         return prog->get_col() == color_prog[f_color];});
+
+
+      //   cout << "Iterator "<< typeid(*it).name() << endl;
+
       if (it != Programms.end())
-      {cout << "Нашёл" << endl;}
-      else{
+      {
+         cout << "Нашёл" << endl;
+
+         cout << "Iterator "<< (*it)->get_col() << endl;
+         (*it)->add(command);
+      }
+      else {
          cout << "Не нашёл"  << endl;
-            Programm new_programm(f_color);
-            if (name_com == "стрелка") {
+         Programm *new_programm = new Programm(color_prog[f_color]);
+         new_programm->add(command);
+         /*   if (name_com == "стрелка") {
                new_programm.add(&arrow);
             }
             else if(name_com == "банка_с_краской"){
@@ -301,13 +320,21 @@ void Task::initialize(Field &current_Field, vector <Robot *> &Robots,vector <Pro
             else if(name_com == "выход"){
               new_programm.add(&box);
             }
+         */
+         Programms.push_back(new_programm);
+         for (unsigned int i = 0; i < Programms.size(); i++)
+         {
+            cout <<"цвет ---control---"<< Programms[i]->get_col() << endl;
          }
-   }
-   for (int i = 0; i < Programms.size(); i++)
-      Programms[i].draw();
 
-   */
-   
+      }
+   }
+
+   //for (int i = 0; i < Programms.size(); i++)
+   //Programms[i].draw();
+
+
+
    cout << "Чтение файла завешенно. Закрываем файл\n" << endl;
    file.close();
 }

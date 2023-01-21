@@ -7,3 +7,4 @@ int _abracadabra_cast(_abracadabra_type);
 #include <algorithm>
 #include <string>
 #include "Objects.hpp"
+#include <typeinfo>

@@ -96,6 +96,7 @@ protected:
 public:
    Command(bool, bool, position); //is_allow_change_cordinat, is_allow_delete,  x, y
    Command(const Command &com); // Конструктор копий
+   Command() = default; // Конструктор копий
    void set_pos(position);
    virtual void use(Robot &) = 0;
    virtual void draw() = 0; // i, j
