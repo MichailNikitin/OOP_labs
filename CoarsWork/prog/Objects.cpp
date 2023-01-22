@@ -287,27 +287,27 @@ void Task::initialize(Field &field, vector <Robot *> &Robots,vector <Programm *>
             orient = position(0, -1);
             break; //"вниз"
          }
-         Arrow arrow(change_coord, allow_delete, position(com_x, com_y), orient);
-         command = &arrow;
+         Arrow *arrow = new Arrow(change_coord, allow_delete, position(com_x, com_y), orient);
+         command = arrow;
       }
       else if (name_com == "банка_с_краской") {
          int f_change_col;
          file >> f_change_col;
 
          cout << f_change_col << endl;
-         ChangeColor canOfPaint(change_coord, allow_delete, position(com_x, com_y), color_prog[f_change_col]);
-         command = &canOfPaint;
+         ChangeColor *canOfPaint = new ChangeColor(change_coord, allow_delete, position(com_x, com_y), color_prog[f_change_col]);
+         command = canOfPaint;
       }
       else if (name_com == "выход") {
          cout << endl;
-         Exit box(change_coord, allow_delete, position(com_x, com_y));
-         command = &box;
+         Exit *box = new Exit(change_coord, allow_delete, position(com_x, com_y));
+         command = box;
       }
       else
          cout << "Сюда вставить проверку на ошибки\n";
 
       auto it =  find_if(Programms.begin(), Programms.end(), [f_color](Programm *prog) -> bool {
-         cout <<"цвет ---"<< prog->get_col()<<"--- цвет2 ---"<< color_prog[f_color] << endl;
+         //cout <<"цвет ---"<< prog->get_col()<<"--- цвет2 ---"<< color_prog[f_color] << endl;
          return prog->get_col() == color_prog[f_color];});
 
 
@@ -317,17 +317,20 @@ void Task::initialize(Field &field, vector <Robot *> &Robots,vector <Programm *>
       {
          cout << "Нашёл" << endl;
 
-         cout << "Iterator "<< (*it)->get_col() << endl;
+        // cout << "Iterator "<< (*it)->get_col() << endl;
          (*it)->add(command);
+         //command->draw(color_prog[f_color]);
+         //cout <<"position---"<< command->coord.x <<", "<< command->coord.y  << endl;
       }
       else {
          cout << "Не нашёл"  << endl;
          Programm *new_programm = new Programm(color_prog[f_color]);
          new_programm->add(command);
          Programms.push_back(new_programm);
+         command->draw(color_prog[f_color]);
          for (unsigned int i = 0; i < Programms.size(); i++)
          {
-            cout <<"цвет ---control---"<< Programms[i]->get_col() << endl;
+          //  cout <<"цвет ---control---"<< Programms[i]->get_col() << endl;
          }
 
       }
@@ -340,6 +343,12 @@ void Task::initialize(Field &field, vector <Robot *> &Robots,vector <Programm *>
 
    cout << "Чтение файла завешенно. Закрываем файл\n" << endl;
    file.close();
+}
+
+void Task::prepare_field(Field &field){
+   
+   
+   
 }
 
 

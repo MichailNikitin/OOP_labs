@@ -148,10 +148,13 @@ class Task {
    string name_taskFile;
    int count_robots;
    int count_commands;
+   int count_tree;
+   int count_fruit;
    // инициализация всех компанентов согласно заданию
 public:
    Task(const string);// название файла с заданием
    void initialize(Field &, std::vector <Robot *> &Robots, std::vector <Programm *> &Programms);
+   void prepare_field(Field &);
    bool is_task_completed(Field &, vector <Robot *> &Robots); // проверка на выполненность
    void draw_an_example() {}; // иллюстрирование решения задания(для художника)
 };
