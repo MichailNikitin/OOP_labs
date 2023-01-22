@@ -153,3 +153,11 @@ cython_debug/
 CoarsWork/prog/Makefile
 *.o
 *.api
+CoarsWork/prog/Makefile
+*.gch
+CoarsWork/prog/temp/tempinc.hpp
+CoarsWork/prog/temp/temp.cpp
+CoarsWork/prog/release/Objects.o
+CoarsWork/prog/release/main.o
+CoarsWork/prog/project.api
+CoarsWork/prog/Makefile
