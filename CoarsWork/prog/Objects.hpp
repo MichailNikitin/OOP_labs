@@ -99,7 +99,7 @@ public:
    Command() = default; // Конструктор копий
    void set_pos(position);
    virtual void use(Robot &) = 0;
-   virtual void draw() = 0; // i, j
+   virtual void draw(int color) = 0; 
 };
 
 // "Стрелка", меняющая нарпавление
@@ -109,7 +109,7 @@ public:
    // разрешение на пермещение и удаление, позиция расположения, позимещения изменения направления
    Arrow(bool is_allow_change_cordinat, bool is_allow_delete, position coord, position orient);
    void use(Robot &);
-   void draw() ; // x, y
+   void draw(int color) ;
 };
 
 //"Банка с краской", меняющая цвет робота
@@ -118,7 +118,7 @@ class ChangeColor : public Command {
 public:
    ChangeColor(bool is_allow_change_cordinat, bool is_allow_delete, position, int color);
    void use(Robot &);
-   void draw(); // x, y
+   void draw(int color);
 };
 
 //"Выход", удаляющий робота
@@ -126,7 +126,7 @@ class Exit : public Command {
 public:
    Exit(bool is_allow_change_cordinat, bool is_allow_delete, position);
    void use(Robot &);
-   void draw(); // x, y
+   void draw(int color); 
 };
 
 class Programm  {

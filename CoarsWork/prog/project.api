@@ -47,34 +47,34 @@ position(int new_x, int new_y) #<Objects.hpp>
 	Arrow:%img : IMAGE* #<Objects.hpp>
 	Arrow:%coord : position #<Objects.hpp>
 	Arrow::use(Robot&) -> void #<Objects.hpp>
-	Arrow::draw() -> void #<Objects.hpp>
+	Arrow::draw(int color) -> void #<Objects.hpp>
 	Arrow::set_pos(position) -> void #<Objects.hpp>
 	Arrow::use(Robot&) -> virtual void #<Objects.hpp>
-	Arrow::draw() -> virtual void #<Objects.hpp>
+	Arrow::draw(int color) -> virtual void #<Objects.hpp>
 	Cell::current_object : Object* #<Objects.hpp>
 	Cell::color : int #<Objects.hpp>
 	ChangeColor:%color : int #<Objects.hpp>
 	ChangeColor:%img : IMAGE* #<Objects.hpp>
 	ChangeColor:%coord : position #<Objects.hpp>
 	ChangeColor::use(Robot&) -> void #<Objects.hpp>
-	ChangeColor::draw() -> void #<Objects.hpp>
+	ChangeColor::draw(int color) -> void #<Objects.hpp>
 	ChangeColor::set_pos(position) -> void #<Objects.hpp>
 	ChangeColor::use(Robot&) -> virtual void #<Objects.hpp>
-	ChangeColor::draw() -> virtual void #<Objects.hpp>
+	ChangeColor::draw(int color) -> virtual void #<Objects.hpp>
 	Command:%is_allow_change_cordinat : bool #<Objects.hpp>
 	Command:%is_allow_delete : bool #<Objects.hpp>
 	Command:%img : IMAGE* #<Objects.hpp>
 	Command:%coord : position #<Objects.hpp>
 	Command::set_pos(position) -> void #<Objects.hpp>
 	Command::use(Robot&) -> virtual void #<Objects.hpp>
-	Command::draw() -> virtual void #<Objects.hpp>
+	Command::draw(int color) -> virtual void #<Objects.hpp>
 	Exit:%img : IMAGE* #<Objects.hpp>
 	Exit:%coord : position #<Objects.hpp>
 	Exit::use(Robot&) -> void #<Objects.hpp>
-	Exit::draw() -> void #<Objects.hpp>
+	Exit::draw(int color) -> void #<Objects.hpp>
 	Exit::set_pos(position) -> void #<Objects.hpp>
 	Exit::use(Robot&) -> virtual void #<Objects.hpp>
-	Exit::draw() -> virtual void #<Objects.hpp>
+	Exit::draw(int color) -> virtual void #<Objects.hpp>
 	Field:%width : int #<Objects.hpp>
 	Field:%height : int #<Objects.hpp>
 	Field:%field : vector #<Objects.hpp>

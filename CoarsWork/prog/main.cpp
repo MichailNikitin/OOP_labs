@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
-#include "graphics.h"
 #include "Objects.hpp"
+#include "graphics.h"
 
 #define POS2CORD(x) 100*x
 

@@ -7,8 +7,6 @@
 
 
 
-
-
 static int arr_arrowUp[16] = {45, 0, 90, 45, 67, 45, 67, 90, 23, 90, 23, 45, 0, 45, 45, 0};
 constexpr int color_prog[4] = {RED, GREEN, BLUE, YELLOW};
 
@@ -128,6 +126,5 @@ Exit::Exit(bool is_change_cordinat, bool is_delete, position new_coord):
 void Arrow::use(Robot &robot) {
    robot.set_direction(this->orientation);
 }
-void Arrow::draw() {
-   setcolor(BLACK);
-   _abracadabra_cast(*(img));
+void Arrow::draw(int col) {
+   cout <<"coord = ("<< coord.x << _abracadabra_cast(coord);
