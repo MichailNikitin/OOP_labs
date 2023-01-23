@@ -7,4 +7,6 @@ int _abracadabra_cast(_abracadabra_type);
 #include <string>
 #include "Objects.hpp"
 #include <typeinfo>
+#include <time.h>
+#include <stdlib.h>
 #include "graphics.h"

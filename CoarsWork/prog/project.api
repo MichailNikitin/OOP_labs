@@ -1,9 +1,11 @@
 # Objects.hpp
-!Objects.cpp Objects.hpp algorithm cctype cerrno clocale cstdint cstdio cstdlib ctype.h cwchar cwctype errno.h exception format fstream graphics.h initializer_list ios iosfwd iostream istream keys_n_colors.h limits limits.h locale.h new ostream signal.h stddef.h stdexcept stdint.h stdio.h stdlib.h streambuf string string_view system_error type_traits typeinfo utility vector wchar.h wctype.h #<#>
+!Objects.cpp Objects.hpp algorithm cctype cerrno clocale cstdint cstdio cstdlib ctype.h cwchar cwctype errno.h exception format fstream graphics.h initializer_list ios iosfwd iostream istream keys_n_colors.h limits limits.h locale.h new ostream signal.h stddef.h stdexcept stdint.h stdio.h stdlib.h streambuf string string_view system_error time.h type_traits typeinfo utility vector wchar.h wctype.h #<#>
 !Objects.hpp cctype cerrno clocale cstdint cstdio cstdlib ctype.h cwchar errno.h exception graphics.h initializer_list iosfwd keys_n_colors.h limits limits.h locale.h new signal.h stddef.h stdint.h stdio.h stdlib.h string string_view type_traits typeinfo utility vector wchar.h #<#>
 !main.cpp Objects.hpp cctype cerrno clocale cstdint cstdio cstdlib ctype.h cwchar cwctype errno.h exception graphics.h initializer_list ios iosfwd iostream istream keys_n_colors.h limits limits.h locale.h new ostream signal.h stddef.h stdexcept stdint.h stdio.h stdlib.h streambuf string string_view system_error type_traits typeinfo utility vector wchar.h wctype.h #<#>
 Arrow _type_ #<Objects.hpp>
 Arrow(bool is_allow_change_cordinat, bool is_allow_delete, position coord, position orient) #<Objects.hpp>
+COUNFUITS #<Objects.hpp>
+COUNTTREE #<Objects.hpp>
 Cell : struct #<Objects.hpp>
 Cell _type_ #<Objects.hpp>
 ChangeColor _type_ #<Objects.hpp>
@@ -34,11 +36,11 @@ Task(const string) #<Objects.hpp>
 Tree _type_ #<Objects.hpp>
 Tree(IMAGE*) #<Objects.hpp>
 WIDTH_I #<Objects.hpp>
-arr_arrowUp : int[] #<Objects.cpp>
 color_prog : constexpr int[] #<Objects.cpp>
 direct2grad(position direct) -> int #<Objects.cpp>
 find_command_in_prog(Programm* prog, int color) -> bool #<Objects.cpp>
 main() -> int #<main.cpp>
+places_taken : vector #<Objects.cpp>
 position _type_ #<Objects.hpp>
 position() #<Objects.hpp>
 position(const position& pos) #<Objects.hpp>
@@ -77,11 +79,12 @@ position(int new_x, int new_y) #<Objects.hpp>
 	Exit::draw(int color) -> virtual void #<Objects.hpp>
 	Field:%width : int #<Objects.hpp>
 	Field:%height : int #<Objects.hpp>
-	Field:%field : vector #<Objects.hpp>
+	Field:%fullField : vector #<Objects.hpp>
 	Field::coord2pos(int, int) -> position #<Objects.hpp>
 	Field::set_obj(Object*, position) -> void #<Objects.hpp>
 	Field::delete_obj(position) -> void #<Objects.hpp>
 	Field::set_color(position, int) -> void #<Objects.hpp>
+	Field::redraw_field() -> void #<Objects.hpp>
 	Field::get_object(position) -> Object* #<Objects.hpp>
 	Fruit:%img : IMAGE* #<Objects.hpp>
 	Fruit::is_access(Robot&) -> bool #<Objects.hpp>
@@ -110,7 +113,10 @@ position(int new_x, int new_y) #<Objects.hpp>
 	Task:%name_taskFile : string #<Objects.hpp>
 	Task:%count_robots : int #<Objects.hpp>
 	Task:%count_commands : int #<Objects.hpp>
+	Task:%count_tree : int #<Objects.hpp>
+	Task:%count_fruit : int #<Objects.hpp>
 	Task::initialize(Field&, std::vector& Robots, std::vector& Programms) -> void #<Objects.hpp>
+	Task::prepare_field(Field&) -> void #<Objects.hpp>
 	Task::is_task_completed(Field&, vector& Robots) -> bool #<Objects.hpp>
 	Task::draw_an_example() -> void #<Objects.hpp>
 	Tree:%img : IMAGE* #<Objects.hpp>

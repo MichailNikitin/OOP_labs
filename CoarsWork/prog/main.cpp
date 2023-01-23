@@ -20,7 +20,7 @@ int main() {
 
    Task task("tast_list.txt");
    task.initialize(field, Robots, Programms);
-
+   task.prepare_field(field);
    
    while (1) {
       switch (getch(kbhit())) {

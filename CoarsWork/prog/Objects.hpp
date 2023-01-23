@@ -6,6 +6,9 @@
 
 #define WIDTH_I 5
 #define HEIGHT_J 5
+#define COUNFUITS 2
+#define COUNTTREE 1
+
 
 using namespace std;
 
@@ -74,13 +77,14 @@ struct Cell {
 
 class Field {
    int width, height; // размеры поля
-   vector<vector<Cell>> field; //поле из клеток
+   vector<vector<Cell>> fullField; //поле из клеток
 public:
    Field(int, int); // width, height
    position coord2pos(int, int); // x, y
    void set_obj(Object *, position); // установить объект
    void delete_obj(position); // удалить объект
    void set_color(position, int); // установить цвет
+   void redraw_field();
    Object *get_object(position); // получить объкт на клетке
 };
 
