@@ -25,14 +25,6 @@ int direct2grad(position direct) {
       return 0;
 }
 
-void reDraw() {
-   putimage(0, 0, loadBMP("inteface.bmp"), COPY_PUT);
-   for (int i = 0; i < Programms.size(); i++)
-      Programms[i]->draw();
-   for (int i = 0; i < Robots.size(); i++)
-      Robots[i]->draw();
-}
-
 bool find_command_in_prog(Programm *prog, int color) {
    if (prog->get_col() == color)
       return true;
@@ -54,6 +46,8 @@ void Robot::set_direction(position new_direction) {
 
 void Robot::set_color(int new_color) {color = new_color;}
 
+int Robot::get_color() {return color;}
+
 void Robot::change_Field(Field &Field) {
 
 
@@ -69,6 +63,9 @@ bool Robot::is_crash(std::vector <Robot *> &Robots) {
 }
 
 Object::Object(IMAGE *image): img(image) {}
+Object::Object(const Object &obj) {
+   img = obj.img;
+   }
 Object::~Object() {freeimage(img);}
 Fruit::Fruit(IMAGE *image): Object(image) {}
 Fruit::~Fruit() {freeimage(img);}
@@ -84,7 +81,7 @@ bool Tree::is_access(Robot &current_robot) {
 }
 
 Field::Field(int w, int h):width(w), height(h) {
-   vector<vector<Cell>> field(width, vector<Cell>(height));
+   vector<vector<Cell>> fullField(width, vector<Cell>(height));
 }
 
 position Field::coord2pos(int x, int y) {
@@ -160,7 +157,7 @@ void Arrow::draw(int col) {
       this->img = loadBMP("arrow_white.bmp");
    }
    IMAGE *rotImg = imageturn(this->img,  direct2grad(orientation), WHITE);
-   putimage(coord.x*100+5,coord.y*100+5, rotImg, COPY_PUT);
+   putimage(coord.x*100+10,coord.y*100+10, rotImg, COPY_PUT);
 }
 
 void ChangeColor::use(Robot &robot) {
@@ -170,7 +167,7 @@ void ChangeColor::draw(int col) {
    //cout <<"coord = ("<< coord.x <<", "<< coord.y<<")\n";
    setcolor(BLACK);
    setfillstyle(SOLID_FILL, col);
-   bar(coord.x*100+25, coord.y*100+5, coord.x*100+75, coord.y*100+95);
+   bar(coord.x*100+25, coord.y*100+10, coord.x*100+75, coord.y*100+90);
    setfillstyle(SOLID_FILL, color);
    fillellipse(coord.x*100+50, coord.y*100+50, 20, 20);
 }
@@ -196,7 +193,7 @@ void Exit::draw(int col) {
    default:
       this->img = loadBMP("wooden-crate_white.bmp");
    }
-   putimage(coord.x*100, coord.x*100, img, COPY_PUT);
+   putimage(coord.x*100+5, coord.x*100+5, img, COPY_PUT);
 }
 
 Programm::Programm(int c): color(c) {}
@@ -374,7 +371,7 @@ void Task::prepare_field(Field &field) {
    count_fruit = COUNFUITS;
    count_tree = COUNTTREE;
    srand(time(NULL));
-   /*
+/*
    for (int n_fruit = 0; n_fruit < count_fruit;)
    {
       position pos_fruit;
@@ -386,7 +383,8 @@ void Task::prepare_field(Field &field) {
       if (it != places_taken.end()) {
          n_fruit ++;
          places_taken.push_back(pos_fruit);
-         field.set_obj(new Fruit(loadBMP("apple.bmp")), pos_fruit);
+         Fruit *fruit =new Fruit(loadBMP("apple.bmp")); 
+         field.set_obj(fruit, pos_fruit);
       }
    }
    for (int n_fruit = 0; n_fruit < count_tree;)
@@ -402,7 +400,8 @@ void Task::prepare_field(Field &field) {
          places_taken.push_back(pos_tree);
          field.set_obj(new Tree(loadBMP("tree.bmp")), pos_tree);
       }
-   }*/
+   }
+   */
 }
 
 

@@ -41,6 +41,7 @@ public:
    void set_cordinat(position); // установить координаты
    void set_direction(position); // установить направление
    void set_color(int); // установить цвет
+   int get_color(); // вернуть цвет
    void change_Field(Field &); // перед выходом из клетки удаление или замена объекта
    void draw();
 private:
@@ -52,6 +53,7 @@ protected:
    IMAGE *img; // картинка объекта
 public:
    Object(IMAGE *);
+   Object(const Object &obj); // Конструктор копий
    ~Object();
    virtual bool is_access(Robot &) = 0; // проверка клетки на доступность для робота
 };
@@ -59,6 +61,7 @@ public:
 class Fruit : public Object {
 public:
    Fruit(IMAGE *);
+   Fruit(const Fruit &obj); // Конструктор копий
    ~Fruit();
    bool is_access(Robot &);
 };
@@ -66,6 +69,7 @@ public:
 class Tree : public Object {
 public:
    Tree(IMAGE *);
+   Tree(const Tree &obj); // Конструктор копий
    ~Tree();
    bool is_access(Robot &);
 };
@@ -163,5 +167,4 @@ public:
    void draw_an_example() {}; // иллюстрирование решения задания(для художника)
 };
 
-void reDraw();
 #endif

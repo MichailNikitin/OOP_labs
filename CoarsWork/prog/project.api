@@ -20,9 +20,11 @@ Field _type_ #<Objects.hpp>
 Field(int, int) #<Objects.hpp>
 Fruit _type_ #<Objects.hpp>
 Fruit(IMAGE*) #<Objects.hpp>
+Fruit(const Fruit& obj) #<Objects.hpp>
 HEIGHT_J #<Objects.hpp>
 Object _type_ #<Objects.hpp>
 Object(IMAGE*) #<Objects.hpp>
+Object(const Object& obj) #<Objects.hpp>
 POS2CORD(x) #<main.cpp>
 Programm _type_ #<Objects.hpp>
 Programm(int color) #<Objects.hpp>
@@ -35,17 +37,21 @@ Task _type_ #<Objects.hpp>
 Task(const string) #<Objects.hpp>
 Tree _type_ #<Objects.hpp>
 Tree(IMAGE*) #<Objects.hpp>
+Tree(const Tree& obj) #<Objects.hpp>
 WIDTH_I #<Objects.hpp>
+clearWin() -> void #<main.cpp>
 color_prog : constexpr int[] #<Objects.cpp>
 direct2grad(position direct) -> int #<Objects.cpp>
 find_command_in_prog(Programm* prog, int color) -> bool #<Objects.cpp>
+highlightCell(position current_cell) -> void #<main.cpp>
 main() -> int #<main.cpp>
+n_currect_com : int #<main.cpp>
 places_taken : vector #<Objects.cpp>
 position _type_ #<Objects.hpp>
 position() #<Objects.hpp>
 position(const position& pos) #<Objects.hpp>
 position(int new_x, int new_y) #<Objects.hpp>
-reDraw() -> void #<Objects.hpp>
+reDraw() -> void #<main.cpp>
 	Arrow:%orientation : position #<Objects.hpp>
 	Arrow:%img : IMAGE* #<Objects.hpp>
 	Arrow:%coord : position #<Objects.hpp>
@@ -108,6 +114,7 @@ reDraw() -> void #<Objects.hpp>
 	Robot::set_cordinat(position) -> void #<Objects.hpp>
 	Robot::set_direction(position) -> void #<Objects.hpp>
 	Robot::set_color(int) -> void #<Objects.hpp>
+	Robot::get_color() -> int #<Objects.hpp>
 	Robot::change_Field(Field&) -> void #<Objects.hpp>
 	Robot::draw() -> void #<Objects.hpp>
 	Task:%text_task : string #<Objects.hpp>
