@@ -45,6 +45,7 @@ position _type_ #<Objects.hpp>
 position() #<Objects.hpp>
 position(const position& pos) #<Objects.hpp>
 position(int new_x, int new_y) #<Objects.hpp>
+reDraw() -> void #<Objects.hpp>
 	Arrow:%orientation : position #<Objects.hpp>
 	Arrow:%img : IMAGE* #<Objects.hpp>
 	Arrow:%coord : position #<Objects.hpp>
@@ -84,7 +85,7 @@ position(int new_x, int new_y) #<Objects.hpp>
 	Field::set_obj(Object*, position) -> void #<Objects.hpp>
 	Field::delete_obj(position) -> void #<Objects.hpp>
 	Field::set_color(position, int) -> void #<Objects.hpp>
-	Field::redraw_field() -> void #<Objects.hpp>
+	Field::draw() -> void #<Objects.hpp>
 	Field::get_object(position) -> Object* #<Objects.hpp>
 	Fruit:%img : IMAGE* #<Objects.hpp>
 	Fruit::is_access(Robot&) -> bool #<Objects.hpp>

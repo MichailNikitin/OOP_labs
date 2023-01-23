@@ -25,6 +25,14 @@ int direct2grad(position direct) {
       return 0;
 }
 
+void reDraw() {
+   putimage(0, 0, loadBMP("inteface.bmp"), COPY_PUT);
+   for (int i = 0; i < Programms.size(); i++)
+      Programms[i]->draw();
+   for (int i = 0; i < Robots.size(); i++)
+      Robots[i]->draw();
+}
+
 bool find_command_in_prog(Programm *prog, int color) {
    if (prog->get_col() == color)
       return true;
@@ -36,13 +44,12 @@ Robot::Robot(IMAGE *image, bool direction, bool cordinat):img(image), allow_chan
 Robot::~Robot() {freeimage(img);}
 
 void Robot::set_cordinat(position new_pos) {
-   pos.x = new_pos.x;
-   pos.y = new_pos.y;
+
+   pos = position(new_pos.x, new_pos.y);
 }
 
 void Robot::set_direction(position new_direction) {
-   direction.x = new_direction.x;
-   direction.y = new_direction.y;
+   direction = position(new_direction.x, new_direction.y);
 }
 
 void Robot::set_color(int new_color) {color = new_color;}
@@ -88,11 +95,11 @@ position Field::coord2pos(int x, int y) {
 }
 
 void Field::set_obj(Object *obj, position pos) { // i, j
-  fullField[pos.x][pos.y].current_object = obj;
+   fullField[pos.x][pos.y].current_object = obj;
 }
 
 void Field::delete_obj(position pos) { // i, j
-   delete fullField[pos.x][pos.y].current_object;
+   fullField[pos.x][pos.y].current_object = nullptr;
 }
 
 void Field::set_color(position pos, int color) { // i, j
@@ -101,6 +108,11 @@ void Field::set_color(position pos, int color) { // i, j
 
 Object *Field::get_object(position pos) {
    return fullField[pos.x][pos.y].current_object;
+}
+
+void Field::draw(){
+   putimage(0, 0, loadBMP("inteface.bmp"), COPY_PUT);
+   //Как сдесь сделать обход двумерного вектора
 }
 
 Command::Command(bool is_change_cordinat, bool is_delete, position new_coord):
@@ -346,11 +358,6 @@ void Task::initialize(Field &field, vector <Robot *> &Robots,vector <Programm *>
          new_programm->add(command);
          Programms.push_back(new_programm);
          command->draw(color_prog[f_color]);
-         for (unsigned int i = 0; i < Programms.size(); i++)
-         {
-            //  cout <<"цвет ---control---"<< Programms[i]->get_col() << endl;
-         }
-
       }
    }
    cout << "начало прорисовки комманд: \n";
@@ -367,6 +374,7 @@ void Task::prepare_field(Field &field) {
    count_fruit = COUNFUITS;
    count_tree = COUNTTREE;
    srand(time(NULL));
+   /*
    for (int n_fruit = 0; n_fruit < count_fruit;)
    {
       position pos_fruit;
@@ -394,7 +402,7 @@ void Task::prepare_field(Field &field) {
          places_taken.push_back(pos_tree);
          field.set_obj(new Tree(loadBMP("tree.bmp")), pos_tree);
       }
-   }
+   }*/
 }
 
 

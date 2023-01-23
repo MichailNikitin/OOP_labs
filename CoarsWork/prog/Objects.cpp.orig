@@ -25,6 +25,14 @@ int direct2grad(position direct) {
       return 0;
 }
 
+void redraw(){
+                  putimage(0, 0, loadBMP("inteface.bmp"), COPY_PUT);
+         for (int i = 0; i < Programms.size(); i++) 
+            Programms[i]->draw();
+         for (int i = 0; i < Robots.size(); i++)
+            Robots[i]->draw();   
+}
+
 bool find_command_in_prog(Programm *prog, int color) {
    if (prog->get_col() == color)
       return true;
@@ -36,13 +44,12 @@ Robot::Robot(IMAGE *image, bool direction, bool cordinat):img(image), allow_chan
 Robot::~Robot() {freeimage(img);}
 
 void Robot::set_cordinat(position new_pos) {
-   pos.x = new_pos.x;
-   pos.y = new_pos.y;
+
+   pos = position(new_pos.x, new_pos.y);
 }
 
 void Robot::set_direction(position new_direction) {
-   direction.x = new_direction.x;
-   direction.y = new_direction.y;
+   direction = position(new_direction.x, new_direction.y);
 }
 
 void Robot::set_color(int new_color) {color = new_color;}
@@ -88,7 +95,7 @@ position Field::coord2pos(int x, int y) {
 }
 
 void Field::set_obj(Object *obj, position pos) { // i, j
-   fullField[pos.x][pos.y].current_object = obj;
+  fullField[pos.x][pos.y].current_object = obj;
 }
 
 void Field::delete_obj(position pos) { // i, j
@@ -367,17 +374,19 @@ void Task::prepare_field(Field &field) {
    count_fruit = COUNFUITS;
    count_tree = COUNTTREE;
    srand(time(NULL));
+   /*
    for (int n_fruit = 0; n_fruit < count_fruit;)
    {
       position pos_fruit;
       pos_fruit.x = rand() % (WIDTH_I-1);
       pos_fruit.y = rand() % (HEIGHT_J-1);
-       auto it = find_if(places_taken.begin(), places_taken.end(), 
-      [pos_fruit](position place) -> bool {return (place.x != pos_fruit.x&& place.y != pos_fruit.y);});
+      auto it = find_if(places_taken.begin(), places_taken.end(),
+   [pos_fruit](position place) -> bool {return (place.x != pos_fruit.x&& place.y != pos_fruit.y);});
 
       if (it != places_taken.end()) {
          n_fruit ++;
          places_taken.push_back(pos_fruit);
+         field.set_obj(new Fruit(loadBMP("apple.bmp")), pos_fruit);
       }
    }
    for (int n_fruit = 0; n_fruit < count_tree;)
@@ -385,15 +394,15 @@ void Task::prepare_field(Field &field) {
       position pos_tree;
       pos_tree.x = rand() % (WIDTH_I-1);
       pos_tree.y = rand() % (HEIGHT_J-1);
-      auto it = find_if(places_taken.begin(), places_taken.end(), 
-      [pos_tree](position place) -> bool {return (place.x != pos_tree.x&& place.y != pos_tree.y);});
+      auto it = find_if(places_taken.begin(), places_taken.end(),
+   [pos_tree](position place) -> bool {return (place.x != pos_tree.x&& place.y != pos_tree.y);});
 
-      if (it != places_taken.end()){
+      if (it != places_taken.end()) {
          n_fruit ++;
-      places_taken.push_back(pos_tree);
+         places_taken.push_back(pos_tree);
+         field.set_obj(new Tree(loadBMP("tree.bmp")), pos_tree);
       }
-   }
-
+   }*/
 }
 
 

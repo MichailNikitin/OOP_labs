@@ -51,15 +51,15 @@ int main() {
          setcolor(YELLOW);
          rectangle(POS2CORD(current_cell.x), POS2CORD(current_cell.y), POS2CORD(current_cell.x+100), POS2CORD(current_cell.y+100));
          break;
+      
+         case '1':
 
-      case '1':
-         cout << "111111111111111111111111111111111"<<endl;
          break;
-      case '2':
-         if (Programms.size() <2)
-         break;
-         
+            case '2':
 
+         break;
+      
+      
       case KEY_ENTER:
 
          break;

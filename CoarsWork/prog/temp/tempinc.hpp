@@ -1,12 +1,6 @@
 struct _abracadabra_type {};
 int _abracadabra_cast(_abracadabra_type);
-#include <fstream>
 #include <iostream>
-#include <format>
-#include <algorithm>
-#include <string>
+#include <vector>
 #include "Objects.hpp"
-#include <typeinfo>
-#include <time.h>
-#include <stdlib.h>
 #include "graphics.h"

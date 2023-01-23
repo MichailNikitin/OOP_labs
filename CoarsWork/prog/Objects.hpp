@@ -84,7 +84,7 @@ public:
    void set_obj(Object *, position); // установить объект
    void delete_obj(position); // удалить объект
    void set_color(position, int); // установить цвет
-   void redraw_field();
+   void draw();
    Object *get_object(position); // получить объкт на клетке
 };
 
@@ -163,5 +163,5 @@ public:
    void draw_an_example() {}; // иллюстрирование решения задания(для художника)
 };
 
-
+void reDraw();
 #endif
