@@ -42,6 +42,8 @@ public:
    void set_direction(position); // установить направление
    void set_color(int); // установить цвет
    int get_color(); // вернуть цвет
+   position get_cordinat(); // вернуть координаты
+   position get_direction(); // вернуть направление
    void change_Field(Field &); // перед выходом из клетки удаление или замена объекта
    void draw();
 private:
@@ -61,7 +63,6 @@ public:
 class Fruit : public Object {
 public:
    Fruit(IMAGE *);
-   Fruit(const Fruit &obj); // Конструктор копий
    ~Fruit();
    bool is_access(Robot &);
 };
@@ -69,7 +70,6 @@ public:
 class Tree : public Object {
 public:
    Tree(IMAGE *);
-   Tree(const Tree &obj); // Конструктор копий
    ~Tree();
    bool is_access(Robot &);
 };
@@ -84,7 +84,6 @@ class Field {
    vector<vector<Cell>> fullField; //поле из клеток
 public:
    Field(int, int); // width, height
-   position coord2pos(int, int); // x, y
    void set_obj(Object *, position); // установить объект
    void delete_obj(position); // удалить объект
    void set_color(position, int); // установить цвет
@@ -137,14 +136,15 @@ public:
    void draw(int color); 
 };
 
+// Класс программ, содержащий набор комманд одного цвета
 class Programm  {
    int color = WHITE;
    vector<Command *> commands ;
 public:
-   Programm(int color); // color
-   int get_col();
-   void add(Command *);
-   void draw();
+   Programm(int color);    // color
+   int get_col();               // вернуть цвет
+   void add(Command *);//  добавление комманды
+   void draw();                // отрисовать все комманды данной программы
    Command *select(position); // i, j
 };
 
@@ -152,18 +152,19 @@ extern vector <Robot*> Robots; // глобальный вектор с роботами
 extern vector <Programm*> Programms; // глобальный вектор с программами
 
 class Task {
-   string text_task; // текст задания
-   string name_taskFile;
-   int count_robots;
-   int count_commands;
-   int count_tree;
-   int count_fruit;
+   string text_task;        // текст задания
+   string name_taskFile; // название файла с заданием
+   int count_robots;       // количество роботов
+   int count_commands;// количество комманд
+   int count_tree;          // количество деревьев
+   int count_fruit;          // количество урожая
    // инициализация всех компанентов согласно заданию
 public:
    Task(const string);// название файла с заданием
    void initialize(Field &, std::vector <Robot *> &Robots, std::vector <Programm *> &Programms);
    void prepare_field(Field &);
    bool is_task_completed(Field &, vector <Robot *> &Robots); // проверка на выполненность
+   string get_text_task();
    void draw_an_example() {}; // иллюстрирование решения задания(для художника)
 };
 

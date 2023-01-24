@@ -14,14 +14,26 @@ void clearWin() {
    putimage(0, 0, loadBMP("inteface.bmp"), COPY_PUT);
 }
 
-void reDraw() { // перерисовка поля
-   putimage(0, 0, loadBMP("inteface.bmp"), COPY_PUT);
+void put_text(string text_task) {
+   setbkcolor(NO_COLOR);
+   setcolor(BLACK);
+   const char *cstr = text_task.c_str();
+   settextstyle(GOTHIC_FONT, HORIZ_DIR, 12);
+   outtextxy(510, 60, cstr);
+}
+
+void reDraw(string text_task) { // перерисовка поля
+   clearWin(); // отрисовываем задний фон
+   // выводим текст задания
+   put_text(text_task);
+   // Отрисовываем программмы и роботов
    for (int i = 0; i < Programms.size(); i++) {
       Programms[i]->draw();
       setcolor(BLACK);
-      rectangle(i*122,500, i*122+130, 549);
+      int heightB = 125;
+      rectangle(i*heightB,500, i*heightB+122, 549);
       setfillstyle(SOLID_FILL, Programms[i]->get_col());
-      bar(i*122,500, i*122+130, 549);
+      bar(i*heightB,500, i*heightB+122, 549);
    }
    for (int i = 0; i < Robots.size(); i++)
       Robots[i]->draw();
@@ -32,6 +44,24 @@ void highlightCell(position current_cell) { // выделение ячейки
    setcolor(YELLOW);
    rectangle(POS2CORD(current_cell.x), POS2CORD(current_cell.y), POS2CORD(current_cell.x+100), POS2CORD(current_cell.y+100));
 }
+
+
+void drawCurrectProg(int n_currect_com, position current_cell) {
+   clearWin();
+   highlightCell(current_cell);
+   Programms[n_currect_com]->draw();
+   for (int i = 0; i < Robots.size(); i++)
+      if (Robots[i]->get_color() == Programms[n_currect_com]->get_col()) {
+         
+         Robots[i]->draw();
+         int heightB = 125;
+         setcolor(BLACK);
+         rectangle(n_currect_com*heightB,500, n_currect_com*heightB+122, 549);
+         setfillstyle(SOLID_FILL, Programms[n_currect_com]->get_col());
+         bar(n_currect_com*heightB,500, n_currect_com*heightB+122, 549);
+      }
+}
+
 
 int n_currect_com = 0;
 
@@ -44,101 +74,87 @@ int main() {
    Field field(WIDTH_I, HEIGHT_J); //создание объекта поля
 
    Task task("tast_list.txt");
+
    task.initialize(field, Robots, Programms); //инициализация роботов и программ
+   string text_task = task.get_text_task(); // получение текста задания
    task.prepare_field(field); // подготовка поля с расстановкой объектов
    highlightCell(current_cell); // отображение текущей ячейки
    while (1) {
-      
+
       //выбор текущей клетки
       switch (getch(kbhit())) {
       case KEY_UP:
-         reDraw();
+         reDraw(text_task);
          current_cell.y += (current_cell.y == 0) ? 0 : -1;
          highlightCell(current_cell);
          break;
       case KEY_DOWN:
-         reDraw();
+         reDraw(text_task);
          current_cell.y += (current_cell.y == HEIGHT_J-1) ? 0 : 1;
          highlightCell(current_cell);
          break;
       case KEY_LEFT:
-         reDraw();
+         reDraw(text_task);
          current_cell.x += (current_cell.x == 0) ? 0 : -1;
          highlightCell(current_cell);
          break;
       case KEY_RIGHT:
-         reDraw();
+         reDraw(text_task);
          current_cell.x += (current_cell.x == WIDTH_I-1) ? 0 : 1;
          highlightCell(current_cell);
          break;
-      
+
       // отображение программ только определённого цвета
       case '1':
          cout << "Выбрана программа 1"<<endl;
          n_currect_com = 0;
-         clearWin();
-         highlightCell(current_cell);
-         Programms[n_currect_com]->draw();
-         for (int i = 0; i < Robots.size(); i++)
-            if (Robots[i]->get_color() == Programms[n_currect_com]->get_col()) {
-               Robots[i] ->draw();
-               setfillstyle(SOLID_FILL, Programms[n_currect_com]->get_col());
-               bar(n_currect_com*122,500, n_currect_com*122+130, 549);
-            }
+         drawCurrectProg(n_currect_com, current_cell);
+         put_text(text_task);
          break;
       case '2':
          if (Programms.size() <2)
             break;
          cout << "Выбрана программа 2"<<endl;
          n_currect_com = 1;
-         clearWin();
-         highlightCell(current_cell);
-         Programms[n_currect_com]->draw();
-         for (int i = 0; i < Robots.size(); i++)
-            if (Robots[i]->get_color() == Programms[n_currect_com]->get_col()) {
-               Robots[i] ->draw();
-               setfillstyle(SOLID_FILL, Programms[n_currect_com]->get_col());
-               bar(n_currect_com*122,500, n_currect_com*122+130, 549);
-            }
+         drawCurrectProg(n_currect_com, current_cell);
+         put_text(text_task);
          break;
       case '3':
          if (Programms.size() <3)
             break;
          cout << "Выбрана программа 3"<<endl;
          n_currect_com = 2;
-         clearWin();
-         highlightCell(current_cell);
-         Programms[n_currect_com]->draw();
-         for (int i = 0; i < Robots.size(); i++)
-            if (Robots[i]->get_color() == Programms[n_currect_com]->get_col()) {
-               Robots[i] ->draw();
-               setfillstyle(SOLID_FILL, Programms[n_currect_com]->get_col());
-               bar(n_currect_com*122,500, n_currect_com*122+130, 549);
-            }
+         drawCurrectProg(n_currect_com, current_cell);
+         put_text(text_task);
          break;
       case '4':
          if (Programms.size() <4)
             break;
          cout << "Выбрана программа 4"<<endl;
          n_currect_com = 3;
-         clearWin();
-         highlightCell(current_cell);
-         Programms[n_currect_com]->draw();
-         for (int i = 0; i < Robots.size(); i++)
-            if (Robots[i]->get_color() == Programms[n_currect_com]->get_col()) {
-               Robots[i] ->draw();
-               setfillstyle(SOLID_FILL, Programms[n_currect_com]->get_col());
-               bar(n_currect_com*122,500, n_currect_com*122+130, 549);
-            }
+         drawCurrectProg(n_currect_com, current_cell);
+         put_text(text_task);
          break;
       //выбор комманды
       case KEY_ENTER:
-
+         
          break;
       // удаление объкта
       case KEY_DELETE:
 
          break;
+      // запуск программы
+      case KEY_TAB:
+         // перемещение роботово
+         for (int i = 0; i < Robots.size(); i++){
+            position new_pos = Robots[i]->get_cordinat();
+            new_pos.x += Robots[i]->get_direction().x;
+            new_pos.y += Robots[i]->get_direction().y;
+            Robots[i]->set_cordinat(new_pos);
+            Robots[i]->draw();
+            reDraw(text_task);
+         }
+      break;
       //отмена удаления
       case KEY_BACKSPACE:
 
