@@ -1,7 +1,7 @@
 # Objects.hpp
-!Objects.cpp Objects.hpp algorithm cctype cerrno clocale cstdint cstdio cstdlib ctype.h cwchar cwctype errno.h exception format fstream graphics.h initializer_list ios iosfwd iostream istream keys_n_colors.h limits limits.h locale.h new ostream signal.h stddef.h stdexcept stdint.h stdio.h stdlib.h streambuf string string_view system_error time.h type_traits typeinfo utility vector wchar.h wctype.h #<#>
-!Objects.hpp cctype cerrno clocale cstdint cstdio cstdlib ctype.h cwchar errno.h exception graphics.h initializer_list iosfwd keys_n_colors.h limits limits.h locale.h new signal.h stddef.h stdint.h stdio.h stdlib.h string string_view type_traits typeinfo utility vector wchar.h #<#>
-!main.cpp Objects.hpp cctype cerrno clocale cstdint cstdio cstdlib ctype.h cwchar cwctype errno.h exception graphics.h initializer_list ios iosfwd iostream istream keys_n_colors.h limits limits.h locale.h new ostream signal.h stddef.h stdexcept stdint.h stdio.h stdlib.h streambuf string string_view system_error type_traits typeinfo utility vector wchar.h wctype.h #<#>
+!Objects.cpp Objects.hpp algorithm cctype cerrno clocale cstdint cstdio cstdlib ctype.h cwchar cwctype errno.h exception format fstream graphics.h initializer_list ios iosfwd iostream istream keys_n_colors.h limits limits.h locale.h new ostream signal.h stddef.h stdexcept stdint.h stdio.h stdlib.h streambuf string string_view system_error time.h type_traits typeinfo utility wchar.h wctype.h #<#>
+!Objects.hpp algorithm cctype cerrno clocale cstdint cstdio cstdlib ctype.h cwchar cwctype errno.h exception format fstream graphics.h initializer_list ios iosfwd iostream istream keys_n_colors.h limits limits.h locale.h new ostream signal.h stddef.h stdexcept stdint.h stdio.h stdlib.h streambuf string string_view system_error time.h type_traits typeinfo utility wchar.h wctype.h #<#>
+!main.cpp Objects.hpp algorithm cctype cerrno clocale cstdint cstdio cstdlib ctype.h cwchar cwctype errno.h exception format fstream graphics.h initializer_list ios iosfwd iostream istream keys_n_colors.h limits limits.h locale.h new ostream signal.h stddef.h stdexcept stdint.h stdio.h stdlib.h streambuf string string_view system_error time.h type_traits typeinfo utility wchar.h wctype.h #<#>
 Arrow _type_ #<Objects.hpp>
 Arrow(bool is_allow_change_cordinat, bool is_allow_delete, position coord, position orient) #<Objects.hpp>
 COUNFUITS #<Objects.hpp>
@@ -24,7 +24,6 @@ HEIGHT_J #<Objects.hpp>
 Object _type_ #<Objects.hpp>
 Object(IMAGE*) #<Objects.hpp>
 Object(const Object& obj) #<Objects.hpp>
-POS2CORD(x) #<main.cpp>
 Programm _type_ #<Objects.hpp>
 Programm(int color) #<Objects.hpp>
 Programms : vector #<Objects.hpp>
@@ -40,11 +39,13 @@ WIDTH_I #<Objects.hpp>
 clearWin() -> void #<main.cpp>
 color_prog : constexpr int[] #<Objects.cpp>
 direct2grad(position direct) -> int #<Objects.cpp>
+drawBarCurrectProg(int i) -> void #<main.cpp>
 drawCurrectProg(int n_currect_com, position current_cell) -> void #<main.cpp>
 field : Field #<main.cpp>
 highlightCell(position current_cell) -> void #<main.cpp>
 main() -> int #<main.cpp>
 n_currect_com : int #<main.cpp>
+operator(const position&, const position&) -> auto #<Objects.hpp>
 places_taken : vector #<Objects.cpp>
 position _type_ #<Objects.hpp>
 position() #<Objects.hpp>
@@ -58,6 +59,7 @@ reDraw(string text_task) -> void #<main.cpp>
 	Arrow::use(Robot&) -> void #<Objects.hpp>
 	Arrow::draw(int color) -> void #<Objects.hpp>
 	Arrow::set_pos(position) -> void #<Objects.hpp>
+	Arrow::get_pos() -> position #<Objects.hpp>
 	Arrow::use(Robot&) -> virtual void #<Objects.hpp>
 	Arrow::draw(int color) -> virtual void #<Objects.hpp>
 	Cell::current_object : Object* #<Objects.hpp>
@@ -68,6 +70,7 @@ reDraw(string text_task) -> void #<main.cpp>
 	ChangeColor::use(Robot&) -> void #<Objects.hpp>
 	ChangeColor::draw(int color) -> void #<Objects.hpp>
 	ChangeColor::set_pos(position) -> void #<Objects.hpp>
+	ChangeColor::get_pos() -> position #<Objects.hpp>
 	ChangeColor::use(Robot&) -> virtual void #<Objects.hpp>
 	ChangeColor::draw(int color) -> virtual void #<Objects.hpp>
 	Command:%is_allow_change_cordinat : bool #<Objects.hpp>
@@ -75,6 +78,7 @@ reDraw(string text_task) -> void #<main.cpp>
 	Command:%img : IMAGE* #<Objects.hpp>
 	Command:%coord : position #<Objects.hpp>
 	Command::set_pos(position) -> void #<Objects.hpp>
+	Command::get_pos() -> position #<Objects.hpp>
 	Command::use(Robot&) -> virtual void #<Objects.hpp>
 	Command::draw(int color) -> virtual void #<Objects.hpp>
 	Exit:%img : IMAGE* #<Objects.hpp>
@@ -82,6 +86,7 @@ reDraw(string text_task) -> void #<main.cpp>
 	Exit::use(Robot&) -> void #<Objects.hpp>
 	Exit::draw(int color) -> void #<Objects.hpp>
 	Exit::set_pos(position) -> void #<Objects.hpp>
+	Exit::get_pos() -> position #<Objects.hpp>
 	Exit::use(Robot&) -> virtual void #<Objects.hpp>
 	Exit::draw(int color) -> virtual void #<Objects.hpp>
 	Field:%width : int #<Objects.hpp>
@@ -106,6 +111,7 @@ reDraw(string text_task) -> void #<main.cpp>
 	Programm::add(Command*) -> void #<Objects.hpp>
 	Programm::draw() -> void #<Objects.hpp>
 	Programm::select(position) -> Command* #<Objects.hpp>
+	Programm::delete_com(Command*) -> void #<Objects.hpp>
 	Robot:%img : IMAGE* #<Objects.hpp>
 	Robot:%pos : position #<Objects.hpp>
 	Robot:%direction : position #<Objects.hpp>

@@ -1,7 +1,14 @@
 #ifndef OBJECTS_H
 #define OBJECTS_H
-#include <vector>
+
+#include <fstream>
+#include <iostream>
+#include <format>
+#include <algorithm>
 #include <string>
+#include <typeinfo>
+#include <time.h>
+#include <stdlib.h>
 #include "graphics.h"
 
 #define WIDTH_I 5
@@ -21,11 +28,14 @@ class Сommand;
 class Programm;
 class Task;
 
+//струкутура для хранения координат парами
 struct position {
-   int x, y;
-   position() {x = y = 0;}
+   int x, y; // координаты
+   position() {x = y = 0;} // конструктор без передаваемых парамтров
    position(int new_x, int new_y):x(new_x), y(new_y) {}
-   position(const position &pos) {x = pos.x;y = pos.y;}
+   position(const position &pos) {x = pos.x;y = pos.y;} // конструктор копий
+   // перегрузка оператора для сравнения 
+   friend auto operator<=>(const position&, const position&) = default; 
 };
 
 class Robot {
@@ -36,8 +46,8 @@ class Robot {
    bool allow_change_direction; // разрешено изменять направление?
    bool allow_change_cordinat; // разрешено изменять координаты?
 public:
-   Robot(IMAGE *img_robot,bool is_allow_change_direction, bool is_allow_change_cordinat); //allow_change_direction, allow_change_cordinat
-   ~Robot();
+   Robot(IMAGE *img_robot,bool is_allow_change_direction, bool is_allow_change_cordinat); //конструктор
+   ~Robot(); //деструктор
    void set_cordinat(position); // установить координаты
    void set_direction(position); // установить направление
    void set_color(int); // установить цвет
@@ -50,17 +60,19 @@ private:
    bool is_crash(vector <Robot *> &Robots); // столкнулся(набор роботов)?
 };
 
+//базовый класс для неподвижных сущностей
 class Object {
 protected:
    IMAGE *img; // картинка объекта
 public:
-   Object(IMAGE *);
+   Object(IMAGE *); // конструктор
    Object(const Object &obj); // Конструктор копий
-   ~Object();
+   ~Object();// деструтор
    virtual void draw(position) = 0; // вернуть картин
    virtual bool is_access(Robot &) = 0; // проверка клетки на доступность для робота
 };
 
+// объект доступный для сбора
 class Fruit : public Object {
 public:
    Fruit(IMAGE *);
@@ -69,6 +81,7 @@ public:
    bool is_access(Robot &);
 };
 
+// объект не доступный для перемещения
 class Tree : public Object {
 public:
    Tree(IMAGE *);
@@ -77,20 +90,22 @@ public:
    bool is_access(Robot &);
 };
 
+// струкура для клетки поля
 struct Cell {
    Object *current_object = nullptr; // объект в клетке
-   int color = WHITE;
+   int color = WHITE; // цвет клетки
 };
 
+//класс поля 
 class Field {
    int width, height; // размеры поля
    vector<vector<Cell>> fullField; //поле из клеток
 public:
-   Field(int, int); // width, height
+   Field(int, int); // констуктор
    void set_obj(Object *, position); // установить объект
    void delete_obj(position); // удалить объект
    void set_color(position, int); // установить цвет
-   void draw();
+   void draw(); // отрисовка всех Object на поле
    Object *get_object(position); // получить объкт на клетке
 };
 
@@ -101,15 +116,16 @@ class Command {
    friend class Programm;
 
 protected:
-   IMAGE *img;
-   position coord;
+   IMAGE *img; // изображение комманды
+   position coord; //координаты комманды
 public:
    Command(bool, bool, position); //is_allow_change_cordinat, is_allow_delete,  x, y
    Command(const Command &com); // Конструктор копий
    Command() = default; // Конструктор копий
-   void set_pos(position);
-   virtual void use(Robot &) = 0;
-   virtual void draw(int color) = 0; 
+   void set_pos(position); // задать новую позицию комманде
+   position get_pos();  // вернуть текущую позицию
+   virtual void use(Robot &) = 0; // виртуальный метод на воздействие на робота
+   virtual void draw(int color) = 0; // виртуальный метод рисования
 };
 
 // "Стрелка", меняющая нарпавление
@@ -141,14 +157,15 @@ public:
 
 // Класс программ, содержащий набор комманд одного цвета
 class Programm  {
-   int color = WHITE;
-   vector<Command *> commands ;
+   int color = WHITE; // цвет программы
+   vector<Command *> commands ; // вектор комманд внутри одной программы
 public:
-   Programm(int color);    // color
+   Programm(int color);    // конструктор
    int get_col();               // вернуть цвет
    void add(Command *);//  добавление комманды
    void draw();                // отрисовать все комманды данной программы
-   Command *select(position); // i, j
+   Command *select(position); // выбрать команду в position
+   void delete_com(Command*); // удаление комманды
 };
 
 extern vector <Robot*> Robots; // глобальный вектор с роботами
@@ -164,10 +181,11 @@ class Task {
    // инициализация всех компанентов согласно заданию
 public:
    Task(const string);// название файла с заданием
+   // инициализация робтов и программ по файлу с заданием 
    void initialize(Field &, std::vector <Robot *> &Robots, std::vector <Programm *> &Programms);
-   void prepare_field(Field &);
+   void prepare_field(Field &); // расставить на поле статичные 
    bool is_task_completed(Field &, vector <Robot *> &Robots); // проверка на выполненность
-   string get_text_task();
+   string get_text_task(); // вернуть текст задания
    void draw_an_example() {}; // иллюстрирование решения задания(для художника)
 };
 

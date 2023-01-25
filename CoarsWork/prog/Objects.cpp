@@ -1,13 +1,4 @@
-#include <fstream>
-#include <iostream>
-#include <format>
-#include <algorithm>
-#include <string>
 #include "Objects.hpp"
-#include <typeinfo>
-#include <time.h>
-#include <stdlib.h>
-#include "graphics.h"
 
 constexpr int color_prog[4] = {RED, GREEN, BLUE, YELLOW};
 vector<position> places_taken;
@@ -24,7 +15,6 @@ int direct2grad(position direct) {
    else
       return 0;
 }
-
 
 Robot::Robot(IMAGE *image, bool direction, bool cordinat):img(image), allow_change_direction(direction), allow_change_cordinat(cordinat) {}
 Robot::~Robot() {freeimage(img);}
@@ -99,7 +89,6 @@ void Field::draw() {
             fullField[i][j].current_object->draw(position(i*100+5, j*100+5));
       }
    }
-   //Как сдесь сделать обход двумерного вектора
 }
 
 Command::Command(bool is_change_cordinat, bool is_delete, position new_coord):
@@ -114,6 +103,8 @@ void Command::set_pos(position pos) {
    coord.x = pos.x;
    coord.y = pos.y;
 }
+
+position Command::get_pos() {return coord;}
 
 Arrow::Arrow(bool is_change_cordinat, bool is_delete, position new_coord, position direction):
    Command(is_change_cordinat, is_delete, new_coord), orientation(direction) {}
@@ -197,6 +188,21 @@ void Programm::draw() {
       commands[i]->draw(color);
    }
 }
+
+void Programm::delete_com(Command *com) {
+   commands.erase(ranges::find(commands, com));
+}
+
+Command *Programm::select(position pos) {
+   auto it =  find_if(commands.begin(), commands.end(), [pos](Command *com) -> bool {
+      return com->get_pos() == pos;});
+   if (it != commands.end())
+      cout << "command is find\n";
+   else
+      cout << "command is't find\n";
+
+}
+
 Task::Task(const string file_name): name_taskFile(file_name) {}
 
 void Task::initialize(Field &field, vector <Robot *> &Robots,vector <Programm *> &Programms) {

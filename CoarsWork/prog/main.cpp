@@ -1,9 +1,4 @@
-#include <iostream>
-#include <vector>
 #include "Objects.hpp"
-#include "graphics.h"
-
-#define POS2CORD(x) 100*x
 
 using namespace std;
 
@@ -12,11 +7,12 @@ vector <Programm *> Programms; // глобальный вектор с программами
 
 Field field(WIDTH_I, HEIGHT_J); //создание объекта пол€
 
-
+//очистка окна
 void clearWin() {
    putimage(0, 0, loadBMP("inteface.bmp"), COPY_PUT);
 }
 
+//вставка текста задани€
 void put_text(string text_task) {
    setbkcolor(NO_COLOR);
    setcolor(BLACK);
@@ -25,50 +21,51 @@ void put_text(string text_task) {
    outtextxy(510, 60, cstr);
 }
 
-void reDraw(string text_task) { // перерисовка пол€
+//отрисовка индикатора выбранной программы в нижней панели
+void drawBarCurrectProg(int i) {
+   setcolor(BLACK);
+   int heightB = 125;
+   rectangle(i*heightB,500, i*heightB+122, 549);
+   setfillstyle(SOLID_FILL, Programms[i]->get_col());
+   bar(i*heightB,501, i*heightB+122, 549);
+}
+
+// перерисовка всех элементов во врем€ выполнени€ программы роботами
+void reDraw(string text_task) {
    clearWin(); // отрисовываем задний фон
    // выводим текст задани€
    put_text(text_task);
-   
+   //прорисовка объектов на поле
    field.draw();
    // ќтрисовываем программмы и роботов
    for (int i = 0; i < Programms.size(); i++) {
       Programms[i]->draw();
-      setcolor(BLACK);
-      int heightB = 125;
-      rectangle(i*heightB,500, i*heightB+122, 549);
-      setfillstyle(SOLID_FILL, Programms[i]->get_col());
-      bar(i*heightB,500, i*heightB+122, 549);
+      drawBarCurrectProg(i);
    }
    for (int i = 0; i < Robots.size(); i++)
       Robots[i]->draw();
 }
 
-void highlightCell(position current_cell) { // выделение €чейки
+// выделение €чейки
+void highlightCell(position current_cell) {
    setlinestyle(0, 1, 3);
    setcolor(YELLOW);
-   rectangle(POS2CORD(current_cell.x), POS2CORD(current_cell.y), POS2CORD(current_cell.x+100), POS2CORD(current_cell.y+100));
+   rectangle(100*current_cell.x, 100*current_cell.y, 100*current_cell.x+100, 100*current_cell.y+100);
 }
 
-
+//отрисока текущей программы
 void drawCurrectProg(int n_currect_com, position current_cell) {
    clearWin();
-   highlightCell(current_cell);
    Programms[n_currect_com]->draw();
    field.draw();
    for (int i = 0; i < Robots.size(); i++)
-      if (Robots[i]->get_color() == Programms[n_currect_com]->get_col()) {1
+      if (Robots[i]->get_color() == Programms[n_currect_com]->get_col()) {
          Robots[i]->draw();
-         int heightB = 125;
-         setcolor(BLACK);
-         rectangle(n_currect_com*heightB,500, n_currect_com*heightB+122, 549);
-         setfillstyle(SOLID_FILL, Programms[n_currect_com]->get_col());
-         bar(n_currect_com*heightB,500, n_currect_com*heightB+122, 549);
+         drawBarCurrectProg(n_currect_com);
       }
 }
 
-
-int n_currect_com = 0;
+int n_currect_com = 0; //номер текущей программы
 
 int main() {
    initwindow(800, 550, "ѕрограмма дл€ обучени€ программированию");
@@ -87,22 +84,22 @@ int main() {
       //выбор текущей клетки
       switch (getch(kbhit())) {
       case KEY_UP:
-         reDraw(text_task);
+         drawCurrectProg(n_currect_com, current_cell);
          current_cell.y += (current_cell.y == 0) ? 0 : -1;
          highlightCell(current_cell);
          break;
       case KEY_DOWN:
-         reDraw(text_task);
+         drawCurrectProg(n_currect_com, current_cell);
          current_cell.y += (current_cell.y == HEIGHT_J-1) ? 0 : 1;
          highlightCell(current_cell);
          break;
       case KEY_LEFT:
-         reDraw(text_task);
+         drawCurrectProg(n_currect_com, current_cell);
          current_cell.x += (current_cell.x == 0) ? 0 : -1;
          highlightCell(current_cell);
          break;
       case KEY_RIGHT:
-         reDraw(text_task);
+         drawCurrectProg(n_currect_com, current_cell);
          current_cell.x += (current_cell.x == WIDTH_I-1) ? 0 : 1;
          highlightCell(current_cell);
          break;
@@ -140,16 +137,17 @@ int main() {
          break;
       //выбор комманды
       case KEY_ENTER:
-         
+
          break;
       // удаление объкта
       case KEY_DELETE:
-
+         Programms[n_currect_com]->delete_com(Programms[n_currect_com]->select(current_cell));
+         drawCurrectProg(n_currect_com, current_cell);
          break;
       // запуск программы
       case KEY_TAB:
          // перемещение роботов
-         for (int i = 0; i < Robots.size(); i++){
+         for (int i = 0; i < Robots.size(); i++) {
             position new_pos = Robots[i]->get_cordinat();
             new_pos.x += Robots[i]->get_direction().x;
             new_pos.y += Robots[i]->get_direction().y;
@@ -157,7 +155,7 @@ int main() {
             Robots[i]->draw();
             reDraw(text_task);
          }
-      break;
+         break;
       //отмена удалени€
       case KEY_BACKSPACE:
 
