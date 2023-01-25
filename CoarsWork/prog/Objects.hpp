@@ -57,6 +57,7 @@ public:
    Object(IMAGE *);
    Object(const Object &obj); // Конструктор копий
    ~Object();
+   virtual void draw(position) = 0; // вернуть картин
    virtual bool is_access(Robot &) = 0; // проверка клетки на доступность для робота
 };
 
@@ -64,6 +65,7 @@ class Fruit : public Object {
 public:
    Fruit(IMAGE *);
    ~Fruit();
+   void draw(position);
    bool is_access(Robot &);
 };
 
@@ -71,6 +73,7 @@ class Tree : public Object {
 public:
    Tree(IMAGE *);
    ~Tree();
+   void draw(position);
    bool is_access(Robot &);
 };
 

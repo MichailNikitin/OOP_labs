@@ -10,6 +10,9 @@ using namespace std;
 vector <Robot *> Robots; // глобальный вектор с роботами
 vector <Programm *> Programms; // глобальный вектор с программами
 
+Field field(WIDTH_I, HEIGHT_J); //создание объекта поля
+
+
 void clearWin() {
    putimage(0, 0, loadBMP("inteface.bmp"), COPY_PUT);
 }
@@ -26,6 +29,8 @@ void reDraw(string text_task) { // перерисовка поля
    clearWin(); // отрисовываем задний фон
    // выводим текст задания
    put_text(text_task);
+   
+   field.draw();
    // Отрисовываем программмы и роботов
    for (int i = 0; i < Programms.size(); i++) {
       Programms[i]->draw();
@@ -50,9 +55,9 @@ void drawCurrectProg(int n_currect_com, position current_cell) {
    clearWin();
    highlightCell(current_cell);
    Programms[n_currect_com]->draw();
+   field.draw();
    for (int i = 0; i < Robots.size(); i++)
-      if (Robots[i]->get_color() == Programms[n_currect_com]->get_col()) {
-         
+      if (Robots[i]->get_color() == Programms[n_currect_com]->get_col()) {1
          Robots[i]->draw();
          int heightB = 125;
          setcolor(BLACK);
@@ -70,8 +75,6 @@ int main() {
    clearWin();
 
    position current_cell(0, 0); // позиция текущей клетки
-
-   Field field(WIDTH_I, HEIGHT_J); //создание объекта поля
 
    Task task("tast_list.txt");
 
@@ -145,7 +148,7 @@ int main() {
          break;
       // запуск программы
       case KEY_TAB:
-         // перемещение роботово
+         // перемещение роботов
          for (int i = 0; i < Robots.size(); i++){
             position new_pos = Robots[i]->get_cordinat();
             new_pos.x += Robots[i]->get_direction().x;

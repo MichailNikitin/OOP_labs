@@ -41,6 +41,7 @@ clearWin() -> void #<main.cpp>
 color_prog : constexpr int[] #<Objects.cpp>
 direct2grad(position direct) -> int #<Objects.cpp>
 drawCurrectProg(int n_currect_com, position current_cell) -> void #<main.cpp>
+field : Field #<main.cpp>
 highlightCell(position current_cell) -> void #<main.cpp>
 main() -> int #<main.cpp>
 n_currect_com : int #<main.cpp>
@@ -92,9 +93,12 @@ reDraw(string text_task) -> void #<main.cpp>
 	Field::draw() -> void #<Objects.hpp>
 	Field::get_object(position) -> Object* #<Objects.hpp>
 	Fruit:%img : IMAGE* #<Objects.hpp>
+	Fruit::draw(position) -> void #<Objects.hpp>
 	Fruit::is_access(Robot&) -> bool #<Objects.hpp>
+	Fruit::draw(position) -> virtual void #<Objects.hpp>
 	Fruit::is_access(Robot&) -> virtual bool #<Objects.hpp>
 	Object:%img : IMAGE* #<Objects.hpp>
+	Object::draw(position) -> virtual void #<Objects.hpp>
 	Object::is_access(Robot&) -> virtual bool #<Objects.hpp>
 	Programm:%color : int #<Objects.hpp>
 	Programm:%commands : vector #<Objects.hpp>
@@ -129,7 +133,9 @@ reDraw(string text_task) -> void #<main.cpp>
 	Task::get_text_task() -> string #<Objects.hpp>
 	Task::draw_an_example() -> void #<Objects.hpp>
 	Tree:%img : IMAGE* #<Objects.hpp>
+	Tree::draw(position) -> void #<Objects.hpp>
 	Tree::is_access(Robot&) -> bool #<Objects.hpp>
+	Tree::draw(position) -> virtual void #<Objects.hpp>
 	Tree::is_access(Robot&) -> virtual bool #<Objects.hpp>
 	position::x : int #<Objects.hpp>
 	position::y : int #<Objects.hpp>

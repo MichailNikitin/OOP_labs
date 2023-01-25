@@ -53,23 +53,28 @@ void Robot::draw() {
    putimage(pos.x*100+5,pos.y*100+5, rotImg, COPY_PUT);
 }
 bool Robot::is_crash(std::vector <Robot *> &Robots) {
-   //if ( 
+   //if (
    return 1;
 }
 
 Object::Object(IMAGE *image): img(image) {}
 Object::Object(const Object &obj) {img = obj.img;}
 Object::~Object() {freeimage(img);}
+
 Fruit::Fruit(IMAGE *image): Object(image) {}
 Fruit::~Fruit() {freeimage(img);}
+
 Tree::Tree(IMAGE *image): Object(image) {}
 Tree::~Tree() {freeimage(img);}
 
 bool Fruit::is_access(Robot &current_robot) {return 1;}
+void Fruit::draw(position pos) {return putimage(pos.x, pos.y, img, COPY_PUT);}
 
 bool Tree::is_access(Robot &current_robot) {return 0;}
+void Tree::draw(position pos) { putimage(pos.x, pos.y, img, COPY_PUT);}
 
-Field::Field(int w, int h):width(w), height(h),  fullField(width, vector<Cell>(height)){}
+
+Field::Field(int w, int h):width(w), height(h),  fullField(width, vector<Cell>(height)) {}
 
 void Field::set_obj(Object *obj, position pos) { // i, j
    fullField[pos.x][pos.y].current_object = obj;
@@ -88,7 +93,12 @@ Object *Field::get_object(position pos) {
 }
 
 void Field::draw() {
-   for(int i = 0;
+   for (int i = 0; i < width; i++) {
+      for (int j = 0; j < height; j++) {
+         if (fullField[i][j].current_object != nullptr)
+            fullField[i][j].current_object->draw(position(i*100+5, j*100+5));
+      }
+   }
    //Как сдесь сделать обход двумерного вектора
 }
 
@@ -175,10 +185,9 @@ void Exit::draw(int col) {
 }
 
 Programm::Programm(int c): color(c) {}
-
 int Programm::get_col() {return color;}
 
-void Programm::add(Command *command) { 
+void Programm::add(Command *command) {
    commands.push_back(command);
 }
 
@@ -194,7 +203,7 @@ void Task::initialize(Field &field, vector <Robot *> &Robots,vector <Programm *>
    ifstream file;
    setlocale(LC_ALL, "Russian");
    file.open(name_taskFile);
- 
+
    getline(file, text_task);
 
    file >> count_robots >> count_commands;
@@ -237,7 +246,6 @@ void Task::initialize(Field &field, vector <Robot *> &Robots,vector <Programm *>
       new_robot->set_color(color_prog[f_color]);
       new_robot->set_cordinat(position(r_x, r_y));
       new_robot->set_direction(direct);
-      new_robot->draw();
       Robots.push_back(new_robot);
    }
 
@@ -315,14 +323,8 @@ void Task::initialize(Field &field, vector <Robot *> &Robots,vector <Programm *>
          Programm *new_programm = new Programm(color_prog[f_color]);
          new_programm->add(command);
          Programms.push_back(new_programm);
-         command->draw(color_prog[f_color]);
       }
    }
-   cout << "начало прорисовки комманд: \n";
-   for (int i = 0; i < Programms.size(); i++) {
-      Programms[i]->draw();
-   }
-
 
    cout << "Чтение файла завешенно. Закрываем файл\n" << endl;
    file.close();
@@ -332,37 +334,36 @@ void Task::prepare_field(Field &field) {
    count_fruit = COUNFUITS;
    count_tree = COUNTTREE;
    srand(time(NULL));
-   
-      for (int n_fruit = 0; n_fruit < count_fruit;)
-      {
-         position pos_fruit;
-         pos_fruit.x = rand() % (WIDTH_I);
-         pos_fruit.y = rand() % (HEIGHT_J);
-         auto it = find_if(places_taken.begin(), places_taken.end(),
-      [pos_fruit](position place) -> bool {return (place.x != pos_fruit.x&& place.y != pos_fruit.y);});
 
-         if (it != places_taken.end()) {
-            n_fruit ++;
-            places_taken.push_back(pos_fruit);
-            Fruit *fruit =new Fruit(loadBMP("apple.bmp"));
-            field.set_obj(fruit, pos_fruit);
-         }
-      }
-      for (int n_fruit = 0; n_fruit < count_tree;)
-      {
-         position pos_tree;
-         pos_tree.x = rand() % (WIDTH_I-1);
-         pos_tree.y = rand() % (HEIGHT_J-1);
-         auto it = find_if(places_taken.begin(), places_taken.end(),
-      [pos_tree](position place) -> bool {return (place.x != pos_tree.x&& place.y != pos_tree.y);});
+   for (int n_fruit = 0; n_fruit < count_fruit;)
+   {
+      position pos_fruit;
+      pos_fruit.x = rand() % (WIDTH_I);
+      pos_fruit.y = rand() % (HEIGHT_J);
+      auto it = find_if(places_taken.begin(), places_taken.end(),
+                        [pos_fruit](position place) -> bool {return (place.x != pos_fruit.x&& place.y != pos_fruit.y);});
 
-         if (it != places_taken.end()) {
-            n_fruit ++;
-            places_taken.push_back(pos_tree);
-            field.set_obj(new Tree(loadBMP("tree.bmp")), pos_tree);
-         }
+      if (it != places_taken.end()) {
+         n_fruit ++;
+         places_taken.push_back(pos_fruit);
+         Fruit *fruit =new Fruit(loadBMP("apple.bmp"));
+         field.set_obj(fruit, pos_fruit);
       }
-      
+   }
+   for (int n_fruit = 0; n_fruit < count_tree;)
+   {
+      position pos_tree;
+      pos_tree.x = rand() % (WIDTH_I-1);
+      pos_tree.y = rand() % (HEIGHT_J-1);
+      auto it = find_if(places_taken.begin(), places_taken.end(),
+                        [pos_tree](position place) -> bool {return (place.x != pos_tree.x&& place.y != pos_tree.y);});
+
+      if (it != places_taken.end()) {
+         n_fruit ++;
+         places_taken.push_back(pos_tree);
+         field.set_obj(new Tree(loadBMP("tree.bmp")), pos_tree);
+      }
+   }
 }
 
 string Task::get_text_task() {
