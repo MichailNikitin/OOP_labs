@@ -1,15 +1,15 @@
 #include "Objects.hpp"
 
-constexpr int color_prog[4] = {RED, GREEN, BLUE, YELLOW};
+vector <int> color_prog = {RED, GREEN, BLUE, YELLOW};
 vector<position> places_taken;
 
 using namespace std;
 
 int direct2grad(position direct) {
    if (direct.x == -1)
-      return 270;
-   if (direct.y == 1)
       return 180;
+   if (direct.y == 1)
+      return 270;
    if (direct.y == -1)
       return 90;
    else
@@ -20,13 +20,13 @@ Robot::Robot(IMAGE *image, bool direction, bool cordinat):img(image), allow_chan
 Robot::~Robot() {freeimage(img);}
 
 void Robot::set_cordinat(position new_pos) {
-
    pos = position(new_pos.x, new_pos.y);
 }
 
 void Robot::set_direction(position new_direction) {
    direction = position(new_direction.x, new_direction.y);
 }
+void Robot::set_img(IMAGE* image){ img = image;}
 
 void Robot::set_color(int new_color) {color = new_color;}
 int Robot::get_color() {return color;}
@@ -38,6 +38,10 @@ void Robot::change_Field(Field &Field) {
 }
 
 void Robot::draw() {
+   int i_color = distance(color_prog.begin(), find(color_prog.begin(), color_prog.end(), color));
+   char name_image[7];
+   snprintf(name_image, sizeof(name_image), "r%d.bmp",i_color);
+   this->img = loadBMP(name_image);
    IMAGE *rotImg = imageturn(img,  direct2grad(direction), WHITE);
    putimage(pos.x*100+5,pos.y*100+5, rotImg, COPY_PUT);
 }
@@ -56,6 +60,20 @@ bool Robot::is_crash(std::vector <Robot *> &Robots) {
          return 1;
    }
    return 0;
+}
+
+bool Robot::is_collision(Field &field, vector <Robot *> &Robots) {
+   for (int i = 0; i < Robots.size(); i++) {
+      if (this == Robots[i])
+         continue;
+      if (Robots[i]->get_cordinat() == this->get_cordinat())
+         return true;
+      if (field.get_object(this->get_cordinat()) != nullptr) {
+         return true;
+      }
+      return this->is_crash(Robots);
+   }
+   return false;
 }
 
 Object::Object(IMAGE *image): img(image) {}
@@ -165,7 +183,8 @@ void Arrow::draw(int col) {
 }
 
 void ChangeColor::use(Robot &robot) {
-   robot.set_color(this->color);
+   int new_color = this->color;
+   robot.set_color(new_color);   
 }
 void ChangeColor::draw(int col) {
    //cout <<"coord = ("<< coord.x <<", "<< coord.y<<")\n";
@@ -196,7 +215,7 @@ void Exit::draw(int col) {
    default:
       this->img = loadBMP("wooden-crate_white.bmp");
    }
-   putimage(coord.x*100+5, coord.x*100+5, img, COPY_PUT);
+   putimage(coord.x*100+5, coord.y*100+5, img, COPY_PUT);
 }
 
 Programm::Programm(int c): color(c) {}
@@ -220,7 +239,7 @@ void Programm::delete_com(Command *com) {
 bool Programm::is_collision() {
    for (int i = 0; i < commands.size(); i ++) {
       for (int j = 0; j < commands.size(); j++) {
-         if(i != j && commands[i]->get_pos() == commands[j]->get_pos())
+         if (i != j && commands[i]->get_pos() == commands[j]->get_pos())
             return true;
       }
    }
@@ -275,22 +294,24 @@ void Task::initialize(Field &field, vector <Robot *> &Robots,vector <Programm *>
          direct = position(1, 0);
          break; // "вправ"
       case 1:
-         direct = position(0, 1);
+         direct = position(0, -1);
          break; //"вверх"
       case 2:
          direct = position(-1, 0);
          break; //"влево"
       case 3:
-         direct = position(0, -1);
+         direct = position(0, 1);
          break; //"вниз"
 
       }
       char name_image[7];
       snprintf(name_image, sizeof(name_image), "r%d.bmp",f_color);
       Robot *new_robot = new Robot(loadBMP(name_image),change_direct, change_coord);
+      
       new_robot->set_color(color_prog[f_color]);
       new_robot->set_cordinat(position(r_x, r_y));
       new_robot->set_direction(direct);
+      
       Robots.push_back(new_robot);
    }
 
@@ -326,13 +347,13 @@ void Task::initialize(Field &field, vector <Robot *> &Robots,vector <Programm *>
             orient = position(1, 0);
             break; // "вправo"
          case 1:
-            orient = position(0, 1);
+            orient = position(0, -1);
             break; //"вверх"
          case 2:
             orient = position(-1, 0);
             break; //"влево"
          case 3:
-            orient = position(0, -1);
+            orient = position(0, 1);
             break; //"вниз"
          }
          Arrow *arrow = new Arrow(change_coord, allow_delete, position(com_x, com_y), orient);

@@ -81,6 +81,7 @@ restart:
    highlightCell(current_cell); // отображение текущей ячейки
    while (1) {
       //выбор текущей клетки
+fixing:
       switch (getch()) {
       case KEY_UP: {
             drawCurrectProg(n_currect_com, current_cell);
@@ -140,7 +141,7 @@ restart:
             put_text(text_task);
             break;
          }
-      //выбор комманды
+      //выбор комманды или робота
       case KEY_ENTER: {
             Command *com = Programms[n_currect_com]->select(current_cell);
             if (com != nullptr && com->get_allow_pos()) {
@@ -175,106 +176,115 @@ restart:
                         break;
                      }
                   case KEY_ENTER: {
-                        if(Programms[n_currect_com]
+                        if (!Programms[n_currect_com]->is_collision())
+                           goto fixing;
+                        break;
                      }
                   }
                }
             }
-               else {
-                  for (int i = 0; i < Robots.size(); i++) {
-                     if (current_cell == Robots[i]->get_cordinat()) {
-                        while (1) {
-                           switch (getch()) {
-                           case KEY_UP: {
-                                 current_cell.y += (current_cell.y == 0) ? 0 : -1;
-                                 Robots[i]->set_cordinat(current_cell);
-                                 drawCurrectProg(n_currect_com, current_cell);
-                                 highlightCell(current_cell);
-                                 break;
-                              }
-                           case KEY_DOWN: {
-                                 current_cell.y += (current_cell.y == HEIGHT_J-1) ? 0 : 1;
-                                 Robots[i]->set_cordinat(current_cell);
-                                 drawCurrectProg(n_currect_com, current_cell);
-                                 highlightCell(current_cell);
-                                 break;
-                              }
-                           case KEY_LEFT: {
-                                 current_cell.x += (current_cell.x == 0) ? 0 : -1;
-                                 Robots[i]->set_cordinat(current_cell);
-                                 drawCurrectProg(n_currect_com, current_cell);
-                                 highlightCell(current_cell);
-                                 break;
-                              }
-                           case KEY_RIGHT: {
-                                 current_cell.x += (current_cell.x == WIDTH_I-1) ? 0 : 1;
-                                 Robots[i]->set_cordinat(current_cell);
-                                 drawCurrectProg(n_currect_com, current_cell);
-                                 highlightCell(current_cell);
-                                 break;
-                              }
-                           case KEY_ENTER: {
-
-                              }
+            else {
+               for (int i = 0; i < Robots.size(); i++) {
+                  if (current_cell == Robots[i]->get_cordinat()) {
+                     while (1) {
+                        switch (getch()) {
+                        case KEY_UP: {
+                              current_cell.y += (current_cell.y == 0) ? 0 : -1;
+                              Robots[i]->set_cordinat(current_cell);
+                              drawCurrectProg(n_currect_com, current_cell);
+                              highlightCell(current_cell);
+                              break;
+                           }
+                        case KEY_DOWN: {
+                              current_cell.y += (current_cell.y == HEIGHT_J-1) ? 0 : 1;
+                              Robots[i]->set_cordinat(current_cell);
+                              drawCurrectProg(n_currect_com, current_cell);
+                              highlightCell(current_cell);
+                              break;
+                           }
+                        case KEY_LEFT: {
+                              current_cell.x += (current_cell.x == 0) ? 0 : -1;
+                              Robots[i]->set_cordinat(current_cell);
+                              drawCurrectProg(n_currect_com, current_cell);
+                              highlightCell(current_cell);
+                              break;
+                           }
+                        case KEY_RIGHT: {
+                              current_cell.x += (current_cell.x == WIDTH_I-1) ? 0 : 1;
+                              Robots[i]->set_cordinat(current_cell);
+                              drawCurrectProg(n_currect_com, current_cell);
+                              highlightCell(current_cell);
+                              break;
+                           }
+                        case KEY_ENTER: {
+                              if (!Robots[i]->is_collision(field, Robots))
+                                 goto fixing;
+                              break;
                            }
                         }
                      }
                   }
                }
-               break;
-            }
-         // удаление объкта
-         case KEY_DELETE: {
-               Command *com = Programms[n_currect_com]->select(current_cell);
-               if (com != nullptr) {
-                  Programms[n_currect_com]->delete_com(com);
-                  drawCurrectProg(n_currect_com, current_cell);
-               }
-               break;
-            }
-         // запуск программы
-         case KEY_TAB: {
-
-               for (int i = 0; i < Robots.size(); i++) {
-                  if (Robots[i]->is_crash(Robots)) {
-                     put_text("Столкновение!");
-                     delay(1000);
-                     clearWin();
-                     Robots.clear();
-                     Programms.clear();
-                     goto restart;
-                  }
-               }
-               // перемещение роботов
-               for (int i = 0; i < Robots.size(); i++) {
-                  auto r = Robots[i];
-                  position new_pos = r->get_cordinat();
-                  new_pos.x += r->get_direction().x;
-                  new_pos.y += r->get_direction().y;
-                  r->set_cordinat(new_pos);
-                  r->draw();
-                  Command *com = Programms[r->get_color()]->select(current_cell);
-                  if (com != nullptr) {
-                     com->use(*r);
-                  }
-                  reDraw(text_task);
-               }
-
-               break;
-            }
-         // возврат в изначальное состояние
-         case KEY_BACKSPACE: {
-               Robots.clear();
-               Programms.clear();
-               task.initialize(field, Robots, Programms);
-               drawCurrectProg(n_currect_com, current_cell);
-               highlightCell(current_cell);
             }
             break;
-         //закрытие
-         case KEY_ESC:
-            closegraph();
-            return 0;
          }
+      // удаление объкта
+      case KEY_DELETE: {
+            Command *com = Programms[n_currect_com]->select(current_cell);
+            if (com != nullptr) {
+               Programms[n_currect_com]->delete_com(com);
+               drawCurrectProg(n_currect_com, current_cell);
+            }
+            break;
+         }
+      // запуск программы
+      case KEY_TAB: {
+
+            for (int i = 0; i < Robots.size(); i++) {
+               position n_pos_rob = position(Robots[i]->get_cordinat().x + Robots[i]->get_direction().x, Robots[i]->get_cordinat().y + Robots[i]->get_direction().y);
+               if (Robots[i]->is_crash(Robots) || typeid(field.get_object(n_pos_rob)) == typeid(Tree)) {
+                  put_text("Столкновение!");
+                  delay(3000);
+                  clearWin();
+                  Robots.clear();
+                  Programms.clear();
+                  goto restart;
+               }
+            }
+            // перемещение роботов
+            for (int i = 0; i < Robots.size(); i++) {
+               auto r = Robots[i];
+               position new_pos = r->get_cordinat();
+               new_pos.x += r->get_direction().x;
+               new_pos.y += r->get_direction().y;
+               r->set_cordinat(new_pos);
+               r->draw();
+               if (typeid(field.get_object(r->get_cordinat())) == typeid(Fruit)) {
+                  field.delete_obj(r->get_cordinat());
+                  field.draw();
+               }
+               Command *com = Programms[r->get_color()]->select(current_cell);
+               if (com != nullptr)
+                  com->use(*r);
+
+               reDraw(text_task);
+            }
+
+            break;
+         }
+      // возврат в изначальное состояние
+      case KEY_BACKSPACE: {
+            Robots.clear();
+            Programms.clear();
+            task.initialize(field, Robots, Programms);
+            drawCurrectProg(n_currect_com, current_cell);
+            highlightCell(current_cell);
+         }
+         break;
+      //закрытие
+      case KEY_ESC:
+         closegraph();
+         return 0;
       }
    }
+}

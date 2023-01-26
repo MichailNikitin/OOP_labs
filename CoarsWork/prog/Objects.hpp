@@ -51,12 +51,14 @@ public:
    void set_cordinat(position); // установить координаты
    void set_direction(position); // установить направление
    void set_color(int); // установить цвет
+   void set_img(IMAGE*); //установить картинку робота нужного цвета
    int get_color(); // вернуть цвет
    position get_cordinat(); // вернуть координаты
    position get_direction(); // вернуть направление
    void change_Field(Field &); // перед выходом из клетки удаление или замена объекта
    void draw();
    bool is_crash(vector <Robot *> &Robots); // столкнулся(набор роботов)?
+   bool is_collision(Field &, vector <Robot *> &Robots);
 };
 
 //базовый класс для неподвижных сущностей

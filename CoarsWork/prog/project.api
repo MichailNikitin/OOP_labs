@@ -37,7 +37,7 @@ Tree _type_ #<Objects.hpp>
 Tree(IMAGE*) #<Objects.hpp>
 WIDTH_I #<Objects.hpp>
 clearWin() -> void #<main.cpp>
-color_prog : constexpr int[] #<Objects.cpp>
+color_prog : vector #<Objects.cpp>
 direct2grad(position direct) -> int #<Objects.cpp>
 drawBarCurrectProg(int i) -> void #<main.cpp>
 drawCurrectProg(int n_currect_com, position current_cell) -> void #<main.cpp>
@@ -127,12 +127,14 @@ reDraw(string text_task) -> void #<main.cpp>
 	Robot::set_cordinat(position) -> void #<Objects.hpp>
 	Robot::set_direction(position) -> void #<Objects.hpp>
 	Robot::set_color(int) -> void #<Objects.hpp>
+	Robot::set_img(IMAGE*) -> void #<Objects.hpp>
 	Robot::get_color() -> int #<Objects.hpp>
 	Robot::get_cordinat() -> position #<Objects.hpp>
 	Robot::get_direction() -> position #<Objects.hpp>
 	Robot::change_Field(Field&) -> void #<Objects.hpp>
 	Robot::draw() -> void #<Objects.hpp>
 	Robot::is_crash : bool #<Objects.hpp>
+	Robot::is_collision(Field&, vector& Robots) -> bool #<Objects.hpp>
 	Task:%text_task : string #<Objects.hpp>
 	Task:%name_taskFile : string #<Objects.hpp>
 	Task:%count_robots : int #<Objects.hpp>
