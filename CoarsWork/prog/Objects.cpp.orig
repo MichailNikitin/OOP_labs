@@ -219,12 +219,10 @@ void Programm::delete_com(Command *com) {
 
 bool Programm::is_collision() {
    for (int i = 0; i < commands.size(); i ++) {
-      for (int j = 0; j < commands.size(); j++) {
-         if(i != j && commands[i]->get_pos() == commands[j]->get_pos())
-            return true;
-      }
+      for (int i = 0; i < commands.size(); i ++) {
+      
+         }
    }
-   return false;
 }
 
 Command *Programm::select(position pos) {

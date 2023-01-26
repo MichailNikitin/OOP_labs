@@ -56,7 +56,6 @@ public:
    position get_direction(); // вернуть направление
    void change_Field(Field &); // перед выходом из клетки удаление или замена объекта
    void draw();
-private:
    bool is_crash(vector <Robot *> &Robots); // столкнулся(набор роботов)?
 };
 
@@ -107,6 +106,7 @@ public:
    void set_color(position, int); // установить цвет
    void draw(); // отрисовка всех Object на поле
    Object *get_object(position); // получить объкт на клетке
+   bool is_there_fruit(); // есть ли фрукты на поле
 };
 
 class Command {
@@ -124,6 +124,7 @@ public:
    Command() = default; // Конструктор копий
    void set_pos(position); // задать новую позицию комманде
    position get_pos();  // вернуть текущую позицию
+bool get_allow_pos();
    virtual void use(Robot &) = 0; // виртуальный метод на воздействие на робота
    virtual void draw(int color) = 0; // виртуальный метод рисования
 };
@@ -160,12 +161,13 @@ class Programm  {
    int color = WHITE; // цвет программы
    vector<Command *> commands ; // вектор комманд внутри одной программы
 public:
-   Programm(int color);    // конструктор
-   int get_col();               // вернуть цвет
-   void add(Command *);//  добавление комманды
-   void draw();                // отрисовать все комманды данной программы
+   Programm(int color);     // конструктор
+   int get_col();                // вернуть цвет
+   void add(Command *);  //  добавление комманды
+   void draw();                 // отрисовать все комманды данной программы
    Command *select(position); // выбрать команду в position
    void delete_com(Command*); // удаление комманды
+   bool is_collision();          // проверка на наложение объектов
 };
 
 extern vector <Robot*> Robots; // глобальный вектор с роботами

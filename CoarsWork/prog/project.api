@@ -60,6 +60,7 @@ reDraw(string text_task) -> void #<main.cpp>
 	Arrow::draw(int color) -> void #<Objects.hpp>
 	Arrow::set_pos(position) -> void #<Objects.hpp>
 	Arrow::get_pos() -> position #<Objects.hpp>
+	Arrow::get_allow_pos() -> bool #<Objects.hpp>
 	Arrow::use(Robot&) -> virtual void #<Objects.hpp>
 	Arrow::draw(int color) -> virtual void #<Objects.hpp>
 	Cell::current_object : Object* #<Objects.hpp>
@@ -71,6 +72,7 @@ reDraw(string text_task) -> void #<main.cpp>
 	ChangeColor::draw(int color) -> void #<Objects.hpp>
 	ChangeColor::set_pos(position) -> void #<Objects.hpp>
 	ChangeColor::get_pos() -> position #<Objects.hpp>
+	ChangeColor::get_allow_pos() -> bool #<Objects.hpp>
 	ChangeColor::use(Robot&) -> virtual void #<Objects.hpp>
 	ChangeColor::draw(int color) -> virtual void #<Objects.hpp>
 	Command:%is_allow_change_cordinat : bool #<Objects.hpp>
@@ -79,6 +81,7 @@ reDraw(string text_task) -> void #<main.cpp>
 	Command:%coord : position #<Objects.hpp>
 	Command::set_pos(position) -> void #<Objects.hpp>
 	Command::get_pos() -> position #<Objects.hpp>
+	Command::get_allow_pos() -> bool #<Objects.hpp>
 	Command::use(Robot&) -> virtual void #<Objects.hpp>
 	Command::draw(int color) -> virtual void #<Objects.hpp>
 	Exit:%img : IMAGE* #<Objects.hpp>
@@ -87,6 +90,7 @@ reDraw(string text_task) -> void #<main.cpp>
 	Exit::draw(int color) -> void #<Objects.hpp>
 	Exit::set_pos(position) -> void #<Objects.hpp>
 	Exit::get_pos() -> position #<Objects.hpp>
+	Exit::get_allow_pos() -> bool #<Objects.hpp>
 	Exit::use(Robot&) -> virtual void #<Objects.hpp>
 	Exit::draw(int color) -> virtual void #<Objects.hpp>
 	Field:%width : int #<Objects.hpp>
@@ -97,6 +101,7 @@ reDraw(string text_task) -> void #<main.cpp>
 	Field::set_color(position, int) -> void #<Objects.hpp>
 	Field::draw() -> void #<Objects.hpp>
 	Field::get_object(position) -> Object* #<Objects.hpp>
+	Field::is_there_fruit() -> bool #<Objects.hpp>
 	Fruit:%img : IMAGE* #<Objects.hpp>
 	Fruit::draw(position) -> void #<Objects.hpp>
 	Fruit::is_access(Robot&) -> bool #<Objects.hpp>
@@ -112,13 +117,13 @@ reDraw(string text_task) -> void #<main.cpp>
 	Programm::draw() -> void #<Objects.hpp>
 	Programm::select(position) -> Command* #<Objects.hpp>
 	Programm::delete_com(Command*) -> void #<Objects.hpp>
+	Programm::is_collision() -> bool #<Objects.hpp>
 	Robot:%img : IMAGE* #<Objects.hpp>
 	Robot:%pos : position #<Objects.hpp>
 	Robot:%direction : position #<Objects.hpp>
 	Robot:%color : int #<Objects.hpp>
 	Robot:%allow_change_direction : bool #<Objects.hpp>
 	Robot:%allow_change_cordinat : bool #<Objects.hpp>
-	Robot:%is_crash : bool #<Objects.hpp>
 	Robot::set_cordinat(position) -> void #<Objects.hpp>
 	Robot::set_direction(position) -> void #<Objects.hpp>
 	Robot::set_color(int) -> void #<Objects.hpp>
@@ -127,6 +132,7 @@ reDraw(string text_task) -> void #<main.cpp>
 	Robot::get_direction() -> position #<Objects.hpp>
 	Robot::change_Field(Field&) -> void #<Objects.hpp>
 	Robot::draw() -> void #<Objects.hpp>
+	Robot::is_crash : bool #<Objects.hpp>
 	Task:%text_task : string #<Objects.hpp>
 	Task:%name_taskFile : string #<Objects.hpp>
 	Task:%count_robots : int #<Objects.hpp>

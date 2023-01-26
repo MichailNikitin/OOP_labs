@@ -174,50 +174,50 @@ restart:
                         highlightCell(current_cell);
                         break;
                      }
-                  case KEY_ENTER: {
-                        if(Programms[n_currect_com]
+                     case KEY_ENTER:{
+                        
                      }
                   }
                }
-            }
+               
                else {
                   for (int i = 0; i < Robots.size(); i++) {
                      if (current_cell == Robots[i]->get_cordinat()) {
-                        while (1) {
-                           switch (getch()) {
-                           case KEY_UP: {
-                                 current_cell.y += (current_cell.y == 0) ? 0 : -1;
-                                 Robots[i]->set_cordinat(current_cell);
-                                 drawCurrectProg(n_currect_com, current_cell);
-                                 highlightCell(current_cell);
-                                 break;
-                              }
-                           case KEY_DOWN: {
-                                 current_cell.y += (current_cell.y == HEIGHT_J-1) ? 0 : 1;
-                                 Robots[i]->set_cordinat(current_cell);
-                                 drawCurrectProg(n_currect_com, current_cell);
-                                 highlightCell(current_cell);
-                                 break;
-                              }
-                           case KEY_LEFT: {
-                                 current_cell.x += (current_cell.x == 0) ? 0 : -1;
-                                 Robots[i]->set_cordinat(current_cell);
-                                 drawCurrectProg(n_currect_com, current_cell);
-                                 highlightCell(current_cell);
-                                 break;
-                              }
-                           case KEY_RIGHT: {
-                                 current_cell.x += (current_cell.x == WIDTH_I-1) ? 0 : 1;
-                                 Robots[i]->set_cordinat(current_cell);
-                                 drawCurrectProg(n_currect_com, current_cell);
-                                 highlightCell(current_cell);
-                                 break;
-                              }
-                           case KEY_ENTER: {
-
-                              }
-                           }
-                        }
+               while (1) {
+                  switch (getch()) {
+                  case KEY_UP: {
+                        current_cell.y += (current_cell.y == 0) ? 0 : -1;
+                        Robots[i]->get_cordinat(current_cell);
+                        drawCurrectProg(n_currect_com, current_cell);
+                        highlightCell(current_cell);
+                        break;
+                     }
+                  case KEY_DOWN: {
+                        current_cell.y += (current_cell.y == HEIGHT_J-1) ? 0 : 1;
+                        Robots[i]->get_cordinat(current_cell);
+                        drawCurrectProg(n_currect_com, current_cell);
+                        highlightCell(current_cell);
+                        break;
+                     }
+                  case KEY_LEFT: {
+                        current_cell.x += (current_cell.x == 0) ? 0 : -1;
+                        Robots[i]->get_cordinat(current_cell);
+                        drawCurrectProg(n_currect_com, current_cell);
+                        highlightCell(current_cell);
+                        break;
+                     }
+                  case KEY_RIGHT: {
+                        current_cell.x += (current_cell.x == WIDTH_I-1) ? 0 : 1;
+                        Robots[i]->get_cordinat(current_cell);
+                        drawCurrectProg(n_currect_com, current_cell);
+                        highlightCell(current_cell);
+                        break;
+                     }
+                     case KEY_ENTER:{
+                        
+                     }
+                  }
+               }
                      }
                   }
                }
@@ -247,16 +247,11 @@ restart:
                }
                // перемещение роботов
                for (int i = 0; i < Robots.size(); i++) {
-                  auto r = Robots[i];
-                  position new_pos = r->get_cordinat();
-                  new_pos.x += r->get_direction().x;
-                  new_pos.y += r->get_direction().y;
-                  r->set_cordinat(new_pos);
-                  r->draw();
-                  Command *com = Programms[r->get_color()]->select(current_cell);
-                  if (com != nullptr) {
-                     com->use(*r);
-                  }
+                  position new_pos = Robots[i]->get_cordinat();
+                  new_pos.x += Robots[i]->get_direction().x;
+                  new_pos.y += Robots[i]->get_direction().y;
+                  Robots[i]->set_cordinat(new_pos);
+                  Robots[i]->draw();
                   reDraw(text_task);
                }
 

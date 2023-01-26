@@ -58,7 +58,7 @@ endif
 CCCS = -finput-charset=utf-8 -fexec-charset=windows-1251
 CCCW = -finput-charset=windows-1251 -fexec-charset=windows-1251
 HS = $(sort $(CHEADERS) $(GRMHEADER) $(CAIOGENERH) $(SMGENERH))
-INIT="E:\Program Files\MinIDE\SciTE/../lib/initansicp.o"
+INIT="C:\Program Files\MinIDE\SciTE/../lib/initansicp.o"
 
 .PHONY : all clean
 
@@ -116,11 +116,6 @@ $(TARGET)/%.exe: %.caio Makefile
 	ifexist.cmd $(TARGET)/$(patsubst %.caio,%.lex,$<) "reflex --flex -o$(TARGET)/$(patsubst %.caio,%.lex.cpp,$<) $(TARGET)/$(patsubst %.caio,%.lex,$<)" "echo // >$(TARGET)/$(patsubst %.caio,%.lex.cpp,$<)"
 	ifexist.cmd $(TARGET)/$(patsubst %.caio,%.grm,$<) "bison -Werror=conflicts-sr,conflicts-rr -Wcounterexamples -o$(TARGET)/$(patsubst %.caio,%.grm.cpp,$<) $(TARGET)/$(patsubst %.caio,%.grm,$<)" "echo // >$(TARGET)/$(patsubst %.caio,%.grm.cpp,$<)"
 	$(GPP) $(CCFLAGS) $(LFLAGS) -o $(TARGET)/$(patsubst %.caio,%,$<) $(TARGET)/$(patsubst %.caio,%.cpp,$<) $(TARGET)/$(patsubst %.caio,%.lex.cpp,$<) $(TARGET)/$(patsubst %.caio,%.grm.cpp,$<) $(INIT) $(addprefix -l,$(CPPLIBS))
-
-$(TARGET)/%.exe: %.cpp2 Makefile
-	$(if $(wildcard $(TARGET)),,mkdir $(TARGET))
-	cpp2front.exe -p -o $(TARGET)/$(patsubst %.cpp2,%.cpp,$<) $<
-	$(GPP) $(CCFLAGS) $(LFLAGS) $(if $(filter uc%,$<),$(CCCS),$(CCCW)) -o $(TARGET)/$(patsubst %.cpp2,%,$<) -I. -I$(TARGET) $(TARGET)/$(patsubst %.cpp2,%.cpp,$<) $(INIT) $(addprefix -l,$(CPPLIBS))
 
 $(TARGET)/%.exe: %.c Makefile
 	$(if $(wildcard $(TARGET)),,mkdir $(TARGET))
