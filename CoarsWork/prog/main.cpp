@@ -323,12 +323,22 @@ fixing:
                      field.draw();
                   }
                }
-               cout << "get_n_color = " << r->get_n_color()  << ", robot = " << r->get_color() << endl;
-               Command *com = Programms[r->get_n_color()]->select(r->get_pos());
-               if (com != nullptr) {
-                  cout << "color comand = " << Programms[r->get_color()]->get_col()  << ", robot = " << r->get_color() << endl;
-                  com->use(*r);
-               }
+               //cout << "get_n_color = " << r->get_n_color()  << ", robot = " << r->get_color() << endl;
+               int colorRobot = r->get_color() ;
+               int colorIndexRobot = r->get_n_color() ;
+               int colorProgramm = Programms[r->get_n_color()]->get_col() ;
+               cout << "color_robot = " <<  colorRobot  << ", command = " << colorProgramm << endl;
+
+               for (int n_prog = 0; n_prog < Programms.size(); n_prog++)
+                  if (r->get_color() == Programms[n_prog]->get_col()) {
+                     Command *com = Programms[n_prog]->select(r->get_pos());
+                     if (com != nullptr) {
+                        cout << "color comand = " << Programms[r->get_color()]->get_col()  << ", robot = " << r->get_color() << endl;
+                        com->use(*r);
+                     }
+                  }
+
+
                reDraw(text_task);
             }
 
