@@ -9,6 +9,7 @@
 #include <typeinfo>
 #include <time.h>
 #include <stdlib.h>
+#include <sstream>
 #include "graphics.h"
 
 #define WIDTH_I 5
@@ -48,12 +49,13 @@ class Robot {
 public:
    Robot(IMAGE *img_robot,bool is_allow_change_direction, bool is_allow_change_cordinat); //конструктор
    ~Robot(); //деструктор
-   void set_cordinat(position); // установить координаты
+   void set_pos(position); // установить координаты
    void set_direction(position); // установить направление
    void set_color(int); // установить цвет
    void set_img(IMAGE*); //установить картинку робота нужного цвета
    int get_color(); // вернуть цвет
-   position get_cordinat(); // вернуть координаты
+   int get_n_color(); // вернуть номер цвета
+   position get_pos(); // вернуть координаты
    position get_direction(); // вернуть направление
    void change_Field(Field &); // перед выходом из клетки удаление или замена объекта
    void draw();

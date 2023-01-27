@@ -16,9 +16,26 @@ void clearWin() {
 void put_text(string text_task) {
    setbkcolor(NO_COLOR);
    setcolor(BLACK);
-   const char *cstr = text_task.c_str();
-   settextstyle(GOTHIC_FONT, HORIZ_DIR, 12);
-   outtextxy(510, 60, cstr);
+   vector <string> text_write;
+   string word;
+   stringstream s(text_task);
+   while (s >> word) text_write.push_back(word);
+   int lenght = 0, j=0;
+   lenght += textwidth(text_write[0].c_str())+textwidth(" ");
+   outtextxy(510, 60, text_write[0].c_str());
+   for (int i=1; i<text_write.size(); i++) {
+      lenght+=textwidth(" ");
+      if (lenght<280) {
+         outtextxy(510+lenght, 60+j*(textheight("T")+5), text_write[i].c_str());
+         lenght += textwidth(text_write[i].c_str())+textwidth(" ");
+      }
+      else {
+         lenght = 0;
+         j++;
+         outtextxy(510+lenght, 60+j*(textheight("T")+5), text_write[i].c_str());
+         lenght += textwidth(text_write[i].c_str())+textwidth(" ");
+      }
+   }
 }
 
 //отрисовка индикатора выбранной программы в нижней панели
@@ -58,10 +75,10 @@ void drawCurrectProg(int n_currect_com, position current_cell) {
    clearWin();
    Programms[n_currect_com]->draw();
    field.draw();
+   drawBarCurrectProg(n_currect_com);
    for (int i = 0; i < Robots.size(); i++)
       if (Robots[i]->get_color() == Programms[n_currect_com]->get_col()) {
          Robots[i]->draw();
-         drawBarCurrectProg(n_currect_com);
       }
 }
 
@@ -87,24 +104,28 @@ fixing:
             drawCurrectProg(n_currect_com, current_cell);
             current_cell.y += (current_cell.y == 0) ? 0 : -1;
             highlightCell(current_cell);
+            put_text(text_task);
             break;
          }
       case KEY_DOWN: {
             drawCurrectProg(n_currect_com, current_cell);
             current_cell.y += (current_cell.y == HEIGHT_J-1) ? 0 : 1;
             highlightCell(current_cell);
+            put_text(text_task);
             break;
          }
       case KEY_LEFT: {
             drawCurrectProg(n_currect_com, current_cell);
             current_cell.x += (current_cell.x == 0) ? 0 : -1;
             highlightCell(current_cell);
+            put_text(text_task);
             break;
          }
       case KEY_RIGHT: {
             drawCurrectProg(n_currect_com, current_cell);
             current_cell.x += (current_cell.x == WIDTH_I-1) ? 0 : 1;
             highlightCell(current_cell);
+            put_text(text_task);
             break;
          }
       // отображение программ только определённого цвета
@@ -151,6 +172,7 @@ fixing:
                         current_cell.y += (current_cell.y == 0) ? 0 : -1;
                         com->set_pos(current_cell);
                         drawCurrectProg(n_currect_com, current_cell);
+                        put_text(text_task);
                         highlightCell(current_cell);
                         break;
                      }
@@ -158,6 +180,7 @@ fixing:
                         current_cell.y += (current_cell.y == HEIGHT_J-1) ? 0 : 1;
                         com->set_pos(current_cell);
                         drawCurrectProg(n_currect_com, current_cell);
+                        put_text(text_task);
                         highlightCell(current_cell);
                         break;
                      }
@@ -165,6 +188,7 @@ fixing:
                         current_cell.x += (current_cell.x == 0) ? 0 : -1;
                         com->set_pos(current_cell);
                         drawCurrectProg(n_currect_com, current_cell);
+                        put_text(text_task);
                         highlightCell(current_cell);
                         break;
                      }
@@ -172,6 +196,7 @@ fixing:
                         current_cell.x += (current_cell.x == WIDTH_I-1) ? 0 : 1;
                         com->set_pos(current_cell);
                         drawCurrectProg(n_currect_com, current_cell);
+                        put_text(text_task);
                         highlightCell(current_cell);
                         break;
                      }
@@ -185,34 +210,66 @@ fixing:
             }
             else {
                for (int i = 0; i < Robots.size(); i++) {
-                  if (current_cell == Robots[i]->get_cordinat()) {
+                  if (current_cell == Robots[i]->get_pos()) {
                      while (1) {
                         switch (getch()) {
                         case KEY_UP: {
                               current_cell.y += (current_cell.y == 0) ? 0 : -1;
-                              Robots[i]->set_cordinat(current_cell);
+                              Robots[i]->set_pos(current_cell);
                               drawCurrectProg(n_currect_com, current_cell);
+                              put_text(text_task);
                               highlightCell(current_cell);
                               break;
                            }
                         case KEY_DOWN: {
                               current_cell.y += (current_cell.y == HEIGHT_J-1) ? 0 : 1;
-                              Robots[i]->set_cordinat(current_cell);
+                              Robots[i]->set_pos(current_cell);
                               drawCurrectProg(n_currect_com, current_cell);
+                              put_text(text_task);
                               highlightCell(current_cell);
                               break;
                            }
                         case KEY_LEFT: {
                               current_cell.x += (current_cell.x == 0) ? 0 : -1;
-                              Robots[i]->set_cordinat(current_cell);
+                              Robots[i]->set_pos(current_cell);
                               drawCurrectProg(n_currect_com, current_cell);
+                              put_text(text_task);
                               highlightCell(current_cell);
                               break;
                            }
                         case KEY_RIGHT: {
                               current_cell.x += (current_cell.x == WIDTH_I-1) ? 0 : 1;
-                              Robots[i]->set_cordinat(current_cell);
+                              Robots[i]->set_pos(current_cell);
                               drawCurrectProg(n_currect_com, current_cell);
+                              put_text(text_task);
+                              highlightCell(current_cell);
+                              break;
+                           }
+
+                        case 'w': {
+                              Robots[i]->set_direction(position(0, -1));
+                              drawCurrectProg(n_currect_com, current_cell);
+                              highlightCell(current_cell);
+                              break;
+                           }
+                        case 'a': {
+                              Robots[i]->set_direction(position(-1, 0));
+                              drawCurrectProg(n_currect_com, current_cell);
+                              put_text(text_task);
+                              highlightCell(current_cell);
+                              break;
+                           }
+                        case 's': {
+                              Robots[i]->set_direction(position(0, 1));
+                              drawCurrectProg(n_currect_com, current_cell);
+                              put_text(text_task);
+                              highlightCell(current_cell);
+                              break;
+                           }
+                        case 'd': {
+                              Robots[i]->set_direction(position(1, 0));
+                              drawCurrectProg(n_currect_com, current_cell);
+                              put_text(text_task);
                               highlightCell(current_cell);
                               break;
                            }
@@ -239,10 +296,9 @@ fixing:
          }
       // запуск программы
       case KEY_TAB: {
-
             for (int i = 0; i < Robots.size(); i++) {
-               position n_pos_rob = position(Robots[i]->get_cordinat().x + Robots[i]->get_direction().x, Robots[i]->get_cordinat().y + Robots[i]->get_direction().y);
-               if (Robots[i]->is_crash(Robots) || typeid(field.get_object(n_pos_rob)) == typeid(Tree)) {
+               position n_pos_rob = position(Robots[i]->get_pos().x + Robots[i]->get_direction().x, Robots[i]->get_pos().y + Robots[i]->get_direction().y);
+               if (Robots[i]->is_crash(Robots) || typeid(field.get_object(n_pos_rob)) == typeid(Tree *)) {
                   put_text("Столкновение!");
                   delay(3000);
                   clearWin();
@@ -254,19 +310,25 @@ fixing:
             // перемещение роботов
             for (int i = 0; i < Robots.size(); i++) {
                auto r = Robots[i];
-               position new_pos = r->get_cordinat();
+               position new_pos = r->get_pos();
                new_pos.x += r->get_direction().x;
                new_pos.y += r->get_direction().y;
-               r->set_cordinat(new_pos);
+               r->set_pos(new_pos);
                r->draw();
-               if (typeid(field.get_object(r->get_cordinat())) == typeid(Fruit)) {
-                  field.delete_obj(r->get_cordinat());
-                  field.draw();
-               }
-               Command *com = Programms[r->get_color()]->select(current_cell);
-               if (com != nullptr)
-                  com->use(*r);
 
+               if (field.get_object(r->get_pos()) != nullptr) {
+                  cout << "Тип объекта - " << typeid(field.get_object(r->get_pos())).name() << " фрукт -" <<  typeid(Fruit *).name() << endl;
+                  if (typeid(field.get_object(r->get_pos())) == typeid(Fruit *)) {
+                     field.delete_obj(r->get_pos());
+                     field.draw();
+                  }
+               }
+               cout << "get_n_color = " << r->get_n_color()  << ", robot = " << r->get_color() << endl;
+               Command *com = Programms[r->get_n_color()]->select(r->get_pos());
+               if (com != nullptr) {
+                  cout << "color comand = " << Programms[r->get_color()]->get_col()  << ", robot = " << r->get_color() << endl;
+                  com->use(*r);
+               }
                reDraw(text_task);
             }
 
@@ -278,6 +340,7 @@ fixing:
             Programms.clear();
             task.initialize(field, Robots, Programms);
             drawCurrectProg(n_currect_com, current_cell);
+            put_text(text_task);
             highlightCell(current_cell);
          }
          break;

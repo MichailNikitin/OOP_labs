@@ -1,7 +1,7 @@
 # Objects.hpp
-!Objects.cpp Objects.hpp algorithm cctype cerrno clocale cstdint cstdio cstdlib ctype.h cwchar cwctype errno.h exception format fstream graphics.h initializer_list ios iosfwd iostream istream keys_n_colors.h limits limits.h locale.h new ostream signal.h stddef.h stdexcept stdint.h stdio.h stdlib.h streambuf string string_view system_error time.h type_traits typeinfo utility wchar.h wctype.h #<#>
-!Objects.hpp algorithm cctype cerrno clocale cstdint cstdio cstdlib ctype.h cwchar cwctype errno.h exception format fstream graphics.h initializer_list ios iosfwd iostream istream keys_n_colors.h limits limits.h locale.h new ostream signal.h stddef.h stdexcept stdint.h stdio.h stdlib.h streambuf string string_view system_error time.h type_traits typeinfo utility wchar.h wctype.h #<#>
-!main.cpp Objects.hpp algorithm cctype cerrno clocale cstdint cstdio cstdlib ctype.h cwchar cwctype errno.h exception format fstream graphics.h initializer_list ios iosfwd iostream istream keys_n_colors.h limits limits.h locale.h new ostream signal.h stddef.h stdexcept stdint.h stdio.h stdlib.h streambuf string string_view system_error time.h type_traits typeinfo utility wchar.h wctype.h #<#>
+!Objects.cpp Objects.hpp algorithm cctype cerrno clocale cstdint cstdio cstdlib ctype.h cwchar cwctype errno.h exception format fstream graphics.h initializer_list ios iosfwd iostream istream keys_n_colors.h limits limits.h locale.h new ostream signal.h sstream stddef.h stdexcept stdint.h stdio.h stdlib.h streambuf string string_view system_error time.h type_traits typeinfo utility wchar.h wctype.h #<#>
+!Objects.hpp algorithm cctype cerrno clocale cstdint cstdio cstdlib ctype.h cwchar cwctype errno.h exception format fstream graphics.h initializer_list ios iosfwd iostream istream keys_n_colors.h limits limits.h locale.h new ostream signal.h sstream stddef.h stdexcept stdint.h stdio.h stdlib.h streambuf string string_view system_error time.h type_traits typeinfo utility wchar.h wctype.h #<#>
+!main.cpp Objects.hpp algorithm cctype cerrno clocale cstdint cstdio cstdlib ctype.h cwchar cwctype errno.h exception format fstream graphics.h initializer_list ios iosfwd iostream istream keys_n_colors.h limits limits.h locale.h new ostream signal.h sstream stddef.h stdexcept stdint.h stdio.h stdlib.h streambuf string string_view system_error time.h type_traits typeinfo utility wchar.h wctype.h #<#>
 Arrow _type_ #<Objects.hpp>
 Arrow(bool is_allow_change_cordinat, bool is_allow_delete, position coord, position orient) #<Objects.hpp>
 COUNFUITS #<Objects.hpp>
@@ -124,12 +124,13 @@ reDraw(string text_task) -> void #<main.cpp>
 	Robot:%color : int #<Objects.hpp>
 	Robot:%allow_change_direction : bool #<Objects.hpp>
 	Robot:%allow_change_cordinat : bool #<Objects.hpp>
-	Robot::set_cordinat(position) -> void #<Objects.hpp>
+	Robot::set_pos(position) -> void #<Objects.hpp>
 	Robot::set_direction(position) -> void #<Objects.hpp>
 	Robot::set_color(int) -> void #<Objects.hpp>
 	Robot::set_img(IMAGE*) -> void #<Objects.hpp>
 	Robot::get_color() -> int #<Objects.hpp>
-	Robot::get_cordinat() -> position #<Objects.hpp>
+	Robot::get_n_color() -> int #<Objects.hpp>
+	Robot::get_pos() -> position #<Objects.hpp>
 	Robot::get_direction() -> position #<Objects.hpp>
 	Robot::change_Field(Field&) -> void #<Objects.hpp>
 	Robot::draw() -> void #<Objects.hpp>

@@ -1,6 +1,6 @@
 #include "Objects.hpp"
 
-vector <int> color_prog = {RED, GREEN, BLUE, YELLOW};
+vector <int> color_prog = {RED, GREEN, BLUE, YELLOW, WHITE};
 vector<position> places_taken;
 
 using namespace std;
@@ -19,7 +19,7 @@ int direct2grad(position direct) {
 Robot::Robot(IMAGE *image, bool direction, bool cordinat):img(image), allow_change_direction(direction), allow_change_cordinat(cordinat) {}
 Robot::~Robot() {freeimage(img);}
 
-void Robot::set_cordinat(position new_pos) {
+void Robot::set_pos(position new_pos) {
    pos = position(new_pos.x, new_pos.y);
 }
 
@@ -30,11 +30,12 @@ void Robot::set_img(IMAGE* image){ img = image;}
 
 void Robot::set_color(int new_color) {color = new_color;}
 int Robot::get_color() {return color;}
-position Robot::get_cordinat() {return pos;}
+int Robot::get_n_color() { return distance(color_prog.begin(), find(color_prog.begin(), color_prog.end(), color));}
+position Robot::get_pos() {return pos;}
 position Robot::get_direction() {return direction;}
 
-void Robot::change_Field(Field &Field) {
-
+void Robot::change_Field(Field &field) {
+   field.delete_obj(pos);
 }
 
 void Robot::draw() {
@@ -48,7 +49,7 @@ void Robot::draw() {
 bool Robot::is_crash(std::vector <Robot *> &Robots) {
    int n_x =pos.x + direction.x;
    int n_y = pos.y + direction.y;
-   if (n_x > WIDTH_I || n_y > HEIGHT_J || n_x < 0 || n_y < 0) {
+   if (n_x > WIDTH_I-1 || n_y > HEIGHT_J-1 || n_x < 0 || n_y < 0) {
       return 1;
    }
    for (int i = 0; i < Robots.size(); i++) {
@@ -66,9 +67,9 @@ bool Robot::is_collision(Field &field, vector <Robot *> &Robots) {
    for (int i = 0; i < Robots.size(); i++) {
       if (this == Robots[i])
          continue;
-      if (Robots[i]->get_cordinat() == this->get_cordinat())
+      if (Robots[i]->get_pos() == this->get_pos())
          return true;
-      if (field.get_object(this->get_cordinat()) != nullptr) {
+      if (field.get_object(this->get_pos()) != nullptr) {
          return true;
       }
       return this->is_crash(Robots);
@@ -158,8 +159,9 @@ Exit::Exit(bool is_change_cordinat, bool is_delete, position new_coord):
    Command(is_change_cordinat, is_delete, new_coord) {}
 
 void Arrow::use(Robot &robot) {
-   robot.set_direction(this->orientation);
+   robot.set_direction(orientation);
 }
+
 void Arrow::draw(int col) {
 
    switch (col) {
@@ -183,11 +185,10 @@ void Arrow::draw(int col) {
 }
 
 void ChangeColor::use(Robot &robot) {
-   int new_color = this->color;
-   robot.set_color(new_color);   
+   robot.set_color(color);   
 }
+
 void ChangeColor::draw(int col) {
-   //cout <<"coord = ("<< coord.x <<", "<< coord.y<<")\n";
    setcolor(BLACK);
    setfillstyle(SOLID_FILL, col);
    bar(coord.x*100+25, coord.y*100+10, coord.x*100+75, coord.y*100+90);
@@ -198,6 +199,7 @@ void ChangeColor::draw(int col) {
 void Exit::use(Robot &robot) {
    Robots.erase(ranges::find(Robots, &robot));
 }
+
 void Exit::draw(int col) {
    switch (col) {
    case RED:
@@ -227,7 +229,6 @@ void Programm::add(Command *command) {
 
 void Programm::draw() {
    for (int i = 0; i < commands.size(); i ++) {
-      cout<< "color = " << color << ", ";
       commands[i]->draw(color);
    }
 }
@@ -250,11 +251,9 @@ Command *Programm::select(position pos) {
    auto it =  find_if(commands.begin(), commands.end(), [pos](Command *com) -> bool {
       return com->get_pos() == pos;});
    if (it != commands.end()) {
-      cout << "command is find\n";
       return *it;
    }
    else {
-      cout << "command is't find\n";
       return nullptr;
    }
 }
@@ -280,8 +279,7 @@ void Task::initialize(Field &field, vector <Robot *> &Robots,vector <Programm *>
       file >> r_x >> r_y;
       file >>f_color >> f_direct;
       file >> f_change_direct >> f_change_coord;
-      cout << r_x << " " << r_y << " " << f_color << " "<< f_direct <<" "<< f_change_direct <<" "<< f_change_coord << endl;
-
+      
       places_taken.push_back(position(r_x, r_y));
 
       bool change_direct, change_coord;
@@ -309,7 +307,7 @@ void Task::initialize(Field &field, vector <Robot *> &Robots,vector <Programm *>
       Robot *new_robot = new Robot(loadBMP(name_image),change_direct, change_coord);
       
       new_robot->set_color(color_prog[f_color]);
-      new_robot->set_cordinat(position(r_x, r_y));
+      new_robot->set_pos(position(r_x, r_y));
       new_robot->set_direction(direct);
       
       Robots.push_back(new_robot);
@@ -329,9 +327,6 @@ void Task::initialize(Field &field, vector <Robot *> &Robots,vector <Programm *>
 
       bool allow_delete = (f_allow_delete == "да"? true : false);
       bool change_coord = (f_change_coord == "да"? true : false);
-
-      cout << name_com  <<   " " << f_color <<" "<< com_x << " " << com_y << " "
-           <<  f_change_coord <<" "<< f_allow_delete << " ";
 
       Command *command;
       places_taken.push_back(position(com_x, com_y));
@@ -373,7 +368,7 @@ void Task::initialize(Field &field, vector <Robot *> &Robots,vector <Programm *>
          command = box;
       }
       else
-         cout << "Сюда вставить проверку на ошибки\n";
+         cout << "Неизвестная команда\n";
 
       auto it =  find_if(Programms.begin(), Programms.end(), [f_color](Programm *prog) -> bool {
          return prog->get_col() == color_prog[f_color];});
@@ -381,11 +376,9 @@ void Task::initialize(Field &field, vector <Robot *> &Robots,vector <Programm *>
 
       if (it != Programms.end())
       {
-         cout << "Нашёл" << endl;
          (*it)->add(command);
       }
       else {
-         cout << "Не нашёл"  << endl;
          Programm *new_programm = new Programm(color_prog[f_color]);
          new_programm->add(command);
          Programms.push_back(new_programm);
@@ -420,8 +413,8 @@ void Task::prepare_field(Field &field) {
    for (int n_fruit = 0; n_fruit < count_tree;)
    {
       position pos_tree;
-      pos_tree.x = rand() % (WIDTH_I-1);
-      pos_tree.y = rand() % (HEIGHT_J-1);
+      pos_tree.x = rand() % (WIDTH_I);
+      pos_tree.y = rand() % (HEIGHT_J);
       auto it = ranges::find(places_taken, pos_tree);
 
       if (it == places_taken.end()) {
