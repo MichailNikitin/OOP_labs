@@ -49,12 +49,12 @@ void drawBarCurrectProg(int i) {
 
 // перерисовка всех элементов во время выполнения программы роботами
 void reDraw(string text_task) {
-   clearWin(); // отрисовываем задний фон
-   // выводим текст задания
+   clearWin(); // отрисовка заднего фона
+   // вывод текста задания
    put_text(text_task);
-   //прорисовка объектов на поле
+   // перерисовка объектов на поле
    field.draw();
-   // Отрисовываем программмы и роботов
+   // отрисовка программмы и роботов
    for (int i = 0; i < Programms.size(); i++) {
       Programms[i]->draw();
       drawBarCurrectProg(i);
@@ -70,7 +70,7 @@ void highlightCell(position current_cell) {
    rectangle(100*current_cell.x, 100*current_cell.y, 100*current_cell.x+100, 100*current_cell.y+100);
 }
 
-//отрисока текущей программы
+//отрисовка текущей программы
 void drawCurrectProg(int n_currect_com, position current_cell) {
    clearWin();
    Programms[n_currect_com]->draw();
@@ -82,7 +82,7 @@ void drawCurrectProg(int n_currect_com, position current_cell) {
       }
 }
 
-int n_currect_com = 0; //номер текущей программы
+int n_currect_com = 0; // номер текущей программы
 
 int main() {
    initwindow(800, 550, "Программа для обучения программированию");
@@ -162,7 +162,7 @@ fixing:
             put_text(text_task);
             break;
          }
-      //выбор комманды или робота
+      //выбор команды или робота
       case KEY_ENTER: {
             Command *com = Programms[n_currect_com]->select(current_cell);
             if (com != nullptr && com->get_allow_pos()) {
@@ -249,6 +249,7 @@ fixing:
                         case 'w': {
                               Robots[i]->set_direction(position(0, -1));
                               drawCurrectProg(n_currect_com, current_cell);
+                              put_text(text_task);
                               highlightCell(current_cell);
                               break;
                            }
@@ -285,7 +286,7 @@ fixing:
             }
             break;
          }
-      // удаление объкта
+      // удаление объекта
       case KEY_DELETE: {
             Command *com = Programms[n_currect_com]->select(current_cell);
             if (com != nullptr) {
@@ -296,12 +297,14 @@ fixing:
          }
       // запуск программы
       case KEY_TAB: {
+         while(1){
             for (int i = 0; i < Robots.size(); i++) {
                position n_pos_rob = position(Robots[i]->get_pos().x + Robots[i]->get_direction().x, Robots[i]->get_pos().y + Robots[i]->get_direction().y);
-               if (Robots[i]->is_crash(Robots) || typeid(field.get_object(n_pos_rob)) == typeid(Tree *)) {
-                  put_text("Столкновение!");
-                  delay(3000);
+               if (Robots[i]->is_crash(Robots) ||(field.get_object(n_pos_rob) != nullptr) && typeid(*field.get_object(n_pos_rob)) == typeid(Tree)) {
                   clearWin();
+                  put_text("Столкновение! Повторите попытку ещё раз!");
+                  delay(3000);
+                  
                   Robots.clear();
                   Programms.clear();
                   goto restart;
@@ -317,32 +320,33 @@ fixing:
                r->draw();
 
                if (field.get_object(r->get_pos()) != nullptr) {
-                  cout << "Тип объекта - " << typeid(field.get_object(r->get_pos())).name() << " фрукт -" <<  typeid(Fruit *).name() << endl;
-                  if (typeid(field.get_object(r->get_pos())) == typeid(Fruit *)) {
-                     field.delete_obj(r->get_pos());
-                     field.draw();
+                  if (typeid(* field.get_object(r->get_pos())) == typeid(Fruit)) {
+                     r->change_Field(field);
                   }
                }
-               //cout << "get_n_color = " << r->get_n_color()  << ", robot = " << r->get_color() << endl;
                int colorRobot = r->get_color() ;
                int colorIndexRobot = r->get_n_color() ;
                int colorProgramm = Programms[r->get_n_color()]->get_col() ;
-               cout << "color_robot = " <<  colorRobot  << ", command = " << colorProgramm << endl;
                
                for (int n_prog = 0; n_prog < Programms.size(); n_prog++)
-                  if (Robots[i]->get_color() == Programms[n_prog]->get_col()) {
-                     
-               Command *com = Programms[r->get_n_color()]->select(r->get_pos());
-               if (com != nullptr) {
-                  cout << "color comand = " << Programms[r->get_color()]->get_col()  << ", robot = " << r->get_color() << endl;
-                  com->use(*r);
-               }
+                  if (r->get_color() == Programms[n_prog]->get_col()) {
+                     Command *com = Programms[n_prog]->select(r->get_pos());
+                     if (com != nullptr) {
+                        com->use(*r);
+                     }
                   }
-
-
                reDraw(text_task);
             }
 
+            if(task.is_task_completed(field, Robots)){
+               clearWin();
+               put_text("Поздравлем! Задание выполненно! Продолжайте совершенствовать свои навыки в программировании, чтобы потом написать такую же увлекательную игру");
+               delay(3000);
+                  Robots.clear();
+                  Programms.clear();
+                  goto restart;
+            }
+         }
             break;
          }
       // возврат в изначальное состояние

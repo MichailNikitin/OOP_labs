@@ -34,9 +34,9 @@ struct position {
    int x, y; // координаты
    position() {x = y = 0;} // конструктор без передаваемых параметров
    position(int new_x, int new_y):x(new_x), y(new_y) {} // конструктор со значениями
-   position(const position &pos) {x = pos.x; y = pos.y;} // конструктор копий
-   // перегрузка оператора для сравнения
-   friend auto operator<=>(const position &, const position &) = default;
+   position(const position &pos) {x = pos.x;y = pos.y;} // конструктор копий
+   // перегрузка оператора для сравнения 
+   friend auto operator<=>(const position&, const position&) = default; 
 };
 
 class Robot {
@@ -52,7 +52,7 @@ public:
    void set_pos(position); // установить координаты
    void set_direction(position); // установить направление
    void set_color(int); // установить цвет
-   void set_img(IMAGE *); //установить картинку робота нужного цвета
+   void set_img(IMAGE*); //установить картинку робота нужного цвета
    int get_color(); // вернуть цвет
    int get_n_color(); // вернуть номер цвета
    position get_pos(); // вернуть координаты
@@ -72,22 +72,25 @@ public:
    Object(const Object &obj); // конструктор копий
    ~Object();// деструтор
    virtual void draw(position) = 0; // нарисовать объект
+   virtual bool is_access(Robot &) = 0; // проверка клетки на доступность для робота
 };
 
-// доступный для сбора объект
+// доступный для сбора объект 
 class Fruit : public Object {
 public:
    Fruit(IMAGE *); // конструктор
    ~Fruit(); // деструктор
    void draw(position); // отрисовка фрукта
+   bool is_access(Robot &); 
 };
 
 // недоступный для перемещения объект
 class Tree : public Object {
 public:
-   Tree(IMAGE *); // конструктор
+   Tree(IMAGE *); // конструктор 
    ~Tree(); // деструктор
    void draw(position); // отрисовка дерева
+   bool is_access(Robot &);
 };
 
 // струкура для клетки поля
@@ -96,10 +99,10 @@ struct Cell {
    int color = WHITE; // цвет клетки
 };
 
-//класс поля
+//класс поля 
 class Field {
    int width, height; // размеры поля
-   int count_tree;          // количество деревьев
+      int count_tree;          // количество деревьев
    int count_fruit;          // количество урожая
    vector<vector<Cell>> fullField; //поле из клеток
 public:
@@ -107,12 +110,9 @@ public:
    void set_obj(Object *, position); // установить объект
    void delete_obj(position); // удалить объект
    void set_color(position, int); // установить цвет
-   void set_count_tree(int count_tree); // установить количество деревьев
-   void set_count_fruit(int count_fruit); // установить количество фруктов
-   int get_count_fruit(); // установить количество фруктов
    void draw(); // отрисовка всех Object на поле
    Object *get_object(position); // получить объект на клетке
-   //bool is_there_fruit(); // есть ли фрукты на поле?
+   bool is_there_fruit(); // есть ли фрукты на поле?
 };
 
 class Command {
@@ -123,12 +123,12 @@ protected:
    IMAGE *img; // изображение комманды
    position coord; //координаты комманды
 public:
-   Command(bool, bool, position); // констуктор
+   Command(bool, bool, position); // констуктор 
    Command(const Command &com); // конструктор копий
    Command() = default; // базовый конструктор
    void set_pos(position); // задать новую позицию команде
    position get_pos();  // вернуть текущую позицию
-   bool get_allow_pos(); // разрешено ли изменять положение
+   bool get_allow_pos(); // разрешено ли изменять положение 
    virtual void use(Robot &) = 0; // виртуальный метод воздействие на робота
    virtual void draw(int color) = 0; // виртуальный метод рисования
 };
@@ -140,7 +140,7 @@ public:
    // конструктор
    Arrow(bool is_allow_change_cordinat, bool is_allow_delete, position coord, position orient);
    void use(Robot &); // воздействие на робота
-   void draw(int color) ; // рисование стрелки
+   void draw(int color) ; // рисование стрелки 
 };
 
 //"Банка с краской", меняющая цвет робота
@@ -171,13 +171,13 @@ public:
    int get_col();                // вернуть цвет
    void add(Command *);  //  добавление команды
    void draw();                 // отрисовать все команды данной программы
-   Command *select(position); // выбрать команду на определенной позиции
-   void delete_com(Command *); // удаление команды
+   Command *select(position); // выбрать команду на определенной позиции 
+   void delete_com(Command*); // удаление команды
    bool is_collision();          // проверка на наложение объектов
 };
 
-extern vector <Robot *> Robots; // глобальный вектор с роботами
-extern vector <Programm *> Programms; // глобальный вектор с программами
+extern vector <Robot*> Robots; // глобальный вектор с роботами
+extern vector <Programm*> Programms; // глобальный вектор с программами
 // класс с заданием
 class Task {
    string text_task;        // текст задания
@@ -186,11 +186,12 @@ class Task {
    int count_commands;// количество команд
    int count_tree;          // количество деревьев
    int count_fruit;          // количество урожая
+   // инициализация всех компонентов согласно заданию
 public:
    Task(const string);// название файла с заданием
-   // инициализация роботов и программ по файлу с заданием
+   // инициализация роботов и программ по файлу с заданием 
    void initialize(Field &, std::vector <Robot *> &Robots, std::vector <Programm *> &Programms);
-   void prepare_field(Field &); // расставить на поле статичные объекты
+   void prepare_field(Field &); // расставить на поле статичные объекты 
    bool is_task_completed(Field &, vector <Robot *> &Robots); // задание выполнено?
    string get_text_task(); // вернуть текст задания
    void draw_an_example() {}; // иллюстрирование решения задания (для программы "художника")

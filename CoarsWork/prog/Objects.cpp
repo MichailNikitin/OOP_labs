@@ -36,6 +36,7 @@ position Robot::get_direction() {return direction;}
 
 void Robot::change_Field(Field &field) {
    field.delete_obj(pos);
+   field.set_count_fruit(field.get_count_fruit()-1);
 }
 
 void Robot::draw() {
@@ -87,24 +88,27 @@ Fruit::~Fruit() {freeimage(img);}
 Tree::Tree(IMAGE *image): Object(image) {}
 Tree::~Tree() {freeimage(img);}
 
-bool Fruit::is_access(Robot &current_robot) {return 1;}
 void Fruit::draw(position pos) {return putimage(pos.x, pos.y, img, COPY_PUT);}
 
-bool Tree::is_access(Robot &current_robot) {return 0;}
 void Tree::draw(position pos) { putimage(pos.x, pos.y, img, COPY_PUT);}
 
+Field::Field(int w, int h):width(w), height(h),  fullField(width, vector<Cell>(height)), count_tree(COUNTTREE), count_fruit(COUNFUITS) {}
 
-Field::Field(int w, int h):width(w), height(h),  fullField(width, vector<Cell>(height)) {}
+void Field::set_count_fruit(int n_fruit){ count_fruit = n_fruit;}
 
-void Field::set_obj(Object *obj, position pos) { // i, j
+void Field::set_count_tree(int n_tree){ count_tree = n_tree;}
+
+int Field::get_count_fruit(){return count_fruit;}
+
+void Field::set_obj(Object *obj, position pos) { 
    fullField[pos.x][pos.y].current_object = obj;
 }
 
-void Field::delete_obj(position pos) { // i, j
+void Field::delete_obj(position pos) { 
    fullField[pos.x][pos.y].current_object = nullptr;
 }
 
-void Field::set_color(position pos, int color) { // i, j
+void Field::set_color(position pos, int color) {
    fullField[pos.x][pos.y].color = color;
 }
 
@@ -119,17 +123,6 @@ void Field::draw() {
             fullField[i][j].current_object->draw(position(i*100+5, j*100+5));
       }
    }
-}
-
-bool Field::is_there_fruit() {
-   for (int i = 0; i < height; i++) {
-      for (int j = 0; j < width; j++) {
-         if (fullField[i][j].current_object = nullptr) {
-            return true;
-         }
-      }
-   }
-   return false;
 }
 
 Command::Command(bool is_change_cordinat, bool is_delete, position new_coord):
@@ -147,7 +140,6 @@ void Command::set_pos(position pos) {
 
 position Command::get_pos() {return coord;}
 bool Command::get_allow_pos() {return is_allow_change_cordinat;}
-
 
 Arrow::Arrow(bool is_change_cordinat, bool is_delete, position new_coord, position direction):
    Command(is_change_cordinat, is_delete, new_coord), orientation(direction) {}
@@ -180,7 +172,7 @@ void Arrow::draw(int col) {
    default:
       this->img = loadBMP("arrow_white.bmp");
    }
-   IMAGE *rotImg = imageturn(this->img,  direct2grad(orientation), WHITE);
+   IMAGE *rotImg = imageturn(this->img,  (direct2grad(orientation)+270)%360, WHITE);
    putimage(coord.x*100+10,coord.y*100+10, rotImg, COPY_PUT);
 }
 
@@ -290,7 +282,7 @@ void Task::initialize(Field &field, vector <Robot *> &Robots,vector <Programm *>
       switch (f_direct) {
       case 0:
          direct = position(1, 0);
-         break; // "вправ"
+         break; // "вправо"
       case 1:
          direct = position(0, -1);
          break; //"вверх"
@@ -400,9 +392,7 @@ void Task::prepare_field(Field &field) {
       pos_fruit.x = rand() % (WIDTH_I);
       pos_fruit.y = rand() % (HEIGHT_J);
       auto it = ranges::find(places_taken, pos_fruit);
-      //auto it = find_if(places_taken.begin(), places_taken.end(),
-      //               [pos_fruit](position place) -> bool {return (place.x != pos_fruit.x&& place.y != pos_fruit.y);});
-
+      
       if (it == places_taken.end()) {
          n_fruit ++;
          places_taken.push_back(pos_fruit);
@@ -410,6 +400,8 @@ void Task::prepare_field(Field &field) {
          field.set_obj(fruit, pos_fruit);
       }
    }
+   field.set_count_fruit(count_fruit);
+   
    for (int n_fruit = 0; n_fruit < count_tree;)
    {
       position pos_tree;
@@ -423,6 +415,7 @@ void Task::prepare_field(Field &field) {
          field.set_obj(new Tree(loadBMP("tree.bmp")), pos_tree);
       }
    }
+   field.set_count_tree(count_tree);
 }
 
 string Task::get_text_task() {
@@ -431,7 +424,7 @@ string Task::get_text_task() {
 }
 
 bool Task::is_task_completed(Field &field, vector <Robot *> &Robots) {
-   if (field.is_there_fruit() && Robots.empty())
+   if (!field.get_count_fruit() && Robots.empty())
       return 1;
    return 0;
 }

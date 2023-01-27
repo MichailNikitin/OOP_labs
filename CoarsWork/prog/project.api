@@ -95,21 +95,22 @@ reDraw(string text_task) -> void #<main.cpp>
 	Exit::draw(int color) -> virtual void #<Objects.hpp>
 	Field:%width : int #<Objects.hpp>
 	Field:%height : int #<Objects.hpp>
+	Field:%count_tree : int #<Objects.hpp>
+	Field:%count_fruit : int #<Objects.hpp>
 	Field:%fullField : vector #<Objects.hpp>
 	Field::set_obj(Object*, position) -> void #<Objects.hpp>
 	Field::delete_obj(position) -> void #<Objects.hpp>
 	Field::set_color(position, int) -> void #<Objects.hpp>
+	Field::set_count_tree(int count_tree) -> void #<Objects.hpp>
+	Field::set_count_fruit(int count_fruit) -> void #<Objects.hpp>
+	Field::get_count_fruit() -> int #<Objects.hpp>
 	Field::draw() -> void #<Objects.hpp>
 	Field::get_object(position) -> Object* #<Objects.hpp>
-	Field::is_there_fruit() -> bool #<Objects.hpp>
 	Fruit:%img : IMAGE* #<Objects.hpp>
 	Fruit::draw(position) -> void #<Objects.hpp>
-	Fruit::is_access(Robot&) -> bool #<Objects.hpp>
 	Fruit::draw(position) -> virtual void #<Objects.hpp>
-	Fruit::is_access(Robot&) -> virtual bool #<Objects.hpp>
 	Object:%img : IMAGE* #<Objects.hpp>
 	Object::draw(position) -> virtual void #<Objects.hpp>
-	Object::is_access(Robot&) -> virtual bool #<Objects.hpp>
 	Programm:%color : int #<Objects.hpp>
 	Programm:%commands : vector #<Objects.hpp>
 	Programm::get_col() -> int #<Objects.hpp>
@@ -149,8 +150,6 @@ reDraw(string text_task) -> void #<main.cpp>
 	Task::draw_an_example() -> void #<Objects.hpp>
 	Tree:%img : IMAGE* #<Objects.hpp>
 	Tree::draw(position) -> void #<Objects.hpp>
-	Tree::is_access(Robot&) -> bool #<Objects.hpp>
 	Tree::draw(position) -> virtual void #<Objects.hpp>
-	Tree::is_access(Robot&) -> virtual bool #<Objects.hpp>
 	position::x : int #<Objects.hpp>
 	position::y : int #<Objects.hpp>
