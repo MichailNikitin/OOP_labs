@@ -317,8 +317,8 @@ fixing:
                r->draw();
 
                if (field.get_object(r->get_pos()) != nullptr) {
-                  cout << "Тип объекта - " << typeid(field.get_object(r->get_pos())).name() << " фрукт -" <<  typeid(Fruit *).name() << endl;
-                  if (typeid(field.get_object(r->get_pos())) == typeid(Fruit *)) {
+                  cout << "Тип объекта - " << typeid(*field.get_object(r->get_pos())).name() << " фрукт - " <<  typeid(Fruit ).name() << endl;
+                  if (typeid(* field.get_object(r->get_pos())) == typeid(Fruit )) {
                      field.delete_obj(r->get_pos());
                      field.draw();
                   }
