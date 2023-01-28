@@ -33,6 +33,8 @@ int Robot::get_color() {return color;}
 int Robot::get_n_color() { return distance(color_prog.begin(), find(color_prog.begin(), color_prog.end(), color));}
 position Robot::get_pos() {return pos;}
 position Robot::get_direction() {return direction;}
+bool Robot::get_allow_change_cordinat(){return allow_change_cordinat;}
+bool Robot::get_allow_change_direction(){return allow_change_direction;}
 
 void Robot::change_Field(Field &field) {
    field.delete_obj(pos);
@@ -134,8 +136,10 @@ Command::Command(const Command &com) {
    coord = com.coord;
 }
 void Command::set_pos(position pos) {
+   if(is_allow_change_cordinat){
    coord.x = pos.x;
    coord.y = pos.y;
+   }
 }
 
 position Command::get_pos() {return coord;}
@@ -155,7 +159,6 @@ void Arrow::use(Robot &robot) {
 }
 
 void Arrow::draw(int col) {
-
    switch (col) {
    case RED:
       this->img = loadBMP("arrow_red.bmp");
@@ -226,7 +229,8 @@ void Programm::draw() {
 }
 
 void Programm::delete_com(Command *com) {
-   commands.erase(ranges::find(commands, com));
+   if(com->is_allow_delete)
+      commands.erase(ranges::find(commands, com));
 }
 
 bool Programm::is_collision() {
@@ -260,9 +264,6 @@ void Task::initialize(Field &field, vector <Robot *> &Robots,vector <Programm *>
    getline(file, text_task);
 
    file >> count_robots >> count_commands;
-
-   cout << text_task << endl;
-   cout << count_robots<< " " << count_commands<< endl;
 
    for (int i = 0; i < count_robots; i++) {
       int r_x, r_y, r_color;
@@ -328,7 +329,6 @@ void Task::initialize(Field &field, vector <Robot *> &Robots,vector <Programm *>
          position orient;
          file >> f_orient;
 
-         cout << f_orient << endl;
          switch (f_orient) {
          case 0:
             orient = position(1, 0);
@@ -350,12 +350,10 @@ void Task::initialize(Field &field, vector <Robot *> &Robots,vector <Programm *>
          int f_change_col;
          file >> f_change_col;
 
-         cout << f_change_col << endl;
          ChangeColor *canOfPaint = new ChangeColor(change_coord, allow_delete, position(com_x, com_y), color_prog[f_change_col]);
          command = canOfPaint;
       }
       else if (name_com == "выход") {
-         cout << endl;
          Exit *box = new Exit(change_coord, allow_delete, position(com_x, com_y));
          command = box;
       }
@@ -419,7 +417,6 @@ void Task::prepare_field(Field &field) {
 }
 
 string Task::get_text_task() {
-   cout<<"text---> "<<text_task<<endl;
    return text_task;
 }
 

@@ -131,6 +131,8 @@ reDraw(string text_task) -> void #<main.cpp>
 	Robot::set_img(IMAGE*) -> void #<Objects.hpp>
 	Robot::get_color() -> int #<Objects.hpp>
 	Robot::get_n_color() -> int #<Objects.hpp>
+	Robot::get_allow_change_cordinat() -> bool #<Objects.hpp>
+	Robot::get_allow_change_direction() -> bool #<Objects.hpp>
 	Robot::get_pos() -> position #<Objects.hpp>
 	Robot::get_direction() -> position #<Objects.hpp>
 	Robot::change_Field(Field&) -> void #<Objects.hpp>

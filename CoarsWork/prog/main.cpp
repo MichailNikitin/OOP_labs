@@ -22,17 +22,17 @@ void put_text(string text_task) {
    while (s >> word) text_write.push_back(word);
    int lenght = 0, j=0;
    lenght += textwidth(text_write[0].c_str())+textwidth(" ");
-   outtextxy(510, 60, text_write[0].c_str());
+   outtextxy(510, 50, text_write[0].c_str());
    for (int i=1; i<text_write.size(); i++) {
       lenght+=textwidth(" ");
-      if (lenght<280) {
-         outtextxy(510+lenght, 60+j*(textheight("T")+5), text_write[i].c_str());
+      if (lenght<270) {
+         outtextxy(510+lenght, 50+j*(textheight("T")+5), text_write[i].c_str());
          lenght += textwidth(text_write[i].c_str())+textwidth(" ");
       }
       else {
          lenght = 0;
          j++;
-         outtextxy(510+lenght, 60+j*(textheight("T")+5), text_write[i].c_str());
+         outtextxy(510+lenght, 50+j*(textheight("T")+5), text_write[i].c_str());
          lenght += textwidth(text_write[i].c_str())+textwidth(" ");
       }
    }
@@ -214,77 +214,93 @@ fixing:
                      while (1) {
                         switch (getch()) {
                         case KEY_UP: {
-                              current_cell.y += (current_cell.y == 0) ? 0 : -1;
-                              Robots[i]->set_pos(current_cell);
-                              drawCurrectProg(n_currect_com, current_cell);
-                              put_text(text_task);
-                              highlightCell(current_cell);
+                              if (Robots[i]->get_allow_change_cordinat()) {
+                                 current_cell.y += (current_cell.y == 0) ? 0 : -1;
+                                 Robots[i]->set_pos(current_cell);
+                                 drawCurrectProg(n_currect_com, current_cell);
+                                 put_text(text_task);
+                                 highlightCell(current_cell);
+                              }
                               break;
                            }
                         case KEY_DOWN: {
-                              current_cell.y += (current_cell.y == HEIGHT_J-1) ? 0 : 1;
-                              Robots[i]->set_pos(current_cell);
-                              drawCurrectProg(n_currect_com, current_cell);
-                              put_text(text_task);
-                              highlightCell(current_cell);
+                              if (Robots[i]->get_allow_change_cordinat()) {
+                                 current_cell.y += (current_cell.y == HEIGHT_J-1) ? 0 : 1;
+                                 Robots[i]->set_pos(current_cell);
+                                 drawCurrectProg(n_currect_com, current_cell);
+                                 put_text(text_task);
+                                 highlightCell(current_cell);
+                              }
                               break;
                            }
                         case KEY_LEFT: {
-                              current_cell.x += (current_cell.x == 0) ? 0 : -1;
-                              Robots[i]->set_pos(current_cell);
-                              drawCurrectProg(n_currect_com, current_cell);
-                              put_text(text_task);
-                              highlightCell(current_cell);
-                              break;
-                           }
-                        case KEY_RIGHT: {
-                              current_cell.x += (current_cell.x == WIDTH_I-1) ? 0 : 1;
-                              Robots[i]->set_pos(current_cell);
-                              drawCurrectProg(n_currect_com, current_cell);
-                              put_text(text_task);
-                              highlightCell(current_cell);
-                              break;
-                           }
+                              if (Robots[i]->get_allow_change_cordinat()) {
+                                 current_cell.x += (current_cell.x == 0) ? 0 : -1;
+                                 Robots[i]->set_pos(current_cell);
+                                 drawCurrectProg(n_currect_com, current_cell);
+                                 put_text(text_task);
+                                 highlightCell(current_cell);
+                                 break;
+                              }
+                           case KEY_RIGHT: {
+                                 if (Robots[i]->get_allow_change_cordinat()) {
+                                    current_cell.x += (current_cell.x == WIDTH_I-1) ? 0 : 1;
+                                    Robots[i]->set_pos(current_cell);
+                                    drawCurrectProg(n_currect_com, current_cell);
+                                    put_text(text_task);
+                                    highlightCell(current_cell);
+                                 }
+                                 break;
+                              }
 
-                        case 'w': {
-                              Robots[i]->set_direction(position(0, -1));
-                              drawCurrectProg(n_currect_com, current_cell);
-                              put_text(text_task);
-                              highlightCell(current_cell);
-                              break;
-                           }
-                        case 'a': {
-                              Robots[i]->set_direction(position(-1, 0));
-                              drawCurrectProg(n_currect_com, current_cell);
-                              put_text(text_task);
-                              highlightCell(current_cell);
-                              break;
-                           }
-                        case 's': {
-                              Robots[i]->set_direction(position(0, 1));
-                              drawCurrectProg(n_currect_com, current_cell);
-                              put_text(text_task);
-                              highlightCell(current_cell);
-                              break;
-                           }
-                        case 'd': {
-                              Robots[i]->set_direction(position(1, 0));
-                              drawCurrectProg(n_currect_com, current_cell);
-                              put_text(text_task);
-                              highlightCell(current_cell);
-                              break;
-                           }
-                        case KEY_ENTER: {
-                              if (!Robots[i]->is_collision(field, Robots))
-                                 goto fixing;
-                              break;
+                           case 'w': {
+                                 if (Robots[i]->get_allow_change_direction()) {
+                                    Robots[i]->set_direction(position(0, -1));
+                                    drawCurrectProg(n_currect_com, current_cell);
+                                    put_text(text_task);
+                                    highlightCell(current_cell);
+                                 }
+                                 break;
+                              }
+                           case 'a': {
+                                 if (Robots[i]->get_allow_change_direction()) {
+                                    Robots[i]->set_direction(position(-1, 0));
+                                    drawCurrectProg(n_currect_com, current_cell);
+                                    put_text(text_task);
+                                    highlightCell(current_cell);
+                                 }
+                                 break;
+                              }
+                           case 's': {
+                                 if (Robots[i]->get_allow_change_direction()) {
+                                    Robots[i]->set_direction(position(0, 1));
+                                    drawCurrectProg(n_currect_com, current_cell);
+                                    put_text(text_task);
+                                    highlightCell(current_cell);
+                                 }
+                                 break;
+                              }
+                           case 'd': {
+                                 if (Robots[i]->get_allow_change_direction()) {
+                                    Robots[i]->set_direction(position(1, 0));
+                                    drawCurrectProg(n_currect_com, current_cell);
+                                    put_text(text_task);
+                                    highlightCell(current_cell);
+                                 }
+                                 break;
+                              }
+                           case KEY_ENTER: {
+                                 if (!Robots[i]->is_collision(field, Robots))
+                                    goto fixing;
+                                 break;
+                              }
                            }
                         }
                      }
                   }
                }
+               break;
             }
-            break;
          }
       // удаление объекта
       case KEY_DELETE: {
@@ -340,13 +356,13 @@ fixing:
 
                if (task.is_task_completed(field, Robots)) {
                   clearWin();
-                  put_text("Поздравлем! Задание выполненно! Продолжайте совершенствовать свои навыки в программировании, чтобы потом написать такую же увлекательную игру");
+                  put_text("Поздравлем! Задание выполненно!");
                   delay(3000);
                   Robots.clear();
                   Programms.clear();
                   goto restart;
                }
-               
+
                delay(1000);
             }
             break;

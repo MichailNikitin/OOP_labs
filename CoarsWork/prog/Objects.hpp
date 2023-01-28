@@ -55,6 +55,8 @@ public:
    void set_img(IMAGE *); //установить картинку робота нужного цвета
    int get_color(); // вернуть цвет
    int get_n_color(); // вернуть номер цвета
+   bool get_allow_change_cordinat(); // вернуть: разрешено изменять направление?
+   bool get_allow_change_direction(); // вернуть: разрешено изменять координаты?
    position get_pos(); // вернуть координаты
    position get_direction(); // вернуть направление
    void change_Field(Field &); // перед выходом из клетки удаление или замена объекта
@@ -115,13 +117,16 @@ public:
    //bool is_there_fruit(); // есть ли фрукты на поле?
 };
 
+//класс команд
 class Command {
    bool is_allow_change_cordinat; //разрешено изменять координаты?
    bool is_allow_delete; //разрешено удалять?
 
+  friend class Programm; //программа дружественный класс
+   
 protected:
-   IMAGE *img; // изображение комманды
-   position coord; //координаты комманды
+   IMAGE *img; // изображение команды
+   position coord; //координаты команды
 public:
    Command(bool, bool, position); // констуктор
    Command(const Command &com); // конструктор копий
